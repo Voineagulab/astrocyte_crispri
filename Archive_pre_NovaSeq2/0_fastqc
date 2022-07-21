@@ -1,0 +1,8 @@
+## Setup
+conda activate py27env
+cd /mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/GOK9962_hnPCR_1/FASTQ/ 
+mkdir FASTQC
+
+
+## Run
+fastqc -o FASTQC/ *.fastq.gz 

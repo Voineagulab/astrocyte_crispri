@@ -1,0 +1,27 @@
+## Setup
+conda activate py27env
+cd /mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/1_GuideAssignment/
+
+SAMPLELIST=/mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/GIMR_GWCCG_200802_IRIVOI_10X/Samples
+getProtospacers=/mnt/Data0/PROJECTS/CROPSeq/FullScale/Scripts/getProtospacers.py
+BASEDIR=/mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/GIMR_GWCCG_200802_IRIVOI_10X/211215_A00152_0509_BHWJ5MDSX2/GE/
+
+## Apply the python script getProtospacers to the sample alignments BAM
+OUT1=_screen.txt
+PERSAMPLEFILE=/count/sample_alignments.bam
+
+while read -r sample; do \
+echo $sample
+python $getProtospacers --input_bams $BASEDIR/$sample/complete/outs/per_sample_outs/$sample/$PERSAMPLEFILE -o $sample$OUT1 --search_seq GTGGAAAGGACGAAACACC --no_swalign --barcode_length 16; \
+done < $SAMPLELIST
+
+## Apply the python script getProtospacers to the sample alignments BAM
+MULTIFILE=complete/outs/multi/count/unassigned_alignments.bam
+OUT2=_screen_multi.txt
+
+while read -r sample; do \
+echo $sample
+python $getProtospacers --input_bams $BASEDIR/$sample/$MULTIFILE -o $sample$OUT2 --search_seq GTGGAAAGGACGAAACACC --no_swalign --barcode_length 16; \
+done < $SAMPLELIST
+
+

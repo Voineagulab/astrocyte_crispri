@@ -1,0 +1,35 @@
+# setup
+cd /mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/GOK9962_hnPCR_1/BAM
+
+# run cellranger
+while read -r sample; do \
+~/PROGRAMS/cellranger-6.0.2/cellranger count \
+--id=$sample \
+--transcriptome=/home/rna2/REFERENCE/HUMAN/GRCh38_hg38/cellranger_refdata-gex-GRCh38-2020-A-dCas9KRAB/ \
+--fastqs=../FASTQ/ \
+--expect-cells=10000 \
+--sample=$sample; \
+done < Samples
+
+
+# repeat for hnPCR_2
+cd /mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/GOK10211_hnPCR_2/BAM
+
+while read -r sample; do \
+~/PROGRAMS/cellranger-6.0.2/cellranger count \
+--id=$sample \
+--transcriptome=/home/rna2/REFERENCE/HUMAN/GRCh38_hg38/cellranger_refdata-gex-GRCh38-2020-A-dCas9KRAB/ \
+--fastqs=../FASTQ/ \
+--expect-cells=10000 \
+--sample=$sample; \
+done < Samples
+
+
+
+# old
+#~/PROGRAMS/cellranger-6.0.2/cellranger count --id=test \
+#--fastqs=../FASTQ/ \
+#--sample=NHA-1 \
+#--transcriptome=/home/rna2/REFERENCE/HUMAN/GRCh38_hg38/cellranger_refdata-gex-GRCh38-2020-A-dCas9KRAB/ \
+#--expect-cells=10000
+

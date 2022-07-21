@@ -1,0 +1,13 @@
+## Setup
+conda activate py27env
+cd /mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/1_Processing/GuideAssignment/
+BAMDIR=/mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/Sequencing/FinalCount/
+BAMFILE=/outs/possorted_genome_bam.bam
+SAMPLELIST=/mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/Sequencing/FinalCount/NHA_Samples
+OUT=_GuideAssignments.txt
+getProtospacers=/mnt/Data0/PROJECTS/CROPSeq/FullScale/Scripts/getProtospacers.py
+
+## Apply the python script getProtospacers to pooled sequencing output
+while read -r sample; do \
+python $getProtospacers --input_bams $BAMDIR/$sample/$BAMFILE -o $sample$OUT --search_seq GTGGAAAGGACGAAACACC --no_swalign --barcode_length 16; \
+done < $SAMPLELIST

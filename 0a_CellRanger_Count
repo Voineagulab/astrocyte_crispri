@@ -1,0 +1,16 @@
+## This script applies cellranger's count function to the combined data from NovaSeq1, NovaSeq2, and hnPCR2
+
+## Directories
+cd /mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/Sequencing/FinalCount
+NOVA1=/mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/Sequencing/GIMR_GWCCG_200802_IRIVOI_10X/211215_A00152_0509_BHWJ5MDSX2/fastq_path/GE3/
+NOVA2=/mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/Sequencing/GOK10263_scRNAseq_2/
+HNPCR2=/mnt/Data0/PROJECTS/CROPSeq/FullScale/Data/Sequencing/GOK10211_hnPCR_2/FASTQ/
+
+while read -r SAMPLE; do \
+~/PROGRAMS/cellranger-6.0.2/cellranger count \
+--id=$SAMPLE \
+--transcriptome=/home/rna2/REFERENCE/HUMAN/GRCh38_hg38/cellranger_refdata-gex-GRCh38-2020-A-dCas9KRAB/ \
+--fastqs=$NOVA1$SAMPLE,$NOVA2$SAMPLE,$HNPCR2$SAMPLE \
+--sample=$SAMPLE \
+--expect-cells=10000 
+done < NHA_Samples
