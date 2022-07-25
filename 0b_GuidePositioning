@@ -1,0 +1,320 @@
+## Herein I take guides from our collaborators and explore their properties
+
+################################################################################################################################ #
+## Setup ----
+
+## Generic
+rm(list = ls()); gc()
+setwd("/Volumes/Data1/PROJECTS/CROPseq/FullLibrary_Selection/")
+options(stringsAsFactors = FALSE)
+
+
+################################################################################################################################ #
+## On long peaks ----
+
+## Parameters
+s <- 200 # the effective range of repression
+remove.filtered.guides <- FALSE
+distance.between.guides <- 50
+
+## Functions
+  expand.bp <- function(bp, by = s, end = max(l)) {
+    range <- (bp - by) : (bp + by)
+    range <- range[which(range > 0 & range <= end)] 
+    return(range)
+  }
+  
+  collapse.bp <- function(list) {
+    vector <- do.call("c", list)
+    vector <- unique(vector)
+    vector <- vector[order(vector)]
+    return(vector)
+  }
+
+## Guides
+  long.guides <- read.csv("Results/NHA/FromSefi/sgRNAs_long_all.csv")
+  # long.guides <- long.guides[c("sgRNA.Sequence", "Strand.of.sgRNA"),]
+  
+  # filter out dud lines
+  g <- grep("chr", long.guides$Input) # 5 lines don't pass this criterion, they are mostly junk
+  long.guides <- long.guides[g,]
+  
+  final.guides.long <- list()
+  regions <- names(table(long.guides$Input))
+  
+ ## Now run loop
+  for (j in regions) { # test on regions[120]
+    print(j)
+    
+    ## Extract information for the target region
+      # subset
+      x <- long.guides[which(long.guides$Input == j),]
+      
+      # some guides were excluded from the ranking system due to, e.g. too close to earlier pick, or 
+      
+      # get length of target region
+      l <- x$Target.Total.Length
+      l <- 1:l[1] # the range of basepairs to cover
+      
+      # get positions of guide binding, and extend by +-sbp
+      pos <- x$sgRNA.Cut.Position..1.based.
+      
+    ## Pick the top n guides and check if the entire region is covered
+      n <- 2 # minimum number to check
+      fully.tiled <- FALSE
+    
+      # start by checking the first guide...
+      use.these <- pos[1:n] 
+      y <- x[1:n,] # y is the subset of x which has guides you want to use
+      
+      covered <- lapply(use.these, expand.bp)
+      covered <- collapse.bp(covered)
+      uncovered <- l[which(!(l %in% covered)) ]
+      
+    ## Now check for additional guides, noting that at least one guide is added
+      while(!(fully.tiled)) {
+        # look at the n+1 guide
+        n <- n + 1
+        new <- pos[n]
+        
+        # check if too close to already chosen guides
+        dist <- abs(use.these - new)
+        dist <- dist < distance.between.guides
+        
+        if (any(dist)) {
+          # note: cannot use next here, as that can cause problems with meeting while conditions when n == length(pos)
+          new.coverage <- 0
+        } else { # if not too close, will it help?
+          new.range <- expand.bp(new)
+          new.coverage <- length(which(new.range %in% uncovered))
+        }
+        
+
+        # and if it helps... update coverage information
+        if (new.coverage > 0) {
+          use.these <- c(use.these, new)
+          y <- rbind(y, x[n,])
+          
+          
+          covered <- lapply(use.these, expand.bp)
+          covered <- collapse.bp(covered)
+          
+          uncovered <- l[which(!(l %in% covered)) ]
+        } 
+        
+        # iterate if there are still uncovered regions or only 1 guide, escape if not!
+        if (length(uncovered) == 0 & length(use.these) > 1) fully.tiled <- TRUE
+        
+        
+        ## The below lines of code were useful when initial n == 1, as it ensures that at least 2 guides are picked
+        # # iterate if there are still uncovered regions or only 1 guide, escape if not!
+        # if (length(uncovered) == 0 & length(use.these) > 1) fully.tiled <- TRUE
+        # 
+        # ## if the final guide is evaluated and the end conditions are not met
+        # if (!(fully.tiled) & n == length(pos)) {
+        #   # then choose the highest-ranged guide that is decently spaced
+        #   y <- abs(pos - pos[1]) # distance from all guides to the highest-ranked guide (where pos[1] always == use.these[1])
+        #   z <- pos[which(y > distance.between.guides )] 
+        #   z <- z[1] # the best guide that is not too close to the highest-ranked guid
+        #   
+        #   use.these <- c(use.these, z)
+        #   
+        #   fully.tiled <- TRUE
+        # }
+        # 
+      } # end while
+      
+    ## Get the relevant guides
+      # choices <- x[which(x$sgRNA.Cut.Position..1.based. %in% use.these),]
+      # which(x$sgRNA.Cut.Position..1.based. %in% use.these) & 
+      
+      # choices <- choices[which((duplicated(choices$sgRNA.Cut.Position..1.based.)) & (as.numeric(rownames(choices)) <= n)),] 
+      # sometimes, there is a sense and antisense guide at the some position, and this removes the lower scoring one which was not actually assessed
+      
+      final.guides.long[[j]] <- y
+  }
+  
+  final.guides.long <- do.call("rbind", final.guides.long)
+  
+  write.csv(final.guides.long, file = "Results/NHA/FromSefi/Final Guides, Long Regions (NEW).csv", row.names = FALSE)
+  
+## Statistics on this
+  ## Number of guides
+    nGuides <- as.data.frame(table(final.guides.long$Input))
+    l <- sapply(strsplit(as.character(nGuides$Var1), ":"), "[", 2)
+    l <- strsplit(l, "-")
+    nGuides$Length <- as.numeric(sapply(l, "[", 2)) - as.numeric(sapply(l, "[", 1))
+    
+    pdf(file = "Results/NHA/FromSefi/Long Peaks - All Guide Stats.pdf", height = 3, width = 6)
+    plot.data <- as.data.frame(table(nGuides$Freq))
+    ggplot(plot.data, aes(x = Var1, y = Freq)) +
+      geom_col(fill = "darkorange1", colour = "black") +
+      theme_bw() +
+      labs(x = "Number of Guides per Region", y = "Count") +
+      scale_y_continuous(expand = c(0,0)) +
+      theme(panel.border = element_blank(), axis.line.y = element_line())
+    
+    nGuides$Freq <- as.factor(nGuides$Freq)
+    annot <- table(nGuides$Freq)
+    levels(nGuides$Freq) <- paste0(levels(nGuides$Freq), "\nn=",annot)
+    ggplot(nGuides, aes(x = as.factor(Freq), y = Length)) +
+      geom_point(position = position_jitter(width = 0.2), alpha = 0.4) +
+      stat_summary(fun = median, geom = "point", colour = "darkorange1", size = 3) +
+      theme_bw() +
+      scale_y_continuous(limits = c(0,NA)) +
+      theme(panel.border = element_blank(), axis.line = element_line()) +
+      labs(y = "Target Region Width", x = "Number of Guides")
+    
+  ## Distance between guides
+    dist <- list()
+    for (j in regions) {
+      x <- final.guides.long[which(final.guides.long$Input == j),]
+      
+      # this is going to be difficult to plot coherently... Maybe try the minimum distance between guides?
+      
+      # get length of target region
+      l <- x$Target.Total.Length
+      
+      # get guide positions
+      d <- x$sgRNA.Cut.Position..1.based.
+      
+      # calculate pairwise distances between guides
+      pd <- as.numeric(dist(d))
+      
+      # store 
+      dist[[j]] <- min(pd) # in this case, just the minimum
+    }
+    
+    y <- do.call("c", dist)
+    y <- as.data.frame(y)
+    
+    ggplot(y, aes(x = y)) +
+      geom_histogram(colour = "black", fill = "darkorange1", breaks = seq(-1, 400, 10)) +
+      theme_bw() +
+      scale_y_continuous(expand = c(0,0)) +
+      scale_x_continuous(limits = c(-1,400), expand = c(0,0), breaks = seq(0, 400, 20)) +
+      # scale_x_continuous(breaks = function(x) 5*x) +
+      geom_vline(xintercept = 0) +
+      theme(panel.border = element_blank()) +
+      labs(y = "Count in Bin", x = "Minimum Pairwise distance between guide set")
+    
+    dev.off()
+    
+    
+################################################################################################################################ #
+## On short peaks ----
+
+## Sefi has provided us with a full list of guides, as well as the top 2 for each region
+    
+## Read in the Broad algorithms top picks
+  short.guides.best <- read.csv("Results/NHA/FromSefi/sgRNAs_short_2_best_sgRNAs.csv")
+    
+    
+## Calculate distances between guides
+  short.guide.separation <- list()
+  regions <- names(table(short.guides.best$Input))
+  
+  for (j in regions) {
+    x <- short.guides.best$sgRNA.Cut.Position..1.based.[which(short.guides.best$Input == j)]
+    short.guide.separation[[j]] <- abs(x[1] - x[2])
+    
+  }
+  plot.data <- do.call("rbind", short.guide.separation)
+  plot.data <- as.data.frame(plot.data)
+  
+  pdf(file = "Results/NHA/FromSefi/Short Peaks - Distance Between Sefi's Guides.pdf", height = 3, width = 8)
+  ggplot(plot.data, aes(x = V1)) +
+    geom_histogram(colour = "black", fill = "darkorange1", breaks = seq(-1, 140, 5)) +
+    theme_bw() +
+    scale_y_continuous(expand = c(0,0)) +
+    scale_x_continuous(limits = c(-1,140), expand = c(0,0), breaks = seq(0, 140, 10)) +
+    # scale_x_continuous(breaks = function(x) 5*x) +
+    geom_vline(xintercept = 0) +
+    theme(panel.border = element_blank()) +
+    labs(y = "Count in Bin", x = "Distance between guide pair")
+  dev.off()
+  
+## Calculate distances from peak centre
+  ## No calculation necessary - just note that 100bp is the middle!
+  pdf(file = "Results/NHA/FromSefi/Short Peaks - Start Position of Sefi's Guides.pdf", height = 3, width = 8)
+  ggplot(short.guides.best, aes(x = sgRNA.Cut.Position..1.based.)) +
+        geom_histogram(colour = "black", fill = "darkorange1", breaks = seq(-1, 200, 5)) +
+    theme_bw() +
+    scale_y_continuous(expand = c(0,0)) +
+    scale_x_continuous(limits = c(-1,201), expand = c(0,0), breaks = seq(0, 200, 10)) +
+    # scale_x_continuous(breaks = function(x) 5*x) +
+    geom_vline(xintercept = c(0,100), linetype = c(1,2)) +
+    theme(panel.border = element_blank()) +
+    labs(y = "Count in Bin", x = "Start Position of Guide in 200bp Window")
+  dev.off()
+  
+  
+## Based on these, the algorithm is biased in its selection of the top2 peaks. 
+## Specifically, high-ranking guides will be excluded if their start position is ~ <5bp or >130bp
+## I will therefore use a (v simple) custom algorithm, which removes this filter
+  
+  # read in
+  short.guides <- read.csv("Results/NHA/FromSefi/sgRNAs_short_all.csv")
+  
+  # for each region, pick the two with the best combined rank
+  final.guides.short <- short.guides[which(short.guides$Combined.Rank %in% c(1, 2)),]
+  
+  # save
+  write.csv(final.guides.short, file = "Results/NHA/FromSefi/Final Guides, Short Regions.csv", row.names = FALSE)
+
+  ## Compare to previous selection!
+    # position of guide
+    pdf(file = "Results/NHA/FromSefi/Short Peaks - Start Position of Voineagu's Guides.pdf", height = 3, width = 8)
+    ggplot(final.guides.short, aes(x = sgRNA.Cut.Position..1.based.)) +
+      geom_histogram(colour = "black", fill = "darkorange1", breaks = seq(-1, 200, 5)) +
+      theme_bw() +
+      scale_y_continuous(expand = c(0,0)) +
+      scale_x_continuous(limits = c(-1,201), expand = c(0,0), breaks = seq(0, 200, 10)) +
+      # scale_x_continuous(breaks = function(x) 5*x) +
+      geom_vline(xintercept = c(0,100), linetype = c(1,2)) +
+      theme(panel.border = element_blank()) +
+      labs(y = "Count in Bin", x = "Start Position of Guide in 200bp Window")
+    dev.off()
+  
+    # compare the rank of chosen guides
+    plot.data <- data.frame(Broad = short.guides.best$Combined.Rank,
+                            Voineagu = final.guides.short$Combined.Rank)
+    plot.data <- melt(plot.data)
+    
+    pdf(file = "Results/NHA/FromSefi/Short Peaks - Comparison of Method of Choosing Top2 Guides.pdf", height = 3, width = 4)
+    # ggplot(plot.data, aes(x = variable, y = value)) +
+    #   geom_boxplot(fill = "darkorange1", outlier.shape = NA) +
+    #   geom_point(position = position_jitter(width = 0.2, height = 0), alpha = 0.5) +
+    #   theme_bw() +
+    #   theme(panel.border = element_blank(), axis.line.y = element_line()) +
+    #   # scale_y_continuous(expand = c(0,0)) +
+    #   labs(x = "Picking Algorithm", y = "Combined Rank of Selected Guides")
+    # 
+    ggplot(plot.data, aes(x = value)) +
+      geom_bar(fill = "darkorange1", colour = "black") +
+      facet_wrap(~variable) +
+      geom_vline(xintercept = 0) +
+      theme_bw() +
+      theme(panel.border = element_blank()) +
+      # scale_y_continuous(expand = c(0,0)) +
+      labs(y = "Count", x = "Rank of Selected Guides")
+    
+    
+    # compare the on-target scores
+    plot.data <- data.frame(Broad = short.guides.best$On.Target.Efficacy.Score,
+                            Voineagu = final.guides.short$On.Target.Efficacy.Score)
+    plot.data <- melt(plot.data)
+    
+    ggplot(plot.data, aes(x = variable, y = value)) +
+      geom_boxplot(fill = "darkorange1", outlier.shape = NA) +
+      geom_point(position = position_jitter(width = 0.2, height = 0), alpha = 0.5) +
+      theme_bw() +
+      theme(panel.border = element_blank(), axis.line.y = element_line()) +
+      # scale_y_continuous(expand = c(0,0)) +
+      labs(x = "Picking Algorithm", y = "Guide On-target Score")
+    
+    dev.off()
+    
+    
+  
+  

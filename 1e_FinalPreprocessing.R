@@ -1,4 +1,4 @@
-
+setwd("/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/1_Processing/")
 
 # Make hda5
 # Make plots
@@ -478,11 +478,6 @@ dcas9 <- "dCas9-KRAB-T2A-BLAST-WPRE" # name of the construct in the expression m
   write.csv(x, file = "Final/Metadata.csv")
   save(x, file = "Final/Metadata.rda")
   
-  # guides only
-  x <- as.data.frame(nha@meta.data)
-  x <- x
-  
-  # targets only
   
 ## As Seurat object in rda
   save(nha, file = "../../Data/Preprocessed/NHA Pooled (Final).rda")

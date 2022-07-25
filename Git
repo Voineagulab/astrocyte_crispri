@@ -1,0 +1,13 @@
+git config user.name "VoineaguLab"
+git config user.email "ivlabunsw@gmail.com"
+
+cd /mnt/Data0/PROJECTS/CROPSeq/FullScale/Scripts/
+git init
+git add -A
+git commit -m "First commit (GJS)"
+
+# Token: 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
+
+git remote add origin https://github.com/Voineagulab/CROPSeq.git
+git push --set-upstream origin master
+

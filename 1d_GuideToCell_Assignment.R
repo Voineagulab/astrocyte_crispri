@@ -81,6 +81,7 @@ load("../../Data/Preprocessed/NHA Pooled (No Guide Annotation).rda")
   g <- grep("NEG", z$GuideID)
   z$GuideID[g] <- paste0("Neg_E_", 1:length(g))
   z$TargetCat[g] <- "Negative"
+  z <- z[which(z$TargetCat != "Promoter"),] # as these are also in the positive library
   
   # guide.list <- list()
   # guide.list$NHA <- read.csv("../Whitelists/NHA Enh Library.csv")
@@ -92,7 +93,7 @@ load("../../Data/Preprocessed/NHA Pooled (No Guide Annotation).rda")
   guide.list$GuideSequence <- substr(guide.list$GuideSequence, 
                                        start = 1, 
                                        stop = 16) # keeps only the first sixteen nt, as sixteen is the length of protospacer sequence that get_barcodes.py called
-  guide.list <- unique(guide.list)
+  # guide.list <- unique(guide.list)
   
   # fix an artefact in $TargetCoord
   guide.list$TargetCoord <- splitter(guide.list$TargetCoord, "-exp-", 1)
@@ -308,9 +309,9 @@ g <- list()
   
 ## Create dataframe
   # of guides
-  guide.annot <- matrix(nrow = nrow(guide.list), ncol = ncol(nha)) %>% as.data.frame()
-  colnames(guide.annot) <- colnames(nha)
-  rownames(guide.annot) <- guide.list$GuideID
+  # guide.annot <- matrix(nrow = nrow(guide.list), ncol = ncol(nha)) %>% as.data.frame()
+  # colnames(guide.annot) <- colnames(nha)
+  # rownames(guide.annot) <- guide.list$GuideID
   
   # of targets
   # target.annot <- matrix(nrow = length(unique(guide.list$TargetID)), ncol = ncol(nha)) %>% as.data.frame()
@@ -363,7 +364,13 @@ g <- list()
     print(j)
     x <- guide.list$GuideID[which(guide.list$TargetID == j)] # get list of guides that constitute a target group
     y <- apply(z[,x], 1, any) # are any of them true?
-    z[,paste0("Pos_", j)] <- y # output
+    
+    if (substr(j, 1, 3) == "Enh") {
+      z[,j] <- y # output  
+    } else {
+      z[,paste0("Pos_", j)] <- y # output
+    }
+    
   }
   
   
