@@ -1,0 +1,2 @@
+## Download from Katana
+rsync -avh z3463456@kdm.restech.unsw.edu.au:/srv/scratch/voineagu/PROJECTS/WAN11678/input/WAN11678-WAN11691/WAN11678A31_TATGTAGTCA-CGCACTAATG/ /Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/Scratchspace/TestFASTQ/
