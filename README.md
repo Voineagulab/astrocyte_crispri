@@ -5,26 +5,26 @@ This repository contains analysis scripts for "CRISPRi Screening of Enhancers in
 
 
 ## Directory descriptions
-**Raw_data_processing**
+#### Raw_data_processing
 Code to process raw sequencing data from *e.g.*, RNA-seq, TT-seq, ATAC-seq, and scRNA-seq.
 
-**CandidateEnhancerSelection_LibraryDesign**
+#### CandidateEnhancerSelection_LibraryDesign
 For the prioritisation of 979 open chromatin regions, and the design of sgRNA to silence them
 
-**CRISPRi_screen**
+#### CRISPRi_screen
 Processing and analyses of the CRISPRi screen in NHAs
 
-**Nanostring**
+#### Nanostring
 Analyses of Nanostring nCounter data, used to validate hits in the CRISPRi screen using an independent method
 
-**Functional_annotation**
+#### Functional_annotation
 The use of published data to annotate gene, enhancers, and variants with functional phenotypic information
 
-**Predictive_models**
+#### Predictive_models
 Using functional genomic properties of enhancers and genes to predict functional enhancer-gene interactions.
 
+#### Manuscript_preparation_plots
 
-**Manuscript_preparation_plots**
 Scripts here generate final figures and tables published in the manuscript. They use output generated in preceding scripts.
 
 ## Other
