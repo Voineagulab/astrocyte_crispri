@@ -6,7 +6,7 @@ This repository contains analysis scripts for "CRISPRi Screening of Enhancers in
 
 ## Directory descriptions
 #### Raw_data_processing
-Code to process raw sequencing data from *e.g.*, RNA-seq, TT-seq, ATAC-seq, and scRNA-seq.
+Code to process raw sequencing data from RNA-seq, TT-seq, ATAC-seq, and scRNA-seq.
 
 #### CandidateEnhancerSelection_LibraryDesign
 For the prioritisation of 979 open chromatin regions, and the design of sgRNA to silence them
@@ -26,6 +26,7 @@ Using functional genomic properties of enhancers and genes to predict functional
 #### Manuscript_preparation_plots
 
 Scripts here generate final figures and tables published in the manuscript. They use output generated in preceding scripts.
+
 
 ## Other
 Questions should be directed to Irina Voineagu (i.voineagu@unsw.edu.au)
