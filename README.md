@@ -5,6 +5,10 @@ This repository contains analysis scripts for "CRISPRi Screening of Enhancers in
 
 
 ## Directory descriptions
+#### Processed_data
+This directory contains small processed files.
+
+
 #### Raw_data_processing
 Code to process raw sequencing data from RNA-seq, TT-seq, ATAC-seq, and scRNA-seq.
 
