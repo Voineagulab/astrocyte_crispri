@@ -1,4 +1,4 @@
-# CROPSeq
+# CRISPRi screening of enhancers in human primary astrocytes
 
 This repository contains analysis scripts for "CRISPRi Screening of Enhancers in Human Primary Astrocytes Identifies Regulatory Circuitry Disrupted in Alzheimer's Disease", by Green, Sutton et al. (2024)
 
