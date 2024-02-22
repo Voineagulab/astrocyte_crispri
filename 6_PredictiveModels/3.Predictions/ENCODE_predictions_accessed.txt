@@ -1,0 +1,18 @@
+
+### ASTROCYES
+rE2G predictions for Astrocytes were downloaded from https://www.encodeproject.org/.
+"all" and "th" refers to all EG pairs and thresholded EG pair data respectively
+The astrocyte_Donor_ENCDO916IIE sample corresponds to NHA astrocytes(Lonza) and was used for comparison with the Astrocyte CRISPRi data generated from the same cell type.
+
+astrocyte_Donor_ENCDO916IIE:
+ENCFF405VJJ.th.bed
+ENCFF440FMQ.all.bed
+
+ENCFF440FMQ.bed contains the overlap between candidate enhancers from the CRISPRi astrocyte screen and ENCFF440FMQ.all.bed and is provided in ./InputData/Astrocytes.
+
+
+### K562 cells
+ENCODE-E2G_Predictions.tsv: Training and prediction data for the ENCODE rE2G model downloaded from: https://github.com/karbalayghareh/ENCODE-E2G/tree/main/data/crispri
+ENCODE-E2G_Extended_Predictions.tsv: Training and prediction data for the ENCODE rE2G-extended model downloaded from https://github.com/karbalayghareh/ENCODE-E2G/tree/main/data/crispri
+Files provided in:
+./InputData/K562

@@ -1,0 +1,6 @@
+These scripts contain code to select our 979 candidate enhancer regions, as well as design sgRNA to silence them in NHA cells
+
+2a: annotation of NHA ATAC-seq peaks and filtering to final candidate set
+2b: prioritisation of top sgRNA for each candidate enhancer
+2c: selection of positive control guides validated by Gasperini et al. (2019) in K562 cells
+2d: creating a list of the final guides

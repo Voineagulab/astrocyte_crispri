@@ -1,0 +1,5 @@
+The prediction model figures - Figure 8 and Supplementary Figure 9 - are generated in 6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R.
+Figure panels are saved as pdfs.
+p-values listed in Figure 8A are saved in Astrocytes/BootstrappingResults.csv and K562/BootstrappingResults.csv
+
+

@@ -1,0 +1,55 @@
+﻿Variable,Category,Data_source,ENCODE_Accession,EGrf,Egrf_extended,TAPseq_rf,rE2G_extended_rf
+hic_contact,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,TRUE,TRUE,TRUE
+activity_prom,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,TRUE,FALSE,TRUE
+normalizedEP300_enhActivity,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,TRUE,FALSE,TRUE
+numTSSEnhGene,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,TRUE,TRUE,FALSE,TRUE
+ABC_Score,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+ABCDenominator,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+ABCNumerator,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+activity_enh,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+activity_enh_squared,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+averageCorrWeighted,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+distanceToTSS,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+DNase_e_grad_max_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+DNase_e_grad_min_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+DNase_p_grad_max_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+DNase_p_grad_min_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+enhCTCF,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+EpiMapScore,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+glsCoefficient,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K27ac_e_grad_max_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K27ac_e_grad_min_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K27ac_p_grad_max_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K27ac_p_grad_min_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K4me3_e_grad_max_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K4me3_e_grad_min_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K4me3_e_max_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K4me3_p_grad_max_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K4me3_p_grad_min_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+H3K4me3_p_max_L_8,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+HiCLoopCrossNormalized,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+HiCLoopOutsideNormalized,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+inCCD,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+inTAD,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+normalizedDNase_enh,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+normalizedDNase_prom,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+normalizedH3K27ac_enh,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+normalizedH3K27ac_prom,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+numNearbyEnhancers,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+P2PromoterClass,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+PETcrossNormalized,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+PEToutsideNormalized,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+phastConMax,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+phyloPMax,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+promCTCF,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+sumNearbyEnhancers,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+ubiquitousExpressedGene,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+X3DContact_squared,ENCODE model predictor data,"ENCODE rE2G exteded, K562 cells",,FALSE,FALSE,FALSE,TRUE
+Chip.H3K27ac,Enhancer_ChIP_OpenChromatin,ENCODE K562 cells,ENCFF301TVL,TRUE,TRUE,TRUE,FALSE
+Chip.H3K4me3,Enhancer_ChIP_OpenChromatin,ENCODE K562 cells,ENCFF611YPB ,TRUE,TRUE,TRUE,FALSE
+DNAse.Pileup,Enhancer_ChIP_OpenChromatin,ENCODE K562 cells,ENCFF205FNC,TRUE,TRUE,TRUE,FALSE
+Gene.Nearest,Annotation,-,-,TRUE,TRUE,FALSE,FALSE
+Gene.StabilityIndex,Other,"PMID: 31531674, http://www.maths.usyd.edu.au/u/pengyi/software/scHK/scHK_human.xlsx ",,TRUE,TRUE,FALSE,FALSE
+Chip.H3K27me3,Enhancer_ChIP_OpenChromatin,ENCODE K562 cells,ENCFF915XIL ,FALSE,FALSE,TRUE,FALSE
+Chip.H3K4me1,Enhancer_ChIP_OpenChromatin,ENCODE K562 cells,ENCFF290LQY,FALSE,FALSE,TRUE,FALSE
+Chip.POLR2A,Enhancer_ChIP_OpenChromatin,ENCODE K562 cells,ENCFF438GBD,FALSE,FALSE,TRUE,FALSE

@@ -1,0 +1,2 @@
+./CRISPRI contains BASH code to process CRISPRi screen scRNAseq data, available on our GEO
+./Herring2022 contains R code to process a brain maturation snRNA-seq dataset from Herring et al. 

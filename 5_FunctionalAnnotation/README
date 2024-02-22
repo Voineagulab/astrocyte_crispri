@@ -1,0 +1,15 @@
+Scripts in this folder concern the functional annotation of our functional enhancers and their regulated genes. They are organised by theme.
+
+./Beluga: predicting the effect of known and hypothetical variants in functional enhancers using  *in silico* mutagenesis, courtesy of the Beluga algorithm (Zhou et al., 2019: https://www.nature.com/articles/s41588-018-0160-6)
+
+./Chromatin: these R scripts explore the chromatin and DNA annotation of functional enhancers, such as superenhancer status, or trends across tissues and development.
+
+./EnhancerTranscription: TTseq and CAGE expression at functional enhancers.
+
+./EnhGenePairs: R scripts considering annotations that relate to the pair of the enhancer and gene itself, rather than either component individually.
+
+./RegulatedGenes: R scripts that explore what is known about the function and dysregulation of enhancer-regulated genes in astrocytes.
+
+./Tobias_TFs: TOBIAS (Bentsen et al., 2020; https://www.nature.com/articles/s41467-020-18035-1) is an algorithm for transcription factor (TF) binding from an ATAC-seq signal. These scripts run the algorithm and explore TF binding patterns in functional enhancers and inactive candidates.
+
+./Variants: Common SNPs were assigned to functional enhancers using overlap and linkage disequilibrium. These scripts perform that assignment, and explore the functional annotations of those variants.

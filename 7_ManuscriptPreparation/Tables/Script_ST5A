@@ -1,0 +1,103 @@
+# This script uses snATAC-seq and snRNA-seq data from Herring et al to assess the cell-type and developmental variation of gene expression and enhancer open chromatin state using a linear model.
+# snATAC-seq and snRNA-seq data had been pseudobulked at cell-type and stage level in order to generate equivalent data
+
+# Clear workspace and load required libraries
+rm(list=ls())
+library(data.table)
+library(pheatmap)
+library(xlsx)
+# Set working directory and sink file
+setwd("/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/")
+# sink("/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/Res4Fig4.info.txt")
+
+# Read CRISPRi screen results
+res <- read.csv("/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
+
+# Load pseudobulked snATAC-seq and snRNA-seq data
+load("/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/Chromatin/Coverage/Herring - Intersections and Coverage.rda")
+atac <- as.data.frame(herring$CoverageMean_Pooled)
+load("/mnt/Data0/PROJECTS/CROPSeq/PublicData/snRNAseq/Herring2022_MaturationBrain/RNA/Processed/Pseudobulk2_ATACesquePooling.rda")
+exp <- pb2$Final
+
+# Subset data to include common columns (i.e cell types and stages available in both data types)
+exp <- exp[, which(colnames(exp) %in% colnames(atac))]
+atac <- atac[, match(colnames(exp), colnames(atac))]
+
+# Combine expression and ATAC-seq data for  genes and enhancers present in the CRISPRi screen
+data <- rbind(exp[which(rownames(exp) %in% res$Gene), ], 
+              atac[which(rownames(atac) %in% res$Enh), ])
+
+# Remove genes/enhancers that are 0 across all samples 
+keep <- rowSums(data) > 0
+table(keep) 
+data <- data[keep, ]# Removing one enhancer (Enh55)
+
+# Log 2 transform the data for analysis
+dat <- t(log2(data + 0.1))
+
+# Extract metadata from sample names
+ct <- transpose(strsplit(rownames(dat), split="_", fixed=TRUE))[[1]]
+stage <- transpose(strsplit(rownames(dat), split="_", fixed=TRUE))[[2]]
+meta <- data.frame(ct, stage)
+rownames(meta) <- rownames(dat)
+meta$Astro <- meta$ct %in% "Astro"
+
+# Extract and label data types (gene or enhancer)
+type <- colnames(dat)
+type[grep("Enh", colnames(dat))] <- "enh"
+type[which(type %in% res$Gene)] <- "gene"
+type <- as.data.frame(type)
+rownames(type) <- colnames(dat)
+
+# Perform linear regression analysis
+stats <- as.data.frame(matrix(NA, nrow = 2, ncol = ncol(dat)))
+colnames(stats) <- colnames(dat)
+rownames(stats) <- c("p.anova.ct", "p.anova.stage")
+
+for (j in c(1:ncol(dat))) {
+  l <- lm(dat[, j] ~  meta$stage + meta$ct)
+  a <- anova(l)
+  stats["p.anova.ct", j] = a$`Pr(>F)`[2]
+  stats["p.anova.stage", j] = a$`Pr(>F)`[1]
+}
+stats <- as.data.frame(t(stats))
+
+# Correct p-values for multiple testing
+stats$padj.anova.ct <- p.adjust(stats$p.anova.ct, method = "BH")
+stats$padj.anova.stage <- p.adjust(stats$p.anova.stage, method = "BH")
+
+# Combine statistical results with data type information
+stats <- data.frame(stats, type[match(rownames(stats), rownames(type)), ])
+colnames(stats)[5] <- "Type"
+
+# Save the results
+#dev <- list(stats = stats, res = res)
+#save(dev, file = "/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/Herring.devreg.rda")
+write.csv(stats, file="/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/SuppTable_HerringDevCTreg.csv")
+
+# Fisher tests assessing whether functional enhancer-gene pairs (i.e. Hits) are more likely to be co-regulated across cell types and stage
+res$Ect <- stats$padj.anova.ct[match(res$Enh, rownames(stats))]
+res$Gct <- stats$padj.anova.ct[match(res$Gene, rownames(stats))]
+res$Estage <- stats$padj.anova.stage[match(res$Enh, rownames(stats))]
+res$Gstage <- stats$padj.anova.stage[match(res$Gene, rownames(stats))]
+
+res$Pct <- (res$Ect < 0.05) & (res$Gct < 0.05)
+ft.ct <- fisher.test(res$Pct, res$HitPermissive)
+
+res$Pstage <- (res$Estage < 0.05) & (res$Gstage < 0.05)
+ft.stage <- fisher.test(res$Pstage, res$HitPermissive)
+
+# Subset data for NEAT1 to plot an example figure
+hits <- res[res$HitPermissive, ]
+g <- "NEAT1"
+e <- hits$Enh[which(hits$Gene %in% g)]
+
+# Create a plot using the selected data
+plot <- rbind(exp[g, ], atac[e, ])
+pheatmap(log2(plot + 0.1), scale = "row", cluster_cols = FALSE)
+
+# Export data for the manuscript
+cat("------Cell type FT:", "\n") ;print(table(res$Pct, res$HitPermissive)); print(ft.ct)
+cat("------Stage FT:", "\n"); print(table(res$Pstage, res$HitPermissive)); print(ft.stage)
+cat("------NEAT1 gene and enhancer stats", "\n"); print(stats[c(g,e) , ])
+# sink()

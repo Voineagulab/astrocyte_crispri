@@ -1,0 +1,16 @@
+"Column_Name","Category","Data.source","EGrf","EGrf_plus","TAPseq","Any","Accession"
+"ATACseq.Pileup","Enhancer_ChIP_OpenChromatin","Present study, NHA astrocytes Lonza",TRUE,FALSE,FALSE,1,NA
+"Beluga.MaxDisScore","Enhancer_FunctionalVariant Prediction Scores","Present study",FALSE,TRUE,FALSE,1,NA
+"Chip.H3K27ac","Enhancer_ChIP_OpenChromatin","ENCODE, NHA astrocytes Lonza",TRUE,FALSE,TRUE,2,"ENCFF058GEM"
+"Chip.H3K27me3","Enhancer_ChIP_OpenChromatin","ENCODE, NHA astrocytes Lonza",FALSE,FALSE,TRUE,1,"ENCFF476HBN"
+"Chip.H3K4me1","Enhancer_ChIP_OpenChromatin","ENCODE, NHA astrocytes Lonza",FALSE,FALSE,TRUE,1,"ENCFF242JDN"
+"Chip.H3K4me3","Enhancer_ChIP_OpenChromatin","ENCODE, NHA astrocytes Lonza",TRUE,FALSE,TRUE,2,"ENCFF184NZS"
+"Chip.POLR2A","Enhancer_ChIP_OpenChromatin","ENCODE, NHA astrocytes Lonza",FALSE,FALSE,TRUE,1,"ENCFF702AYE"
+"DNAse","Enhancer_ChIP_OpenChromatin","ENCODE, NHA astrocytes Lonza",FALSE,FALSE,TRUE,1,"ENCFF320CHE"
+"Gene.Nearest","Annotation","-",TRUE,FALSE,FALSE,1,NA
+"Gene.StabilityIndex","Other","PMID: 31531674, http://www.maths.usyd.edu.au/u/pengyi/software/scHK/scHK_human.xlsx ",TRUE,FALSE,FALSE,1,NA
+"HiC_interaction_NeuN_neg","Enhancer_Promoter_HiC_contacts","PMID: 34172755",FALSE,TRUE,TRUE,2,NA
+"numTSSEnhGene","Annotation","-",TRUE,FALSE,FALSE,1,NA
+"Tobias.Exp_Bound_TF_counts","Enhancer_TFfootprinting","Present study, NHA astrocytes Lonza",FALSE,TRUE,FALSE,1,NA
+"TTseq.Ratio_TTversusRNA","Enhancer_TTseq","Present study, NHA astrocytes Lonza",FALSE,TRUE,FALSE,1,NA
+"TTseq.TTseq_Total","Enhancer_TTseq","Present study, NHA astrocytes Lonza",FALSE,TRUE,FALSE,1,NA

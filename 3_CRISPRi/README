@@ -1,0 +1,7 @@
+These scripts perform differential expression analyses, comparing single-cells with a given guide (or guide set) to those without. All code is in R. 
+
+3a-b preprocess the scRNA-seq expression data from 1_RawDataProcessing. Here, cells are called, annotated, and filtered, and assigned with the sgRNAs they target
+
+3c runs differential expression using SCEPTRE. 3d and 3e analyse this output, for positive control guides (targeting TSSs) and candidate enhancer-targeting guides, respectively. Note that the latter represents the primary result of the screen, selecting functional enhancer gene pairs (n=158, from 145 unique enhancers regulating 116 unique genes), and performing some basic characterisation.
+
+3f performs a simple power analysis based on downsampling our observed data.
