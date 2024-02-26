@@ -32,5 +32,8 @@ Code for benchmarking predictive models and training EGrf and EGrf-extended. Inp
 #### Manuscript_preparation_plots
 Scripts that generate the manuscript figures and tables published in the manuscript. 
 
+## The CRISPRi screen results are available in a browsable format at:
+https://voineagulabunsw.github.io/astrocyte_crispri_resource/
+
 ## Other
 Questions should be directed to Gavin Sutton (gavin.sutton@unsw.edu.au / gavinjamiesutton@gmail.com) and Irina Voineagu (i.voineagu@unsw.edu.au)
