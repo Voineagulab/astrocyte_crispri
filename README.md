@@ -8,7 +8,7 @@
 ## This repository contains analysis scripts for "CRISPRi Screening of Enhancers in Human Primary Astrocytes Identifies Regulatory Circuitry Disrupted in Alzheimer's Disease", by Green, Sutton *et al.* (2024)
 Each directory contains a short readme describing its contents, with more general descriptions below.
 
-#### Processed_data
+#### UsefulFiles
 This directory does not contain code, but rather small processed data files, results files, and helper functions. These are useful for re-running scripts. 
 
 #### Raw_data_processing
