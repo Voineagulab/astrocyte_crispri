@@ -1,4 +1,4 @@
-These files are those that are commonly loaded into scripts. A key is included below to show the correspondence between file name and the variable name commonly used in scripts
+Processed data files
 
 | Filename in GitHub  | Filename referenced in Code | Variable name in R Code | Description |
 | ------------- | ------------- | ------------- |------------- |
