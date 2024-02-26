@@ -12,19 +12,19 @@ Each directory contains a short readme describing its contents, with more genera
 This directory does not contain code, but rather small processed data files, results files, and helper functions. These are useful for re-running scripts. 
 
 #### Raw_data_processing
-Code to process raw sequencing data, such as from scRNA-seq.
+Code to process raw scRNA-seq sequencing data.
 
 #### CandidateEnhancerSelection
 Code for selecting the candidate enhancer set of 979 open chromatin regions, and the design of sgRNAs targeting these regions.
 
 #### CRISPRi_screen
-Data processing and analyses of the NHA CRISPRi screen scRNA-seq data to identify fnctional enhancer-gene pairs.
+Data processing and analyses of the NHA CRISPRi screen scRNA-seq data to identify functional enhancer-gene pairs.
 
 #### Nanostring
 Analyses of Nanostring nCounter data, used to validate hits in the CRISPRi screen.
 
 #### Functional_annotation
-These scripts use published data to annotate genes and enhancers with information on eRNA transcription (using TT-seq and CAGE), chromatin state (across development and tissues), expression dysregulation across phenotypes, transcription factor binding (using TOBIAS footprinting analyses), and genetic variants including eQTL data. 
+These scripts annotate genes and enhancers with information on eRNA transcription (using TT-seq and CAGE), chromatin state (across development and tissues), expression dysregulation in brain disease, transcription factor binding (using TOBIAS footprinting analyses), and genetic variants including eQTL data. These annotations are based on TT-seq, RNA-seq and ATAC-seq data generated in the present study as well as published data listed in the Methods section of the paper (Functional annotation of genes and Gunctional annotation of enhancers).
 
 #### Predictive_models
 Code for benchmarking predictive models and training EGrf and EGrf-extended. Input data used to generate the training data is included and described in Predictive_models/1.Data/FileDescriptions.rtf
