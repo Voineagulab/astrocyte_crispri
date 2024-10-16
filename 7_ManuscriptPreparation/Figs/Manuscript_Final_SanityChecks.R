@@ -1,5 +1,5 @@
 ## Setup
-  setwd("/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_SanityChecks/")
+  setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_SanityChecks/")
   library(tidyverse)
   library(rcartocolor)
   library(ggsci)
@@ -23,6 +23,11 @@
   candidate.annot <- read.csv("../../../FullScale/Results/3_HitEnrichment/Chromatin/Final - Annotation Logical.csv", row.names = 1)
   candidate.enrich <- read.csv("../../../FullScale/Results/3_HitEnrichment/Chromatin/Final - Enrichments.csv", row.names = 1)
   
+## Read in power dataframe
+  pow <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable3_DE/3F_Power.csv")
+  wellpowered_egps <- pow$Pair[which(pow$WellPowered015  | pow$Hit)]
+  wellpowered_enh <- pow$Enhancer[which(pow$WellPowered015 | pow$Hit)] %>% unique()
+  wellpowered_genes <- pow$Gene[which(pow$WellPowered015 | pow$Hit)] %>% unique()
 
   
 ## Plotting parameters
@@ -51,7 +56,8 @@
 
 ## Plot 0: ATAC pileup
   p <- read.csv("../../../FullLibrary_Selection/Results/Peaks_Annotated.csv")
-  p <- atac[which(atac$id %in% res.final$Enh.Pos),]
+  # p <- p[which(p$id %in% res.final$Enh.Pos),]
+  p <- p[which(p$id %in% res.final$Enh.Pos[which(res.final$Enh %in% wellpowered_enh)]),]
   
   # annotate as hit
   p$Hit <- p$id %in% res.final$Enh.Pos[which(res.final$HitPermissive)]
@@ -88,13 +94,10 @@
 ## Of superenhancer, TAD, and K562 enhancers
   yMax <- 25    
 
-  
-  
-  
-  
 ## Collect data
   # tads
   tad <- read.csv("../../../FullScale/Results/3_HitEnrichment/EnhGenePairs/TAD/Pair-TAD Annotation.csv", row.names = 1)
+  tad <- tad[which(tad$Pair %in% wellpowered_egps),]
   x <- table(tad$HitPermissive, tad$CrossTAD)
   fish <- fisher.test(x)
   x <- x / rowSums(x) * 100
@@ -109,21 +112,27 @@
   
   # superenhancers
   y <- candidate.annot[which(candidate.annot$Tested),]
+  y <- y[which(rownames(y) %in% wellpowered_enh),]
   y <- table(y$Hit, y$Superenhancer)
+  
+  y_ttl <- fisher.test(y)
+  
   y <- y / rowSums(y) * 100
   y <- as.data.frame(y)
   y <- y[which(as.logical(y$Var2)),]
   # levels(y$Var1) <- c("Inactive\ncandidates", "Functional\nenhancers")
   y$Resource <- "Superenhancer"
   
-  y_ttl <- candidate.enrich["Superenhancer",]
-  y_ttl <- paste0("p=", signif(y_ttl$p, 2), ", ", 
-                "OR=", signif(y_ttl$OR, 2))
+  # y_ttl <- candidate.enrich["Superenhancer",]
+  # y_ttl <- paste0("p=", signif(y_ttl$p, 2), ", ", 
+  #               "OR=", signif(y_ttl$OR, 2))
   sink_sanity(figNo = "2C", title = "Superenhancer", y_ttl)
   
   # k562 enhancers
   z <- candidate.annot[which(candidate.annot$Tested),]
+  z <- z[which(rownames(z) %in% wellpowered_enh),]
   z <- table(z$Hit, z$ValidatedEnh_K562_Yao2022)
+  z_ttl <- fisher.test(z)
   z <- z / rowSums(z) * 100
   z <- as.data.frame(z)
   z <- z[which(as.logical(z$Var2)),]
@@ -131,10 +140,10 @@
     
   z$Resource <- "K562 enhancer"
   
-  z_ttl <- candidate.enrich["ValidatedEnh_K562_Yao2022",]
-  z_ttl <- paste0("p=", signif(z_ttl$p, 2), ", ", 
-                "OR=", signif(z_ttl$OR, 2))
-  sink_sanity(figNo = "2C", title = "K562", z_ttl)
+  # z_ttl <- candidate.enrich["ValidatedEnh_K562_Yao2022",]
+  # z_ttl <- paste0("p=", signif(z_ttl$p, 2), ", ", 
+  #               "OR=", signif(z_ttl$OR, 2))
+  sink_sanity(figNo = "2B", title = "K562", z_ttl)
   
 ## Plot
   p <- rbind(x,y,z)
@@ -143,7 +152,7 @@
   p$Resource <- gsub(" ", "\n", p$Resource)
   
   # pdf(file = "Combined sanity check barplot.pdf", height = 2, width = 3)
-  pdf_sanity(figNo = "2C", title = "K562, Superenhancer, TAD", h = 2, w = 3)
+  pdf_sanity(figNo = "2B", title = "K562, Superenhancer, TAD", h = 2, w = 3)
   ggplot(p, aes(x = Resource, y = Freq, colour = Var1, fill = Var1)) +
       geom_col(position = "dodge", width = 0.7) +
       scale_colour_manual(values = pals$Hits_Darker) +

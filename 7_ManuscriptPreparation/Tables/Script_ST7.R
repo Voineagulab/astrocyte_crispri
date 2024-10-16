@@ -1,4 +1,4 @@
-setwd("/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable7_Disease/")
+setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable7_Disease/")
 options(stringsAsFactors = FALSE)
 source("../../../FullScale/Scripts/Functions.R")
 res.final <- read.csv("../../../FullScale/Results/2_DE/Enh/Results Final.csv")
@@ -38,7 +38,7 @@ update_enr_fractions <- function(dat) {
 
 ## 7A: Disgenet
   # read in  
-  disg <- read.csv("../../../FullScale/Results/3_HitEnrichment/Genes/Disgenet - Enrichment.csv", row.names = 1)
+  disg <- read.csv("../../../FullScale/Results/3_HitEnrichment/Genes/Wellpowered/Disgenet - Enrichment.csv", row.names = 1)
 
   # filter
   disg <- disg[which(disg$FDR < 0.05),]
@@ -58,7 +58,7 @@ update_enr_fractions <- function(dat) {
   disg <- disg[,-c(11, 12)] # upper and lower bounds of the confidence interval
   
   # save
-  write.csv(disg, file = "7A_Disgenet.csv", row.names = FALSE)
+  write.csv(disg, file = "7A_Disgenet_Wellpowered.csv", row.names = FALSE)
   
 ## 7B: Disease-associated DEGs in astrocytes
   ## Load
@@ -108,7 +108,7 @@ update_enr_fractions <- function(dat) {
     
 ## 7C: enrichments for the above
   ## Load
-    load("../../../FullScale/Results/3_HitEnrichment/Genes/Final.rda", verbose = TRUE)
+    load("../../../FullScale/Results/3_HitEnrichment/Genes/Wellpowered/Final.rda", verbose = TRUE)
     enr <- enrichments
   
   ## Filter rows
@@ -117,13 +117,12 @@ update_enr_fractions <- function(dat) {
     
   ## Update the fraction and nIntersect
     enr <- update_enr_fractions(enr)
-    
   # Save
-    write.csv(enr, "7C_AstDEGsEnrichments.csv", row.names = FALSE)
+    write.csv(enr, "7C_AstDEGsEnrichments_Wellpowered.csv", row.names = FALSE)
     
 ## 7D: Rosmap annotations
   ## Load
-    load("/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/3.SigGeneCharact/ROSMAP.Results.rda", verbose = TRUE)
+    load("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/3.SigGeneCharact/ROSMAP.Results.rda", verbose = TRUE)
     rosmap <- lapply(rosmap.results, function(x) x$sig.genes)
     rosmap <- do.call("rbind", rosmap)
     
@@ -142,6 +141,7 @@ update_enr_fractions <- function(dat) {
       x <- rosmap[which(rosmap$coef == j), ]
       scaff[,j] <- scaff$Gene %in% x$gene
     }
+    
     
   ## Save
     write.csv(scaff, file = "7D_RosmapAnnotation.csv", row.names = FALSE)

@@ -204,7 +204,7 @@ test_boundMatrix$JASPAR_Class <- gsub("Nuclear receptors", "Nuc. recep.", test_b
   # gsub("binding", "", .)
 
 # pdf("Tobias_ClassFTPlots_P.pdf", width = w_margin *(4.5/8) , height = 4)
-pdf_tf(figNo = "5B", title = "JASPAR class enrichments", h = 3.5, w = 3.6)
+pdf_tf(figNo = "SF7A", title = "JASPAR class enrichments", h = 3.5, w = 3.6)
 # familyTFPlots(test_boundMatrix, x = "JASPAR_Class", y = "LOG10FDR", size = "Odds Ratio", expand_x = c(0.05,0.05))
 familyTFPlots_GJS(test_boundMatrix, x = "JASPAR_Class", y = "LOG10FDR", size = "Odds Ratio", expand_x = c(0.05,0.05))
 dev.off()

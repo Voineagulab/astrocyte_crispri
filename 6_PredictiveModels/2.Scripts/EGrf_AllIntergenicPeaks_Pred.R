@@ -105,7 +105,7 @@ for (peak in unique(intergenic_peaks$Enh)) {
 
 #Loop over each unique enhancer and calculate which gene is the nearest
 EGPs$Gene.Nearest <- FALSE
-for (enh in unique(EGPs$Enh)) {
+for (enh in unique(EGPs$peak)) {
   EGPs[EGPs$Enh == enh & EGPs$Gene.Distance == min(EGPs[EGPs$Enh == enh,"Gene.Distance"]),"Gene.Nearest"] <- TRUE
 }
 

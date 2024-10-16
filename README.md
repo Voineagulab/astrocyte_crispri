@@ -14,8 +14,9 @@ This directory does not contain code, but rather small processed data files, res
 #### Raw_data_processing
 Code to process raw scRNA-seq sequencing data.
 
-#### CandidateEnhancerSelection
-Code for selecting the candidate enhancer set of 979 open chromatin regions, and the design of sgRNAs targeting these regions.
+#### NHA characterisation and CandidateEnhancerSelection
+- Code for selecting the candidate enhancer set of 979 open chromatin regions, and the design of sgRNAs targeting these regions.
+- Code for the characterisation of NHA cells
 
 #### CRISPRi_screen
 Data processing and analyses of the NHA CRISPRi screen scRNA-seq data to identify functional enhancer-gene pairs.
@@ -24,7 +25,7 @@ Data processing and analyses of the NHA CRISPRi screen scRNA-seq data to identif
 Analyses of Nanostring nCounter data, used to validate hits in the CRISPRi screen.
 
 #### Functional_annotation
-These scripts annotate genes and enhancers with information on eRNA transcription (using TT-seq and CAGE), chromatin state (across development and tissues), expression dysregulation in brain disease, transcription factor binding (using TOBIAS footprinting analyses), and genetic variants including eQTL data. These annotations are based on TT-seq, RNA-seq and ATAC-seq data generated in the present study as well as published data listed in the Methods section of the paper (Functional annotation of genes and Gunctional annotation of enhancers).
+These scripts annotate genes and enhancers with information on eRNA transcription (using TT-seq and CAGE), chromatin state (across development and tissues), expression dysregulation in brain disease, transcription factor binding (using TOBIAS footprinting analyses), and genetic variants including eQTL data. These annotations are based on TT-seq, RNA-seq and ATAC-seq data generated in the present study as well as published data listed in the Methods section of the paper (Functional annotation of genes and Functional annotation of enhancers).
 
 #### Predictive_models
 Code for benchmarking predictive models and training EGrf and EGrf-extended. Input data used to generate the training data is included in Predictive_models/1.Data and described in Predictive_models/1.Data/FileDescriptions.rtf
@@ -36,4 +37,4 @@ Scripts that generate the manuscript figures and tables published in the manuscr
 https://voineagulabunsw.github.io/astrocyte_crispri_resource/
 
 ## Other
-Questions should be directed to Gavin Sutton (gavin.sutton@unsw.edu.au / gavinjamiesutton@gmail.com) and Irina Voineagu (i.voineagu@unsw.edu.au)
+Questions should be directed to Gavin Sutton (ggavinjamiesutton@gmail.com) and Irina Voineagu (i.voineagu@unsw.edu.au)

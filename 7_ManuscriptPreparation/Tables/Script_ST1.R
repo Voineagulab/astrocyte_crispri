@@ -1,37 +1,85 @@
-setwd("/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable1_ATAC/")
-options(stringsAsFactors = FALSE)
-source("../../../FullScale/Scripts/Functions.R")
-res.final <- read.csv("../../../FullScale/Results/2_DE/Enh/Results Final.csv")
-guides <- read.csv("../../../FullScale/Data/Whitelists/NHA Enh Library.csv")
+## Setup
+  setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable1_ATAC/")
+  options(stringsAsFactors = FALSE)
+  source("../../../FullScale/Scripts/Functions.R")
+  res.final <- read.csv("../../../FullScale/Results/2_DE/Enh/Results Final.csv")
+  guides <- read.csv("../../../FullScale/Data/Whitelists/NHA Enh Library.csv")
+
+## Read in power
+  pow <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable3_DE/3F_Power.csv")
+  wellpowered_egps <- pow$Pair[which(pow$WellPowered015  | pow$Hit)]
+  wellpowered_enh <- pow$Enhancer[which(pow$WellPowered015 | pow$Hit)] %>% unique()
+  wellpowered_genes <- pow$Gene[which(pow$WellPowered015 | pow$Hit)] %>% unique()
+
+## Cleaning function
+  update_enr_fractions <- function(dat) {
+      # the function to output enrichment statistics outputs a misleading total
+      # the "Total_TRUE" and "fraction_Bg_TRUE" both give refer to the complete set of bg + hit, rather than just bg
+      # this does not affect the calculation of statistics
+      # this code adjusts these numbers
+    
+    # infer n
+    total <- dat$Total_TRUE / dat$Fraction_Bg_TRUE 
+    nHit <- dat$Total_Hit_TRUE / dat$Fraction_Hit_TRUE 
+   
+    # adjust 
+    dat$Total_TRUE <- dat$Total_TRUE - dat$Total_Hit_TRUE
+    dat$Fraction_Bg_TRUE <- dat$Total_TRUE  / (total - nHit)
+    
+    # colnames!
+    colnames(dat)[2:5] <- c("Nonhit_True", "Nonhit_Fraction", "Hit_True", "Hit_Fraction")
+    
+    # round
+    dat$Nonhit_Fraction <- round(dat$Nonhit_Fraction, 3)
+    dat$Hit_Fraction <- round(dat$Hit_Fraction, 3)
+    dat[,c(6:9)] <- apply(dat[,c(6:9)], 2, signif, 3)
+    
+    
+    # output
+    return(dat)
+    
+  }
+  
+  
+  update_enr_wellpowered <- function(data = candidate.annot, data.column, rbind = FALSE, rbind.to = candidate.enrich) {
+    # copy of the function used in 3b
+    # however, filters to well-powered enhancers
+    
+    
+    # filter to enhancers tested against at least one gene (957 of 979)
+    # data <- data[which(data$Tested),]
+    
+    # filter to enhancers that are well-powered
+    data <- data[which(data$Enh %in% wellpowered_enh),]
+    
+    # get information
+    total <- nrow(data)
+    x <- data[,data.column] %>% as.logical()
+    y <- data$Hit
+
+    # run stats
+    f <- table(x, y) %>% fisher.test()
+
+    # output stats
+    out <- data.frame(Total_TRUE = sum(x),
+                      Fraction_Bg_TRUE = sum(x) / total,
+                      Total_Hit_TRUE = sum(x & y),
+                      Fraction_Hit_TRUE = sum(x & y) / sum(y),
+                      p = f$p.value,
+                      OR = f$estimate,
+                      Lower = f$conf.int[1],
+                      Upper = f$conf.int[2],
+                      row.names = data.column)
+
+    if (rbind) {
+      return(rbind(rbind.to, out))
+    } else {
+      return(out)
+    }
+
+  }
 
 
-update_enr_fractions <- function(dat) {
-  # the function to output enrichment statistics outputs a misleading total
-    # the "Total_TRUE" and "fraction_Bg_TRUE" both give refer to the complete set of bg + hit, rather than just bg
-    # this does not affect the calculation of statistics
-    # this script adjusts these numbers
-  
-  # infer n
-  total <- dat$Total_TRUE / dat$Fraction_Bg_TRUE 
-  nHit <- dat$Total_Hit_TRUE / dat$Fraction_Hit_TRUE 
- 
-  # adjust 
-  dat$Total_TRUE <- dat$Total_TRUE - dat$Total_Hit_TRUE
-  dat$Fraction_Bg_TRUE <- dat$Total_TRUE  / (total - nHit)
-  
-  # colnames!
-  colnames(dat)[2:5] <- c("Nonhit_True", "Nonhit_Fraction", "Hit_True", "Hit_Fraction")
-  
-  # round
-  dat$Nonhit_Fraction <- round(dat$Nonhit_Fraction, 3)
-  dat$Hit_Fraction <- round(dat$Hit_Fraction, 3)
-  dat[,c(6:9)] <- apply(dat[,c(6:9)], 2, signif, 3)
-  
-  
-  # output
-  return(dat)
-  
-}
 
 ## 1A: all ATAC information
   ## Read in
@@ -100,10 +148,15 @@ update_enr_fractions <- function(dat) {
       h1 <- h[which(h$Enh == cand$Enh[j]),]
       cand$Gene[j] <- paste(h1$Gene, collapse = "/")
     }
+      
+    
+  ## Add power information
+    cand$Wellpowered <- cand$Enh %in% wellpowered_enh
+    table(wellpowered_enh %in% cand[cand$Wellpowered==TRUE,]$Enh) #double check all powered enh are found in cand table
     
   ## Filter columns
     cn <- colnames(cand)
-    cand <- cand[,c("Enh", "Coord", "Tested", "Hit", "Gene", 
+    cand <- cand[,c("Enh", "Coord", "Tested", "Hit", "Gene", "Wellpowered",
                     cn[grep("Altius", cn)], 
                     "ValidatedEnh_K562_Yao2022", 
                     "AstSpecific_NottAtac", "AstSpecific_NottH3K27ac", "AstSpecific_Morabito", 
@@ -120,8 +173,8 @@ update_enr_fractions <- function(dat) {
       gsub("Morabito", "Morabito2021", .) %>%
       gsub("Nott", "Nott2019_", .)
       
-                    
-  ## Save
+    
+    ## Save
     write.csv(cand, "1B_CandidatePeakAnnotation.csv", row.names = FALSE)
                     
 ## 1C: TTseq annotation
@@ -183,40 +236,69 @@ update_enr_fractions <- function(dat) {
     
 ## 1D: Enrichment for annotations and transcription
   ## Load for annotations
-    load("../../../FullScale/Results/3_HitEnrichment/Chromatin/Final.rda", verbose = TRUE)
-    enr <- candidate.enrich
+    # old version loaded from original script
+    # load("../../../FullScale/Results/3_HitEnrichment/Chromatin/Final.rda", verbose = TRUE)
+    # enr <- candidate.enrich
+    
+    # new version, which recalculates fisher test using only well-powered enh
+    enr <- list()
+    for (j in colnames(cand)[-c(1:6)]) {
+      enr[[j]] <- update_enr_wellpowered(data = cand, data.column = j, rbind = FALSE)
+    }
+    enr <- do.call("rbind", enr)
+    
     enr$Resource <- rownames(enr)
     enr <- relocate(enr, "Resource")
     
-    enr$Resource <- gsub("Superenhancer", "NHA_Superenhancer_Hnisz2013", enr$Resource) %>%
-      gsub("_Xu", "_Supenhancer_Xu", .) %>%
-      gsub("Altius", "ENCODEv3_Meuleman2020", .) %>%
-      gsub("Gene", "LinkedGene", .) %>%
-      gsub("AstSpecific_Glia_Pooled", "GliaSpecific_Herring_Pooled", .) %>%
-      gsub("Herring", "Herring2022", .) %>%
-      gsub("Morabito", "Morabito2021", .) %>%
-      gsub("Nott", "Nott2019_", .)
+    # enr$Resource <- gsub("Superenhancer", "NHA_Superenhancer_Hnisz2013", enr$Resource) %>%
+    #   gsub("_Xu", "_Supenhancer_Xu", .) %>%
+    #   gsub("Altius", "ENCODEv3_Meuleman2020", .) %>%
+    #   gsub("Gene", "LinkedGene", .) %>%
+    #   gsub("AstSpecific_Glia_Pooled", "GliaSpecific_Herring_Pooled", .) %>%
+    #   gsub("Herring", "Herring2022", .) %>%
+    #   gsub("Morabito", "Morabito2021", .) %>%
+    #   gsub("Nott", "Nott2019_", .)
+    # 
+    # enr <- enr[which(enr$Resource %in% colnames(cand)),]
     
-    enr <- enr[which(enr$Resource %in% colnames(cand)),]
-    
+  
   ## Add transcription
-    eRNA.enrich <- read.csv("../../../FullScale/Results/4_EnhancerTranscription/Hit Enrichments.csv")
-    colnames(eRNA.enrich)[1] <- "Resource"
+    # eRNA.enrich <- read.csv("../../../FullScale/Results/4_EnhancerTranscription/Hit Enrichments.csv")
+    # colnames(eRNA.enrich)[1] <- "Resource"
+    # 
+    # # filter rows
+    # eRNA.enrich <- eRNA.enrich[c(1,2,4,5),]
+    # eRNA.enrich$Resource <- gsub("FANTOM5_Ast", "FANTOM5_Ast_CAGE", eRNA.enrich$Resource) %>%
+    #   gsub("FANTOM5_Any", "FANTOM5_AnySample_CAGE", .) %>%
+    #   gsub("TTseq", "TTseq_eRNA+", .) %>%
+    #   gsub("Unidirectional", "Uni_or_Bi", .)
     
-    # filter rows
-    eRNA.enrich <- eRNA.enrich[c(1,2,4,5),]
+    # new version taking into account only well-powered enhancers
+    x <- tt
+    x$TTseq_Unidirectional <- x$TTseq_eRNA != "eRNA-"
+    x$TTseq_Bidirectional <- x$TTseq_eRNA == "Bidirectional eRNA+"
+    
+    eRNA.enrich <- list()
+    for (j in colnames(x)[c(14:17)]) {
+      eRNA.enrich[[j]] <- update_enr_wellpowered(data = x, data.column = j, rbind = FALSE)
+    }
+    eRNA.enrich <- do.call("rbind", eRNA.enrich)
+    
+    eRNA.enrich$Resource <- rownames(eRNA.enrich)
+    eRNA.enrich <- relocate(eRNA.enrich, "Resource")
+    
     eRNA.enrich$Resource <- gsub("FANTOM5_Ast", "FANTOM5_Ast_CAGE", eRNA.enrich$Resource) %>%
       gsub("FANTOM5_Any", "FANTOM5_AnySample_CAGE", .) %>%
       gsub("TTseq", "TTseq_eRNA+", .) %>%
       gsub("Unidirectional", "Uni_or_Bi", .)
-    
-      
+
   ## Combined
     enr <- rbind(enr, eRNA.enrich)
     
   ## Fix fractions
     enr <- update_enr_fractions(enr)
     
-  ## Save
+
+    ## Save
     write.csv(enr, "1D_CandidatePeakEnrichments.csv", row.names = FALSE)
     

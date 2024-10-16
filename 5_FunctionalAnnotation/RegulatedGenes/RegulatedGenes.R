@@ -18,6 +18,10 @@ rm(list = ls()); gc()
 setwd("/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/")
 options(stringsAsFactors = FALSE)
 
+## Only tests for well-powered genes
+filterForWellPowered <- TRUE
+# if (filterForWellPowered) setwd("")
+
 ## Packages, functions, and libraries
   library(Seurat)
   library(sceptre)
@@ -52,10 +56,18 @@ options(stringsAsFactors = FALSE)
 ## Load results
   res.final <- read.csv("../2_DE/Enh/Results Final.csv")
   
+## Load power
+  pow <- read.csv("/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable3_DE/3F_Power.csv")
+  wellpowered_egps <- pow$Pair[which(pow$WellPowered015  | pow$Hit)]
+  wellpowered_enh <- pow$Enhancer[which(pow$WellPowered015 | pow$Hit)] %>% unique()
+  wellpowered_genes <- pow$Gene[which(pow$WellPowered015 | pow$Hit)] %>% unique()
+  
 ## Set up gene lists
   # the hit and background genes, useful for enrichment
   hit.genes <- unique(res.final$Gene[which(res.final$HitPermissive)]) # hit genes
   bg <- unique(res.final$Gene) # highly-expressed genes as background
+  
+  bg_wellpowered <- bg[which(bg %in% wellpowered_genes)]
   
   # a dataframe to store gene-level logical annotations
   annot.logi <- data.frame(Gene = bg, Hit = bg %in% hit.genes)
@@ -70,8 +82,13 @@ options(stringsAsFactors = FALSE)
                                 rbind = FALSE, 
                                 rbind.to = enrichments,
                                 replace = FALSE,
+                                filt.pow = filterForWellPowered,
                                 alternative = "two.sided",
                                 signed = "Unsigned") {
+    
+    # filtering to well-powered hits
+    if (filt.pow) data <- data[which(data$Gene %in% wellpowered_genes),]
+    
     # get information
     total <- nrow(data)
     x <- data[,data.column] %>% as.logical()
@@ -112,14 +129,34 @@ options(stringsAsFactors = FALSE)
   annot.detailed <- data.frame(Gene = sort(hit.genes))
   
 ## Quick load
-  # load("Genes/Final.rda")
+  # load("Genes/Wellpowered/Final.rda")
 
 ################################################################################################################################ #
 ## GO ----
   
+## Run gprofiler 2
+  # run
+  go <- gprofiler2::gost(query = hit.genes, custom_bg = bg_wellpowered, significant = TRUE, evcodes = TRUE, organism = "hsapiens", user_threshold = 0.05, correction_method = "fdr")
+  go <- as.data.frame(go$result)
+  go$parents <- sapply(go$parents, function(x) paste(x, collapse = "_"))
+
+  # save
+  g <- apply(go, 2, function(x) { # this code makes the dataframe suitable for csv format
+    
+    if (class(x) != "character") {
+      return(x)
+    } else {
+      return(gsub(",", "_", x))
+    }
+    
+  })
+  
+  write.csv(g, file = "Genes/Wellpowered/GO - gprofiler2.csv", quote = FALSE, row.names = FALSE)  
+  
 ## Run Clusterprofiler
   cp <- enrichGO(gene = hit.genes,
-                 universe = bg, 
+                 universe = bg_wellpowered,
+                 # universe = bg, 
                  OrgDb = "org.Hs.eg.db", 
                  keyType = "SYMBOL", 
                  ont = "all", 
@@ -127,9 +164,9 @@ options(stringsAsFactors = FALSE)
                  pAdjustMethod = "BH", 
                  readable = FALSE) # a new update
   
-  save(cp, file = "Genes/GO - Clusterprofiler.rda")
+  save(cp, file = "Genes/Wellpowered/GO - Clusterprofiler.rda")
   x <- cp@result
-  write.csv(x, "Genes/GO - Clusterprofiler.csv")
+  write.csv(x, "Genes/Wellpowered/GO - Clusterprofiler.csv")
   
   # test a few plots
   # goplot(cp) # not working
@@ -163,6 +200,32 @@ options(stringsAsFactors = FALSE)
   
   
   
+#   cnetplot(cp@, layout="dh", colorEdge = TRUE,
+#          cex_label_gene=0.5,cex_label_category=0.7)
+# 
+#    cnetplot(cp, categorySize="pvalue", showCategory =20, font.size=12,label_format=30,cex_line =1,colorEdge = TRUE)
+# 
+#   
+# #plot interesting terms
+# pdf("GOenrichment plots.pdf", height=5, width=10)
+# terms=c( "tissue development", "cell migration","cellular response to growth factor stimulus", "chemotaxis", "response to wounding", "regulation of cell differentiation")
+# keep=which(cp@result$Description%in%terms)
+# cp2=cp; cp2@result=cp2@result[keep,]
+# 
+# cnetplot(cp2,   layout="dh", colorEdge = TRUE,
+#          cex_label_gene=0.5,cex_label_category=0.7)
+# cnetplot(go2,   layout="dh", colorEdge = TRUE,
+#          cex_label_gene=0.5,cex_label_category=0.7, circular=TRUE)
+# terms=c( "cell migration","cellular response to growth factor stimulus", "chemotaxis", "response to wounding", "regulation of cell differentiation")
+# keep=which(go@result$Description%in%terms)
+# go2=go; go2@result=go@result[keep,]
+# cnetplot(go2,   layout="dh", colorEdge = TRUE,
+#          cex_label_gene=0.5,cex_label_category=0.7)
+# cnetplot(go2,   layout="dh", colorEdge = TRUE,
+#          cex_label_gene=0.5,cex_label_category=0.7, circular=TRUE)
+
+  
+  
 ################################################################################################################################ #
 ## Disgenet ----
   
@@ -175,7 +238,20 @@ options(stringsAsFactors = FALSE)
   
   
 ## Run
- 
+  # disease associations for each gene
+  # disgenet.g2d <- gene2disease(gene = hit.genes, 
+  #                     database = "ALL", 
+  #                     score = c(0, 1), 
+  #                     verbose = TRUE)
+  # 
+  # x <- disgenet.g2d@qresult
+  # x <- x[order(x$gene_symbol),]
+  # x <- relocate(x, "gene_symbol", "disease_name")
+  # write.csv(x, file = "Genes/Wellpowered/Disgenet - Gene2Disease.csv", row.names = FALSE)
+  
+  
+  
+  
   
   # disease set enrichments for the list of hits
   disgenet.enrich <- disease_enrichment(entities = hit.genes,
@@ -185,16 +261,17 @@ options(stringsAsFactors = FALSE)
                                         vocabulary = "HGNC",
                                         verbose = TRUE)
 
-  # x_disgenet <- disgenet.enrich@qresult
-  # write.csv(x, file = "Genes/Disgenet - Enrichment (Curated).csv", row.names = FALSE)
+  x_disgenet <- disgenet.enrich@qresult
+  # write.csv(x, file = "Genes/Wellpowered/Disgenet - Enrichment (Curated).csv", row.names = FALSE)
   # GJS note: the function seems to be insensitive to the choice of universe, and defaults to all genes.
   
-  ## Disease associations for each gene, run in a custom function
+  ## Disease associations for each gene
     # read in  
     disg_all <- read.delim("../../../PublicData/DisGeNet_070422/all_gene_disease_associations.tsv")
     
     # filter to tested genes
-    g2d <- disg_all[which(disg_all$geneSymbol %in% res.final$Gene),]
+    # g2d <- disg_all[which(disg_all$geneSymbol %in% res.final$Gene),]
+    g2d <- disg_all[which(disg_all$geneSymbol %in% bg_wellpowered),]
     
     # clean table
     g2d <- data.frame(Gene = g2d$geneSymbol,
@@ -224,7 +301,7 @@ options(stringsAsFactors = FALSE)
                                       data = g2d_annot, rbind.to = 
                                         g2d_enrich, 
                                       signed = "Unsigned",
-                                      alternative = "greater")  # this is the only one-sided fisher we run
+                                      alternative = "greater")  
       
       
     }
@@ -241,13 +318,137 @@ options(stringsAsFactors = FALSE)
     g2d_enrich <- g2d_enrich[,c("Disease", "p", "FDR", "OR", "Disease_Type", "Disease_SemanticType", "Total_count", "Total_ratio", "Hit_count", "Hit_ratio", "Lower", "Upper")]
     rownames(g2d_enrich) <- 1:nrow(g2d_enrich)
     
-    write.csv(g2d_enrich, "Genes/Disgenet - Enrichment.csv")
+    write.csv(g2d_enrich, "Genes/Wellpowered/Disgenet - Enrichment.csv")
     
   
 
 ## Save
-  # save(disgenet.enrich, disgenet.g2d, file = "Genes/Disgenet.rda")
+  # save(disgenet.enrich, disgenet.g2d, file = "Genes/Wellpowered/Disgenet.rda")
   
+  
+## Plot enrichment
+  # function
+  denrich <- function(p) {
+    ggplot(p, aes(x = Description, y = -log10(FDR), fill = Ratio, size = Count)) +
+      geom_point(shape = 21, colour = "black") +
+      # geom_col(width = 0.1, colour = "black", fill = "black") +
+      coord_flip() +
+      scale_fill_viridis_c(option = "A") +
+      theme_bw() +
+      scale_y_continuous(limits = c(0, NA)) +
+      theme(axis.title.y = invis) +
+      labs()
+  }
+  
+  # "Mental Disorders"
+  p <- disgenet.enrich@qresult[grepl("Mental Disorders", disgenet.enrich@qresult$disease_class_name),]
+  p$Ratio <- as.numeric(splitter(p$Ratio, "/", 1)) / length(hit.genes)
+  p <- p[which(p$FDR < 0.05),]
+  p <- p[1:10,] # top 10
+  p$Description <- factor(p$Description, levels = rev(p$Description))
+  
+  pdf(file = "Genes/Wellpowered/Disgenet Enrichment - Mental Disorders (Curated).pdf", height = 4, width = 8)
+  denrich(p)
+  dev.off()
+  
+  # "Nervous System Diseases"
+  p <- disgenet.enrich@qresult[grepl("Nervous System Diseases", disgenet.enrich@qresult$disease_class_name),]
+  p <- p[!(grepl("Neoplasms|Mental|Cardiovascular|Musculo", p$disease_class_name)),]
+  p$Ratio <- as.numeric(splitter(p$Ratio, "/", 1)) / length(hit.genes)
+  p <- p[which(p$FDR < 0.05),]
+  p <- p[1:10,]
+  p$Description <- factor(p$Description, levels = rev(p$Description))
+  
+  pdf(file = "Genes/Wellpowered/Disgenet Enrichment - Nervous System Diseases (Curated).pdf", height = 3.5, width = 8)
+  denrich(p)
+  dev.off()
+  
+  # "Neoplasms"
+  p <- disgenet.enrich@qresult[grepl("Neoplasms", disgenet.enrich@qresult$disease_class_name),]
+  p$Ratio <- as.numeric(splitter(p$Ratio, "/", 1)) / length(hit.genes)
+  p <- p[1:15,]
+  p$Description <- factor(p$Description, levels = rev(p$Description))
+  
+  pdf(file = "Genes/Wellpowered/Disgenet Enrichment - Neoplasms (Curated).pdf", height = 4, width = 8)
+  denrich(p)
+  dev.off()
+  
+## Add disgenet annotations to each gene
+  annot.detailed$Disgenet <- "."
+  for (j in annot.detailed$Gene) {
+    x <- disgenet.g2d@qresult[which(disgenet.g2d@qresult$gene_symbol == j),]
+    annot.detailed$Disgenet[which(annot.detailed$Gene == j)] <- paste(x$disease_name, collapse = "; ")
+  }
+  
+  annot.detailed$Disgenet <- gsub(",", "", annot.detailed$Disgenet)
+  
+  
+################################################################################################################################ #
+## Miscellaneous gene lists ----
+  
+  
+## SFARI
+  sfari <- read.csv("../../../PublicData/SFARI-Gene_genes_10-12-2022release_10-13-2022export.csv")
+  m <- match(annot.detailed$Gene, sfari$gene.symbol)
+  
+  annot.detailed$SFARI_Score <- sfari$gene.score[m]
+  annot.detailed$SFARI_Syndromic <- sfari$syndromic[m]
+  
+  
+## Phenotype in mouse knockouts
+  # access from https://www.informatics.jax.org/batch
+  write.table(bg, file = "../../../PublicData/MGIPhenotypes/BackgroundGenes.txt", col.names = FALSE, quote = FALSE, row.names = FALSE)
+  
+  # read in
+  mgi <- read.delim("../../../PublicData/MGIPhenotypes/MGIBatchReport_20230309_050302.txt")
+  mgi <- mgi[which(mgi$Term != ""),]
+
+  # extract annotation
+  annot.detailed$MGI <- NA
+  
+    for (j in 1:nrow(annot.detailed)) {
+      print(j)
+      g <- annot.detailed$Gene[j]
+      
+      if (g %in% mgi$Input) {
+        
+        x <- mgi[which(mgi$Input == g),]
+        annot.detailed$MGI[j] <- paste(x$Term, collapse = "; ")
+        
+      } else {
+        
+        next
+        
+      }
+    }
+  
+  annot.detailed$MGI.Lethal <- grepl("lethal", annot.detailed$MGI, ignore.case = TRUE)
+  
+  
+## gnomAD
+  gnomad <- read.delim("../../../PublicData/gnomAD_full_constraint_metrics.tsv")
+  gnomad <- gnomad[which(gnomad$canonical == "true"),] # canonical transcript only
+  
+  ## Add detailed annotation
+    m <- match(annot.detailed$Gene, gnomad$gene)
+    
+    # pLI: probability of loss of function intolerance
+    annot.detailed$pLI <- round(gnomad$pLI[m], 3)
+    
+    # the new gnomad metric is observed/expected loss of function mutations
+    annot.detailed$LOEUF <- gnomad$oe_lof_upper[m]  
+    
+  ## Add logical annotation  
+    m <- match(annot.logi$Gene, gnomad$gene)
+    
+    # pLI: where >0.9 is the accepted cut-off for being intolerant
+    annot.logi$pLI <- gnomad$pLI[m] > 0.9
+    enrichments <- run.fisher.vsHits(data.column = "pLI", rbind = FALSE)
+    
+    # observed/expected loss of function mutations: they recommend the upper bound of 90% confidence interval, so called: LOEUF (0.35 is the accepted cut-off)
+    annot.logi$LOEUF <- gnomad$oe_lof_upper[m] < 0.35
+    enrichments <- run.fisher.vsHits(data.column = "LOEUF", rbind = TRUE)  
+    
     
 
 ################################################################################################################################ #
@@ -279,7 +480,94 @@ options(stringsAsFactors = FALSE)
       annot.logi$Housekeeping_Eisenberg2013 <- annot.logi$Gene %in% eisenberg
       enrichments <- run.fisher.vsHits(data.column = "Housekeeping_Eisenberg2013", rbind = TRUE)
     
+    
+    
+## Brain-specific genes
+  ## Use GTEx V8, pre-transformed to median-per-tissue
+    
+  ## Load
+    # # read in
+    # gtex <- read.table("../../../PublicData/GTEx/GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_tpm.gct", sep = "\t", skip = 2, header = TRUE)
+    # 
+    # # subset to used genes
+    # gtex <- gtex[which(gtex$Description %in% res.final$Gene),]
+    # 
+    # # resolve the duplicate
+    # elfn2 <- geneInfo$EnsID[which(geneInfo$Symbol == "ELFN2")]
+    # gtex <- gtex[-which(gtex$Description == "ELFN2" & grepl(elfn2, gtex$Name)),] # this symbol has two rows for separate EnsIDs, so remove the EnsID which does not correspond to your records
+    # 
+    # # set rownames
+    # rownames(gtex) <- gtex$Description
+    # gtex <- gtex[,-c(1:2)]
+    # 
+    # # save
+    # save(gtex, file = "../../../PublicData/GTEx/GTEx_V8_AllSamps.rda")
+    
+    # load
+    load(file = "../../../PublicData/GTEx/GTEx_V8_AllSamps.rda")
+    
+    # metadata
+    gtex_meta <- read.delim(file = "../../../PublicData/GTEx/GTEx_Analysis_v8_Annotations_SampleAttributesDS.txt")
+    rownames(gtex_meta) <- gsub("-", "\\.", gtex_meta$SAMPID)
+    gtex_meta <- gtex_meta[colnames(gtex),] # same order as the expression data
+    
+    # remove cell-line-derived samples
+    remove <- grep("Cells - ", gtex_meta$SMTSD)
+    gtex_meta <- gtex_meta[-remove,]
+    gtex <- gtex[,-remove]
+    
+    
+    
+  ## Coarsely summarise the trend across tissues
+    gtex_trends <- list()
+    
+    ## No tissue pooling
+    gtex_trends$NoPool <- data.frame(Mean = rowMeans(gtex),
+                                     sd = apply(gtex, 1, sd),
+                                     cv = NA,
+                                     PctExp0 = rowMeans(gtex > 0),
+                                     PctExp1 = rowMeans(gtex > 1),
+                                     PctExp2 = rowMeans(gtex > 2),
+                                     PctExp5 = rowMeans(gtex > 5),
+                                     PctExp10 = rowMeans(gtex > 10))
+    
+    gtex_trends$NoPool$cv <- gtex_trends$NoPool$sd / gtex_trends$NoPool$Mean
   
+  ## Compare BA9 to all non-brain tissues
+    # sample filtering
+    remove <- which((gtex_meta$SMTS == "Brain") & (gtex_meta$SMTSD != "Brain - Frontal Cortex (BA9)"))
+    m <- gtex_meta[-remove,]
+    e <- gtex[,-remove]
+  
+    # metadata
+    isBrain <- m$SMTS == "Brain"
+    
+    # transform expression data
+    e <- log2(e + 0.5)
+    e <- t(e)
+    
+    # lm
+    brainSpecific <- lm(e~isBrain)
+    brainSpecific <- summary(brainSpecific)
+    
+    brainSpecific <- lapply(brainSpecific, function(z) {
+      data.frame(P = as.numeric(z$coefficients["isBrainTRUE", "Pr(>|t|)"]),
+                 log2fc = as.numeric(z$coefficients["isBrainTRUE", "Estimate"]))
+    })
+    
+    brainSpecific <- do.call("rbind", brainSpecific)
+    rownames(brainSpecific) <- splitter(rownames(brainSpecific), " ", 2)
+    brainSpecific$FDR <- p.adjust(brainSpecific$P, method = "fdr")
+    brainSpecific$BrainMarker <- brainSpecific$FDR < 0.05 & brainSpecific$log2fc > 1
+    brainSpecific$Gene <- rownames(brainSpecific)
+    brainSpecific <- brainSpecific[,c(5,2,1,3,4)]  
+    
+    write.csv(brainSpecific, "Genes/Wellpowered/Tissue-Specificity - GTEx PFC vs non-brain.csv")
+    
+  ## Add to annotation
+    annot.logi$BrainSpecific_GTEx <- annot.logi$Gene %in% brainSpecific$Gene[which(brainSpecific$BrainMarker)] 
+    enrichments <- run.fisher.vsHits(data.column = "BrainSpecific_GTEx", rbind = TRUE, signed = "Up")
+    
     
 ## Astrocyte-specific genes, regardless of age
   ## Load pseudobulk data from Herring 2022
@@ -325,7 +613,7 @@ options(stringsAsFactors = FALSE)
     herring_astSpecific$AstMarker <- herring_astSpecific$FDR < 0.05 & herring_astSpecific$log2fc > 1
     herring_astSpecific$Gene <- rownames(herring_astSpecific)
     herring_astSpecific <- herring_astSpecific[,c(5,2,1,3,4)]  
-    write.csv(herring_astSpecific, file = "Genes/Astrocyte Markers - Herring 2022.csv")
+    write.csv(herring_astSpecific, file = "Genes/Wellpowered/Astrocyte Markers - Herring 2022.csv")
     
   ## Add to annotation dataframes
     annot.logi$AstMarkers_AllAges_Herring2022 <- annot.logi$Gene %in% herring_astSpecific$Gene[which(herring_astSpecific$AstMarker)]
@@ -363,7 +651,24 @@ options(stringsAsFactors = FALSE)
     annot.logi$AstMarkers_Subtypes_Sadick2022 <- annot.logi$Gene %in% subtypeMarkers$gene
     enrichments <- run.fisher.vsHits(data.column = "AstMarkers_Subtypes_Sadick2022", rbind = TRUE, signed = "Up")
   
-
+  ## Detailed annotation too
+    annot.detailed$AstSubtypes_Sadick2022 <- NA
+  
+    for (j in 1:nrow(annot.detailed)) {
+      print(j)
+      g <- annot.detailed$Gene[j]
+      
+      if (g %in% subtypeMarkers$gene) {
+        
+        x <- subtypeMarkers[which(subtypeMarkers$gene == g),]
+        annot.detailed$AstSubtypes_Sadick2022[j] <- paste(x$LEN_so_astro_r2_cluster, collapse = "; ")
+        
+      } else {
+        
+        next
+        
+      }
+    }
     
 ################################################################################################################################ #
 ## Temporal trends within Astrocytes ----
@@ -429,7 +734,19 @@ options(stringsAsFactors = FALSE)
     
   ## Rename levels
     names(zhang_data) <- gsub(" ", "_", names(zhang_data))
-
+    
+  # ## Combine up and down
+  #   m1 <- grep("mouse", names(zhang_data))
+  #   zhang_data$human_vs_mouse <- do.call("c", (zhang_data[m1]))
+  #   
+  #   m2 <- grep("fetal", names(zhang_data))
+  #   zhang_data$fetal_vs_adult <- do.call("c", (zhang_data[m2]))
+  #   
+  #   m3 <- grep("GBM", names(zhang_data))
+  #   zhang_data$GBM_vs_Healthy <- do.call("c", (zhang_data[m3]))
+  #   
+  #   m4 <- grep("Epilepsy", names(zhang_data))
+  #   zhang_data$Epilepsy_vs_Healthy <- do.call("c", (zhang_data[m4]))
       
   ## Add to annotation (foetal vs adult only)
     annot.logi$AstMaturation_Zhang2016 <- annot.logi$Gene %in% c(zhang_data$up_fetal_vs_adult, zhang_data$down_fetal_vs_adult)
@@ -638,14 +955,38 @@ options(stringsAsFactors = FALSE)
   # data already processed above
   
   # add to annotation (FCD results only)
-  annot.logi$AstDisease_FocalCorticalDysplasia_Krawczyk2022 <- annot.logi$Gene %in% krawczyk_data$FocalCorticalDysplasia$`Gene Name`
-  annot.logi.up$AstDisease_FocalCorticalDysplasia_Krawczyk2022 <- annot.logi$Gene %in% krawczyk_data$FocalCorticalDysplasia$`Gene Name`[which(krawczyk_data$FocalCorticalDysplasia$`log2(Fold Change)` > 0)]
-  annot.logi.down$AstDisease_FocalCorticalDysplasia_Krawczyk2022 <- annot.logi$Gene %in% krawczyk_data$FocalCorticalDysplasia$`Gene Name`[which(krawczyk_data$FocalCorticalDysplasia$`log2(Fold Change)` < 0)]
+  # annot.logi$AstDisease_FocalCorticalDysplasia_Krawczyk2022 <- annot.logi$Gene %in% krawczyk_data$FocalCorticalDysplasia$`Gene Name`
+  # annot.logi.up$AstDisease_FocalCorticalDysplasia_Krawczyk2022 <- annot.logi$Gene %in% krawczyk_data$FocalCorticalDysplasia$`Gene Name`[which(krawczyk_data$FocalCorticalDysplasia$`log2(Fold Change)` > 0)]
+  # annot.logi.down$AstDisease_FocalCorticalDysplasia_Krawczyk2022 <- annot.logi$Gene %in% krawczyk_data$FocalCorticalDysplasia$`Gene Name`[which(krawczyk_data$FocalCorticalDysplasia$`log2(Fold Change)` < 0)]
   
-  enrichments <- run.fisher.vsHits(data.column = "AstDisease_FocalCorticalDysplasia_Krawczyk2022", rbind = TRUE)
-  enrichments <- run.fisher.vsHits(data.column = "AstDisease_FocalCorticalDysplasia_Krawczyk2022", rbind = TRUE, data = annot.logi.up, signed = "Up")
+  # enrichments <- run.fisher.vsHits(data.column = "AstDisease_FocalCorticalDysplasia_Krawczyk2022", rbind = TRUE)
+  # enrichments <- run.fisher.vsHits(data.column = "AstDisease_FocalCorticalDysplasia_Krawczyk2022", rbind = TRUE, data = annot.logi.up, signed = "Up")
   # enrichments <- run.fisher.vsHits(data.column = "AstDisease_FocalCorticalDysplasia_Krawczyk2022", rbind = TRUE, data = annot.logi.down, signed = "Down")
   # the above line of code was commented out as there are no down DEGs in our screened gene set
+  
+## "Disease-associated astrocytes": cluster 4 in Habib et al Nat Neuro 2020
+  # six astrocyte clusters were found, with pairwise DE performed.
+  # cluster 6 was found to be a GFAP-high state
+  # cluster 4 was termed DAA, because it was unique to their Alzheimer's population
+  # we will focus on the the comparison of these to cluster 1, which they deem the GFAP-low homeostatic state
+  
+  # read in
+  daa <- read_xlsx("../../../PublicData/snRNAseq/Habib2020_MouseDAA/41593_2020_624_MOESM2_ESM.xlsx", sheet = "Supplementary Table 2", skip = 5)
+  
+  # convert to human symbol
+  daa$Human <- convert_mouse2human(daa$Gene)
+  
+  # filter
+  daa <- daa[-which(is.na(daa$Human)),] # remove rows with no found human symbol
+  
+  # overlap
+  annot.logi$AstDisease_DAA_Habib2020 <- annot.logi$Gene %in% daa$Human[which((daa$`Cluster ID #1` == 1) & (daa$`Cluster ID #2` == 4))]
+  annot.logi.up$AstDisease_DAA_Habib2020 <- annot.logi$Gene %in% daa$Human[which((daa$`Cluster ID #1` == 1) & (daa$`Cluster ID #2` == 4) & daa$`Avg log fold-change #1/#2` < 0)] # note: this is < 0 for upregulation in Cluster 4
+  annot.logi.down$AstDisease_DAA_Habib2020 <- annot.logi$Gene %in% daa$Human[which((daa$`Cluster ID #1` == 1) & (daa$`Cluster ID #2` == 4) & daa$`Avg log fold-change #1/#2` > 0)] # note: this is > 0 for upregulation in Cluster 4
+  
+  enrichments <- run.fisher.vsHits(data.column = "AstDisease_DAA_Habib2020", rbind = TRUE)
+  enrichments <- run.fisher.vsHits(data.column = "AstDisease_DAA_Habib2020", rbind = TRUE, data = annot.logi.up, signed = "Up")
+  enrichments <- run.fisher.vsHits(data.column = "AstDisease_DAA_Habib2020", rbind = TRUE, data = annot.logi.down, signed = "Down")
   
     
 ################################################################################################################################ #
@@ -698,7 +1039,7 @@ options(stringsAsFactors = FALSE)
                                    Up = rowSums(annot.logi.up[,grep("AstActivation_TIC_hiPSC", colnames(annot.logi.up))]),
                                    Down = rowSums(annot.logi.down[,grep("AstActivation_TIC_hiPSC", colnames(annot.logi.down))]))
   
-    write.csv(leng_consistency, file = "Genes/Activation - Leng2022.csv")
+    write.csv(leng_consistency, file = "Genes/Wellpowered/Activation - Leng2022.csv")
     
     # test
     for (j in 1:4) {
@@ -717,6 +1058,120 @@ options(stringsAsFactors = FALSE)
     }
  
 
+
+## LPS activation timecourse of mouse astrocytes in vivo
+  ## From Hasel 2021
+    
+  ## Read in
+    hasel_genes <- list()
+    
+    # bulk
+    hasel_bulk <- read_xlsx("../../../PublicData/Hasel2021_MouseAstActivation/ST1_LPS_BulkTimecourse.xlsx", sheet = 2)
+    
+    get_hasel_bulkDEGs <- function(y, fix = FALSE) {
+      
+      # genes passing padjusted threshold
+      padj <- hasel_bulk[[paste0("padj_", y, "_LPS")]]
+      padj <- gsub("E", "e", padj) 
+      padj <- as.numeric(padj)
+      pass.padj <- padj < 0.05
+      
+      # genes passing log2fc threshold
+      # fc <- hasel_bulk[[paste0("l2f_", y, "_LPS")]]
+      # pass.fc <- fc > 1
+      
+      # get degs
+      # z <- hasel_bulk$`Gene Name`[pass.padj & pass.fc]
+      z <- hasel_bulk[which(pass.padj), c("Gene Name", paste0("l2f_", y, "_LPS"))]
+      colnames(z) <- c("Gene", "logf2c")
+      
+      # convert to human symbol
+      z$Gene <- convert_mouse2human(genes = z$Gene, path.fix = fix, return.vector = TRUE)
+      z <- z[-which(is.na(z$Gene)),]
+      z <- unique(z)
+      
+      # return
+      return(z)
+    }
+    
+    hasel_genes$MouseLPS_3h <- get_hasel_bulkDEGs("3h")
+    hasel_genes$MouseLPS_24h <- rbind(get_hasel_bulkDEGs("24h_Male"), get_hasel_bulkDEGs("24h_Female"))
+    hasel_genes$MouseLPS_72h <- get_hasel_bulkDEGs("72h")
+    
+    # rat
+    hasel_rat <- read_xlsx("../../../PublicData/Hasel2021_MouseAstActivation/ST7_Rat.xlsx", sheet = 2)
+    hasel_rat$Human <- convert_rat2human(hasel_rat$SYMBOL, path.fix = FALSE)
+    hasel_rat <- hasel_rat[-which(is.na(hasel_rat$Human)),]
+    
+    get_hasel_ratDEGs <- function(y) {
+    
+      # genes passing padjusted threshold
+      padj <- hasel_rat[[paste0(y, "_padj")]]
+      padj <- gsub("E", "e", padj) 
+      padj <- as.numeric(padj)
+      pass.padj <- padj < 0.05
+      
+      # # genes passing log2fc threshold
+      # fc <- hasel_rat[[paste0(y, "_l2f")]]
+      # pass.fc <- fc > 1
+      
+      # get degs
+      z <- hasel_rat[which(pass.padj), c("Human", paste0(y, "_l2f"))]
+      colnames(z) <- c("Gene", "logf2c")
+      z <- unique(z)
+      
+      # return
+      return(z)
+    }
+    
+    hasel_genes$Rat_IFNgamma <- get_hasel_ratDEGs("Ifng_vs_Cnt") # interferon gamma
+    hasel_genes$Rat_IFNbeta <- get_hasel_ratDEGs("Ifnb_vs_Cnt") # interferon beta
+    hasel_genes$Rat_TIC <- get_hasel_ratDEGs("TIC_vs_Cnt") # tnfa, ilf1 alpha, c1q
+    
+    # single cell
+    hasel_sc <- read_xlsx("../../../PublicData/Hasel2021_MouseAstActivation/ST6_scRNAseq_DEGs.xlsx", skip = 1)
+    hasel_sc$Human <- convert_mouse2human(hasel_sc$Gene_name, path.fix = FALSE)
+    hasel_sc <- hasel_sc[-which(is.na(hasel_sc$Human)),]
+    
+    hasel_genes$MouseLPS_SC <- data.frame(Gene = hasel_sc$Human, logf2c = hasel_sc$log_2_fold)
+    
+    # rename
+    names(hasel_genes) <- paste0("AstActivation_", names(hasel_genes), "_Hasel2021")
+    
+  ## Add each list to the dataframe
+    for (j in names(hasel_genes)) {
+      # annot.logi[,j] <- annot.logi$Gene %in% hasel_genes[[j]]
+      # enrichments <- run.fisher.vsHits(data.column = j, rbind = TRUE)
+      
+      annot.logi[,j] <- annot.logi$Gene %in% hasel_genes[[j]]$Gene
+      annot.logi.up[,j] <- annot.logi$Gene %in% hasel_genes[[j]]$Gene[which(hasel_genes[[j]]$logf2c > 0)]
+      annot.logi.down[,j] <- annot.logi$Gene %in% hasel_genes[[j]]$Gene[which(hasel_genes[[j]]$logf2c < 0)]
+  
+      enrichments <- run.fisher.vsHits(data.column = j, rbind = TRUE)
+      enrichments <- run.fisher.vsHits(data.column = j, rbind = TRUE, data = annot.logi.up, signed = "Up")
+      
+      if (j == "AstActivation_MouseLPS_72h_Hasel2021") next
+      # enrichments <- run.fisher.vsHits(data.column = j, rbind = TRUE, data = annot.logi.down, signed = "Down")
+      
+    }
+    
+    
+## Finally: from Leng 2022, looking at DEGs between IRAS1 and IRAS2
+  # these are transcriptomically-distinct populations from scRNAseq of TIC-activated iAstrocytes
+    
+  ## Read in
+    iras <- read_xlsx("../../../PublicData/Leng2022_iAstrocyteScreen/ST4_ClusterMarkers.xlsx", sheet = "DEGs between IRAS2 vs. IRAS1")
+    
+  ## Add to annotation matrices
+    # annot.logi$AstActivation_TIC_hiPSC_IRAS <- annot.logi$Gene %in% iras$gene
+    annot.logi$AstActivation_TIC_hiPSC_IRAS1 <- annot.logi$Gene %in% iras$gene[which(iras$avg_diff > 0)] # this is a < sign. it is because the paper implies that IRAS2 is group1:  The columns ‘pct.1’ and ‘pct.2’ contain the percent of cells expressing the gene of interest in the cluster of interest (‘pct.1’) or all other cells (‘pct.2’) or in IRAS2 (‘pct.1’) iAstrocytes or IRAS1 (‘pct.2’) iAstrocytes. 
+    annot.logi$AstActivation_TIC_hiPSC_IRAS2 <- annot.logi$Gene %in% iras$gene[which(iras$avg_diff > 0)]
+    
+    # enrichments <- run.fisher.vsHits(data.column = "AstActivation_TIC_hiPSC_IRAS", rbind = TRUE, signed = "Unsigned")
+    enrichments <- run.fisher.vsHits(data.column = "AstActivation_TIC_hiPSC_IRAS1", rbind = TRUE, signed = "Up")
+    enrichments <- run.fisher.vsHits(data.column = "AstActivation_TIC_hiPSC_IRAS2", rbind = TRUE, signed = "Up")
+  
+  
     
   
 ################################################################################################################################ #
@@ -757,8 +1212,13 @@ options(stringsAsFactors = FALSE)
                                          data.column, 
                                          rbind = FALSE, 
                                          rbind.to = enrichments.combined,
+                                         filt.pow = filterForWellPowered,
                                          replace = FALSE,
                                          signed = "Unsigned") {
+    
+    # filtering to well-powered hits
+    if (filt.pow) data <- data[which(data$Gene %in% wellpowered_genes),]
+    
     # get information
     total <- nrow(data)
     x <- data[,data.column]
@@ -822,13 +1282,13 @@ options(stringsAsFactors = FALSE)
 ## Save ----
   
     
-write.csv(enrichments, file = "Genes/Final - Enrichments.csv")
-write.csv(enrichments.combined, file = "Genes/Final - Enrichments (Combined Annotations).csv", row.names = FALSE)  
-write.csv(annot.logi, file = "Genes/Final - Annotation Logical.csv", row.names = FALSE)
-write.csv(annot.detailed, file = "Genes/Final - Annotation Detailed.csv", row.names = FALSE)
-write.csv(annot.logi.up, file = "Genes/Final - Annotation Logical (Signed Up).csv", row.names = FALSE)
-write.csv(annot.logi.down, file = "Genes/Final - Annotation Logical (Signed Down).csv", row.names = FALSE)
-write.csv(annot.combined, file = "Genes/Final - Annotation Summed Per Phenotype Category.csv", row.names = FALSE)
+write.csv(enrichments, file = "Genes/Wellpowered/Final - Enrichments.csv")
+write.csv(enrichments.combined, file = "Genes/Wellpowered/Final - Enrichments (Combined Annotations).csv", row.names = FALSE)  
+write.csv(annot.logi, file = "Genes/Wellpowered/Final - Annotation Logical.csv", row.names = FALSE)
+write.csv(annot.detailed, file = "Genes/Wellpowered/Final - Annotation Detailed.csv", row.names = FALSE)
+write.csv(annot.logi.up, file = "Genes/Wellpowered/Final - Annotation Logical (Signed Up).csv", row.names = FALSE)
+write.csv(annot.logi.down, file = "Genes/Wellpowered/Final - Annotation Logical (Signed Down).csv", row.names = FALSE)
+write.csv(annot.combined, file = "Genes/Wellpowered/Final - Annotation Summed Per Phenotype Category.csv", row.names = FALSE)
 
 
 save(enrichments, 
@@ -837,7 +1297,66 @@ save(enrichments,
      annot.logi.down,
      annot.logi.up,
      annot.combined,
-     annot.detailed, file = "Genes/Final.rda")
+     annot.detailed, file = "Genes/Wellpowered/Final.rda")
 
 
+# ################################################################################################################################ #
+# ## Visualise ----
+# 
+# 
+# ## A heatmap
+#   x <- annot.logi
+#   rownames(x) <- x$Gene
+#   
+#   # filter columns
+#   keep.cols <- c("Hit",
+#                  "AstMarkers_Herring2022",
+#                  "AstMarkers_Foetal_Zhong2018",
+#                  "AstSubtypes_Sadick2022",
+#                  "AstAgeing_Krawczyk2022",
+#                  "AstAgeing_Palmer2021",
+#                  "AstMaturation_Zhang2016",
+#                  "AstMaturation_Krawczyk2022",
+#                  "AstActivation_iAstro_Leng2022",
+#                  "AstActivation_hiPSC_TCW_Leng2022",
+#                  "AstActivation_hiPSC_Li_Leng2022",
+#                  "AstActivation_hiPSC_Krenciko_Leng2022",
+#                  "AstDisease_AD_Sadick2022",
+#                  "AstDisease_MS_Jakel2019",
+#                  "AstDisease_ASD_Gandal2022",
+#                  "AstDisease_GBM_Zhang2016",
+#                  "AstDisease_Peritumour_Krawczyk2022",
+#                  "AstDisease_Epilepsy_Zhang2016")
+#   x <- x[,keep.cols]
+#   x[,-1] <- apply(x[,-1], 2, as.numeric)
+#   
+#   # clean column names
+#   colnames(x) <- gsub("^Ast", "", colnames(x)) %>%
+#     gsub("_Leng2022", "", .) %>%
+#     gsub("hiPSC_", "", .) %>%
+#     gsub("Disease_", "", .) %>%
+#     gsub("Krenciko", "Krencik", .) %>%
+#     gsub("Activation", "Activation", .) %>%
+#     gsub("_Zhong", "", .) %>%
+#     gsub("_", "\n", .) %>%
+#     splitter(., "2", 1) %>%
+#     gsub("iAstro_", "", .) 
+#     
+#   
+#   
+# ## Plot
+#   # row side colours to label hits
+#   rsc <- as.factor(x$Hit)
+#   levels(rsc) <- c("grey90", "firebrick1")
+#   rsc <- as.character(rsc)
+#   
+#   # plot all genes
+#   pdf(file = "Genes/Wellpowered/Heatmap of Logical - All Genes.pdf", height = 20, width = 5)
+#   gplots::heatmap.2(as.matrix(x[,-1]), RowSideColors = rsc, trace = "none", col = carto_pal(7, "ag_GrnYl"), margins = c(12, 5))
+#   dev.off()  
+#   
+#   # plot hit genes
+#   pdf(file = "Genes/Wellpowered/Heatmap of Logical - Hit Genes.pdf", height = 20, width = 5)
+#   gplots::heatmap.2(as.matrix(x[which(x$Hit),-1]), trace = "none", col = carto_pal(7, "ag_GrnYl"), margins = c(10, 5))
+#   dev.off()  
   

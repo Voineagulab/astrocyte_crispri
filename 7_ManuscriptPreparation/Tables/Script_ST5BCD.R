@@ -34,21 +34,49 @@ res.final <- read.csv("../../../FullScale/Results/2_DE/Enh/Results Final.csv")
   ## Save
     write.csv(tfbs, "5B_TobiasBound.csv", row.names = FALSE)
 
-## 5C: enrichments
-  ## Load
-    tfEnr <- read.csv("../../../EnhancerPredictionModels/Results/Tobias/Summaries/FisherTestsExpressedTFMatrix.csv")
+# ## 5C: enrichments old version
+#   ## Load
+#     tfEnr <- read.csv("../../../EnhancerPredictionModels/Results/Tobias/Summaries/FisherTestsExpressedTFMatrix.csv")
+# 
+#   ## Filter rows
+#     tfEnr <- tfEnr[-grep("Unbound", tfEnr$Variable),]
+#     tfEnr$Variable <- gsub("Tobias.Bound_", "", tfEnr$Variable)
+#     tfEnr <- tfEnr[which(tfEnr$Variable %in% colnames(tfbs)),]
+# 
+#   ## Filter columns
+#     tfEnr <- tfEnr[,c("Variable", "OR", "p", "Lower", "Upper")]
+#     colnames(tfEnr)[1] <- "TF"
+# 
+#   ## Save
+#     write.csv(tfEnr, "5C_TobiasBoundEnrich.csv", row.names = FALSE)
     
-  ## Filter rows
-    tfEnr <- tfEnr[-grep("Unbound", tfEnr$Variable),]
-    tfEnr$Variable <- gsub("Tobias.Bound_", "", tfEnr$Variable)
-    tfEnr <- tfEnr[which(tfEnr$Variable %in% colnames(tfbs)),]
-    
-  ## Filter columns
-    tfEnr <- tfEnr[,c("Variable", "OR", "p", "Lower", "Upper")]
-    colnames(tfEnr)[1] <- "TF"
-
-  ## Save
-    write.csv(tfEnr, "5C_TobiasBoundEnrich.csv", row.names = FALSE)
+## 5C new version which only considers well-powered non-hit enhancers
+#Tobias Class plots
+  test_boundMatrix <- read.csv("/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Results/Tobias/Summaries/JASPAR_group_AnnotatedTFs.csv")
+  colnames(test_boundMatrix)[colnames(test_boundMatrix) == "Odds.Ratio"] <- "Odds Ratio"
+  #Alter names so they fit on the plot
+  test_boundMatrix$JASPAR_Class <- gsub("Nuclear receptors", "Nuc. recep.", test_boundMatrix$JASPAR_Class) # %>%
+    # gsub("binding", "", .)# test_boundMatrix$JASPAR_Class <- gsub("Nuclear receptors", "Nuc. recep.", test_boundMatrix$JASPAR_Class) %>%
+    # gsub("binding", "", .)
+  
+  # replace p-values with those from the well-powered subset of enhancers
+  x <- read.csv("../../../EnhancerPredictionModels/Results/Tobias/Summaries/FisherTestsExpressedTFMatrix_wellpowered.csv")
+  # y <- read.csv("../../../EnhancerPredictionModels/Results/Tobias/Summaries/FisherTestsExpressedTFMatrix.csv") # confirms that the existing p-values are from here
+  m <- match(test_boundMatrix$Variable, x$Variable)
+  test_boundMatrix$P <- x$p[m]
+  test_boundMatrix$`Odds Ratio` <- x$OR[m]
+  test_boundMatrix$FDR <- p.adjust(test_boundMatrix$P, method = "fdr")
+  test_boundMatrix$BON <- p.adjust(test_boundMatrix$P, method = "bonf")
+  
+  # clean
+  test_boundMatrix <- test_boundMatrix[,c(1,3,4,6,7,8,9,11,12)]
+  notDimer <- test_boundMatrix$TF.1 == test_boundMatrix$TF.2
+  test_boundMatrix$TF.2[notDimer] <- NA
+  test_boundMatrix <- test_boundMatrix[-which(is.na(test_boundMatrix$P)),]
+  colnames(test_boundMatrix)[1] <- "Name"
+  test_boundMatrix <- test_boundMatrix[order(test_boundMatrix$P),]
+  
+  write.csv(test_boundMatrix, file = "5C_TobiasBoundEnrich_wellpowered.csv", row.names = FALSE)
     
 ## 5D: astrocyte-specificity of genes, enhancers, and TFs
   ## Read in the elements showing specificity to check

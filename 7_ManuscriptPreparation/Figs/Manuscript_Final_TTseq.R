@@ -1,5 +1,5 @@
 ## Setup
-  setwd("/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_TTseq/")
+  setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_TTseq/")
   library(tidyverse)
   library(rcartocolor)
   library(ggsci)
@@ -64,7 +64,11 @@
     sink()
   }
   
-
+## Read in power dataframe
+  pow <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable3_DE/3F_Power.csv")
+  wellpowered_egps <- pow$Pair[which(pow$WellPowered015  | pow$Hit)]
+  wellpowered_enh <- pow$Enhancer[which(pow$WellPowered015 | pow$Hit)] %>% unique()
+  wellpowered_genes <- pow$Gene[which(pow$WellPowered015 | pow$Hit)] %>% unique()
 
 ################################################################################################################################ #
 ## Comparison of TTseq to RNAseq ----
@@ -109,6 +113,8 @@
   m <- match(p$Enh, transcribed$Enh)
   p$Cat <- transcribed$Category_3[m]
   p <- p[-which(p$Cat == "Not transcribed"),]
+  
+  p <- p[which(p$Enh %in% wellpowered_enh),] # 424 to 350
 
 
 p <- melt(p)
@@ -118,7 +124,7 @@ levels(p$Hit) <- c("Inactive\ncandidates", "Functional\nenhancers")
 offset <- 0.1
   
 # pdf(file = "Counts in hits versus non-hits.pdf", height = 2, width = 2)
-pdf_tt(figNo = "4E", title = "Reads in hits versus non-hits", h = 2, w = 2)
+pdf_tt(figNo = "3E", title = "Reads in hits versus non-hits", h = 2, w = 2)
 ggplot(p[which(p$variable == "TTseq"),], aes(x = Hit, colour = Hit, fill = Hit, y = value+offset)) +
   geom_violin(scale = "width", position = position_dodge(width = 0.7), width = 0.7, alpha = 0.7) +
   geom_boxplot(colour = "black", width = 0.2, outlier.shape = NA, show.legend = FALSE) +
@@ -142,7 +148,7 @@ dev.off()
 q <- p[which(p$variable == "TTseq"),]
 sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$value ~ q$Hit))
 
- # p = 0.003
+ # p = 0.0446
 
 
 ################################################################################################################################ #
@@ -157,18 +163,21 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
   
   ## Functions
     plot.cats <- function(thresh, complex = FALSE) {
+      
+      transcribed_filt <- transcribed[which(transcribed$Enh %in% wellpowered_enh),]
+      
       # stats
-      fish_trns <- table(transcribed$Hit, transcribed[,paste0("Category_", thresh)] != "Not transcribed") %>% fisher.test()
+      fish_trns <- table(transcribed_filt$Hit, transcribed_filt[,paste0("Category_", thresh)] != "Not transcribed") %>% fisher.test()
       lab_trns <- paste0("Transcribed: p=", 
                          signif(fish_trns$p.value, 2),
                          ", OR=", signif(fish_trns$estimate, 2))
       
-      fish_uni <- table(transcribed$Hit, transcribed[,paste0("Category_", thresh)] == "Unidirectional") %>% fisher.test()
+      fish_uni <- table(transcribed_filt$Hit, transcribed_filt[,paste0("Category_", thresh)] == "Unidirectional") %>% fisher.test()
       lab_uni <- paste0("Unidirectional: p=", 
                          signif(fish_uni$p.value, 2),
                          ", OR=", signif(fish_uni$estimate, 2))
       
-      fish_bi <- table(transcribed$Hit, transcribed[,paste0("Category_", thresh)] == "Bidirectional") %>% fisher.test()
+      fish_bi <- table(transcribed_filt$Hit, transcribed_filt[,paste0("Category_", thresh)] == "Bidirectional") %>% fisher.test()
       lab_bi <- paste0("Bidirectional: p=", 
                          signif(fish_bi$p.value, 2),
                          ", OR=", signif(fish_bi$estimate, 2))
@@ -180,7 +189,7 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
                     "\n", lab_bi)
       
       # plot values
-      tab <- table(transcribed$Hit, transcribed[,paste0("Category_", thresh)])
+      tab <- table(transcribed_filt$Hit, transcribed_filt[,paste0("Category_", thresh)])
       tab <- tab / rowSums(tab)
       tab <- t(tab)
       tab <- as.data.frame.matrix(tab)
@@ -235,9 +244,16 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
     plot.cats(final.thresh) 
     dev.off()
  
+## Test whether functional EGPs are more likely to be bidirectional (given transcription is assumed)
+    p <- transcribed[which(transcribed$Enh %in% wellpowered_enh),]
+    p <- p[which(p$Category_3 != "Not transcribed"),]
+    fish <- table(p$Hit, p$Bidirectional_3)  %>% fisher.test()
+    sink_tt(figNo = "3D", title = "eRNA bidirectional if transcribed", fish)
+    
 ## Plot across thresholds
-  p <- apply(transcribed[, grep("Category", colnames(transcribed)),], 2, function(x) {
-    y <- table(transcribed$Hit, x)
+  p <- transcribed[which(transcribed$Enh %in% wellpowered_enh),]
+  p <- apply(p[, grep("Category", colnames(p)),], 2, function(x) {
+    y <- table(p$Hit, x)
     y <- y / rowSums(y)
     y <- as.data.frame.matrix(y)
   })
@@ -263,7 +279,7 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
   p$Annot <- round(p$value * 100) %>% paste0("%") 
   
   # pdf(file = "Transcriptional categories across thresholds (TTseq).pdf", height = 2.5, width = 3.5)
-  pdf_tt(figNo = "SFig6C", title = "eRNA across thresholds", h = 2.5, w = 3.5)
+  pdf_tt(figNo = "SFig5C", title = "eRNA across thresholds", h = 2.5, w = 3.5)
   ggplot(p, aes(x = Hit, fill = interaction(variable, Hit), y = value*100, label = Annot)) +
     geom_col(alpha = 0.8, width = 0.9, position = "stack") +
     theme_bw() +
@@ -286,54 +302,54 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
 ## Correlate TTseq to other variables ----
     
  
-## Scatterplot transcription versus distance for EGPs
-  ## Setup
-    p <- res.final
-    distCat <- read.csv("../../../FullScale/Results/3_HitEnrichment/EnhGenePairs/Intervening Gene Classification Between EGPs.csv", row.names = 1)
-    
-    m <- match(p$Enh, rownames(tt))
-    p$TT <- tt$TTseq_Total[m]
-    
-    m <- match(p$Enh, transcribed$Enh)
-    p$Transcribed <- transcribed$Category_3[m]  != "Not transcribed"
-    p$Transcribed <- factor(p$Transcribed, levels = c("FALSE", "TRUE"))
-    levels(p$Transcribed) <- c("eRNA -", "eRNA +")
-    
-    m <- match(p$Pair, distCat$Pair)
-    p$DistCat <- distCat$Distance.Category[m]
-    p$DistCat <- factor(p$DistCat)
-  
-    p$HitPermissive <- factor(p$HitPermissive, levels = c("FALSE", "TRUE"))
-    levels(p$HitPermissive) <- c("Inactive EGP", "Functional EGP")
-    
-  ## Plot
-    offset <- 1 # on TTseq counts
-
-    # pdf(file = "Distance versus TT scatterplot (V2).pdf", height = 1.8, width = 2)
-    pdf_tt(figNo = "3F", title = "Distance versus eRNA", h = 1.8, w = 2)
-    pal <- pals$Primary[c(5,7,4,1)]
-    
-    levels(p$DistCat) <- c("Type A", "Type B", "Type C", "Type D")
-    ggplot(p[which(p$HitPermissive == "Functional EGP"),], aes(y = Gene.Distance / 1000, x = Transcribed, colour = DistCat)) +
-      geom_quasirandom(dodge.width = 0.25) +
-      geom_violin(colour = "black", scale = "width", width = 0.7, draw_quantiles = 0.5, alpha = 0) +
-      scale_colour_manual(values = pal) +
-      theme_bw() +
-      theme(panel.grid = invis, legend.position = "none", #  axis.text.y = text90,
-            panel.border = invis, axis.line.y = element_line(), axis.title.x = invis) +
-      labs(y = "Distance (kb)") +
-      scale_y_continuous(trans = "log10", limits = c(2, 510), 
-                         expand = c(0,0), 
-                         breaks = c(2, 5, 10, 20, 50, 100, 200, 500)) 
-    dev.off()
-    
-  ## Statistics
-    # within hits, what is the relationship between distance and transcription
-    h <- which(p$HitPermissive == "Functional EGP")
-   
-    w <- wilcox.test((p$Gene.Distance[h]) ~ (p$Transcribed[h] )) # p = 0.02
-    sink_tt(figNo = "3F", title = "Distance versus eRNA", w)
-  
+# ## Scatterplot transcription versus distance for EGPs
+#   ## Setup
+#     p <- res.final
+#     distCat <- read.csv("../../../FullScale/Results/3_HitEnrichment/EnhGenePairs/Intervening Gene Classification Between EGPs.csv", row.names = 1)
+#     
+#     m <- match(p$Enh, rownames(tt))
+#     p$TT <- tt$TTseq_Total[m]
+#     
+#     m <- match(p$Enh, transcribed$Enh)
+#     p$Transcribed <- transcribed$Category_3[m]  != "Not transcribed"
+#     p$Transcribed <- factor(p$Transcribed, levels = c("FALSE", "TRUE"))
+#     levels(p$Transcribed) <- c("eRNA -", "eRNA +")
+#     
+#     m <- match(p$Pair, distCat$Pair)
+#     p$DistCat <- distCat$Distance.Category[m]
+#     p$DistCat <- factor(p$DistCat)
+#   
+#     p$HitPermissive <- factor(p$HitPermissive, levels = c("FALSE", "TRUE"))
+#     levels(p$HitPermissive) <- c("Inactive EGP", "Functional EGP")
+#     
+#   ## Plot
+#     offset <- 1 # on TTseq counts
+# 
+#     # pdf(file = "Distance versus TT scatterplot (V2).pdf", height = 1.8, width = 2)
+#     pdf_tt(figNo = "3F", title = "Distance versus eRNA", h = 1.8, w = 2)
+#     pal <- pals$Primary[c(5,7,4,1)]
+#     
+#     levels(p$DistCat) <- c("Type A", "Type B", "Type C", "Type D")
+#     ggplot(p[which(p$HitPermissive == "Functional EGP"),], aes(y = Gene.Distance / 1000, x = Transcribed, colour = DistCat)) +
+#       geom_quasirandom(dodge.width = 0.25) +
+#       geom_violin(colour = "black", scale = "width", width = 0.7, draw_quantiles = 0.5, alpha = 0) +
+#       scale_colour_manual(values = pal) +
+#       theme_bw() +
+#       theme(panel.grid = invis, legend.position = "none", #  axis.text.y = text90,
+#             panel.border = invis, axis.line.y = element_line(), axis.title.x = invis) +
+#       labs(y = "Distance (kb)") +
+#       scale_y_continuous(trans = "log10", limits = c(2, 510), 
+#                          expand = c(0,0), 
+#                          breaks = c(2, 5, 10, 20, 50, 100, 200, 500)) 
+#     dev.off()
+#     
+#   ## Statistics
+#     # within hits, what is the relationship between distance and transcription
+#     h <- which(p$HitPermissive == "Functional EGP")
+#    
+#     w <- wilcox.test((p$Gene.Distance[h]) ~ (p$Transcribed[h] )) # p = 0.02
+#     sink_tt(figNo = "3F", title = "Distance versus eRNA", w)
+#   
 ################################################################################################################################ #
 ## FANTOM5 ----
   
@@ -341,6 +357,8 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
 ## Read in
   f5 <- read.csv("../../../FullScale/Results/4_EnhancerTranscription/FANTOM5/Peak Annotation.csv")
   f5 <- f5[which(f5$Enh %in% res.final$Enh),]
+  
+  f5 <- f5[which(f5$Enh %in% wellpowered_enh),]
   
 ## Plot 1: Binary calls at enhancers as independent validation
   p <- apply(f5[,-c(1:2, 5)], 2, function(x) {
@@ -364,7 +382,7 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
 
   
   # pdf(file = "FANTOM5 - Overlap Barplot.pdf", height = 2, width = 3)
-  pdf_tt(figNo = "SFig6D", title = "FANTOM5", h = 2, w = 3)
+  pdf_tt(figNo = "SFig5D", title = "FANTOM5", h = 2, w = 3)
   ggplot(p[which(p$Sample == "Astrocytes"),], aes(x = Sample, y = Freq*100, fill = Hit, colour = Hit)) +
     geom_col(position = "dodge", width = 0.75) +
     theme_bw() +
@@ -376,6 +394,10 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
           axis.ticks.x = invis, plot.title = element_text(size = 6)) +
     labs(y = "Percent with bidirectional\nCAGE peak in FANTOM5", x = "FANTOM5 Sample Set")
   dev.off()
+  
+  # stat
+  f <- table(f5$UsedAst > 0, f5$Hit) %>% fisher.test()
+  sink_tt(figNo = "SFig5D", title = "FANTOM5", f)
   
    
    
@@ -396,11 +418,17 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
                   TTseq = transcribed$Category_3,
                   Hit = transcribed$Hit)
   
+  p <- p[which(p$Enh %in% wellpowered_enh),]
+  
   # add in FANTOM5 calls
   m <- match(p$Enh, f5$Enh)
   p$FANTOM5 <- f5$UsedAst > 0
   p$FANTOM5 <- factor(p$FANTOM5)
   levels(p$FANTOM5) <- c("CAGE-", "CAGE+")
+  
+  # aside: fisher test comparing fantom5 to ttseq
+  fish <- table(p$TTseq != "Not transcribed", p$FANTOM5) %>% fisher.test()
+  sink_tt(figNo = "SFig6E", title = "TTseq vs FANTOM5", fish)
   
   # stratify FANTOM5 calls by transcription
   tab <- table(p$TTseq, p$FANTOM5)
@@ -444,7 +472,7 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
   pal <- c("grey95", pals$Primary[c(4,5,7)])
   
   # pdf("FANTOM5 - Combined category.pdf", height = 3, width = 3.8)
-  pdf_tt(figNo = "SFig6E", title = "FANTOM5 vs TTseq", h = 3, w = 3.8)
+  pdf_tt(figNo = "SFig5E", title = "FANTOM5 vs TTseq", h = 3, w = 3.8)
   ggplot(tab, aes(x = Var2, fill = Var1, y = Freq*100)) +
     geom_col(colour = "black", width = 0.7) +
     theme_bw() +

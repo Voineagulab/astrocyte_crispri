@@ -13,3 +13,5 @@ Scripts in this folder concern the functional annotation of our functional enhan
 ./Tobias_TFs: TOBIAS (Bentsen et al., 2020; https://www.nature.com/articles/s41467-020-18035-1) is an algorithm for transcription factor (TF) binding from an ATAC-seq signal. These scripts run the algorithm and explore TF binding patterns in functional enhancers and inactive candidates.
 
 ./Variants: Common SNPs were assigned to functional enhancers using overlap and linkage disequilibrium. These scripts perform that assignment, and explore the functional annotations of those variants.
+
+WGCNAenh.R: Co-variation network construction using pseudo-bulked ATAC-seq data.

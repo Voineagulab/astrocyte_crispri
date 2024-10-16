@@ -1,7 +1,6 @@
-## GJS: finalised up to the NanoString section
 
 ## Setup
-  setwd("/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_MainDE/Final/")
+  setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_MainDE/Final/")
   library(tidyverse)
   library(rcartocolor)
   library(ggplot2)
@@ -13,6 +12,12 @@
 
 ## Read in results dataframe
   res.final <- read.csv("../../../../FullScale/Results/2_DE/Enh/Results Final.csv")
+  
+## Read in power dataframe
+  pow <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable3_DE/3F_Power.csv")
+  wellpowered_egps <- pow$Pair[which(pow$WellPowered015  | pow$Hit)]
+  wellpowered_enh <- pow$Enhancer[which(pow$WellPowered015 | pow$Hit)] %>% unique()
+  wellpowered_genes <- pow$Gene[which(pow$WellPowered015 | pow$Hit)] %>% unique()
   
 ## Functions to write to disk in a traceable way
   pdf_mainDE <- function(figNo, title, h, w) {
@@ -250,6 +255,7 @@ e$log2fc.vst <- exp(e$logfc.vst) %>% log2()
   
 ## Density plot of distances
   p <- res.final
+  p <- p[which(p$Pair %in% wellpowered_egps),] # well-powered
   p$HitPermissive <- factor(p$HitPermissive)
   levels(p$HitPermissive) <- c("ns", "Functional")
   
@@ -284,8 +290,16 @@ e$log2fc.vst <- exp(e$logfc.vst) %>% log2()
     distCat <- read.csv(file = "../../../../FullScale/Results/3_HitEnrichment/EnhGenePairs/Intervening Gene Classification Between EGPs.csv", row.names = 1)
   
    ## Collect data
+    distCat <- distCat[which(distCat$Pair %in% wellpowered_egps),] # well powered
+  
+    # quick test of fisher test for nearest gene
+    fish <- table(distCat$HitPermissive, distCat$Distance.Category == "Cond1_Nearest") %>% fisher.test()
+    sink_mainDE(figNo = "3B", title = "Nearest gene stacked barplot fisher test", fish)
+    
+    # now plot all categories
     p <- table(distCat$HitPermissive, distCat$Distance.Category)
     p <- p / rowSums(p)
+    sink_mainDE(figNo = "3B", title = "Nearest gene stacked barplot", p)
     p <- t(p)
     p <- as.data.frame.matrix(p)
     
@@ -388,173 +402,170 @@ e$log2fc.vst <- exp(e$logfc.vst) %>% log2()
 
       
 ################################################################################################################################ #
-## Nanostring replication ----
-    
-    
-## Load data
-  load("../../../../Validation_RNAseq/Nanostring/Results/Final_Revised/ProcessedData.rda", verbose = TRUE)  
-  res_nano <- read.csv("../../../../Validation_RNAseq/Nanostring/Results/Final_Revised//LinearModels.csv", row.names = 1)
-      
-## Prepare supplementary tables
-  ## Metadata
-    rownames(meta_nano) <- splitter(rownames(meta_nano), "\\.", 2)
+  ################################################################################################################################ #
+  ## Nanostring replication ----
   
-    # add metadata column on whether the sample was tested
-    meta_nano$AnalysisBatch <- "."
-    meta_nano$AnalysisBatch[meta_nano$Batch == "Run_1"] <- "b1"
-    meta_nano$AnalysisBatch[meta_nano$Batch %in% c("Run_2", "Run_3")] <- "b23"
-    meta_nano$AnalysisBatch[meta_nano$Batch %in% c("Run_4", "Run_5")] <- "b45"
-    
-    meta_nano$AnalysisIncluded <- "Y"
-    meta_nano$AnalysisIncluded[meta_nano$Input_ng == 300] <- "N"
-    # meta_nano$AnalysisIncluded[meta_nano$Batch == "Run_1"] <- "N"
-    meta_nano$AnalysisIncluded[meta_nano$Batch == "Run_1" & meta_nano$Enh == "Enh854_HSPB1" & meta_nano$Input_ng == 150] <- "Y" # the exception to Run1, as being tested
-    meta_nano$AnalysisIncluded[meta_nano$Batch == "Run_1" & (is.na(meta_nano$Enh)) & meta_nano$Input_ng == 150] <- "N (but used as outgroup)" # background samples for the above
-    
-    # reorder
-    meta_nano <- relocate(meta_nano, c(colnames(meta_nano)[1:6], "AnalysisBatch", "AnalysisIncluded"))
-    
-
-  ## Results
-    res_nano <- res_nano[,-9] # bonferroni correction, not used
-    m <- match(res_nano$Group, meta_nano$Group)
-    res_nano$Guide <- meta_nano$Guide[m]
-    res_nano <- relocate(res_nano, "Guide")
-    
-    # add a note on FTH1 in batch1
-    res_nano$Notes <- "."
-    g <- which(res_nano$Batches == "b1" & res_nano$Group == "FTH1")
-    res_nano$Notes[g] <- "A technical replicate of this was performed in batches 2+3, with higher n. For all analyses and plots in the manuscript (e.g. overall replication rate), we ignore this result"
-    
-## Compare fold-change in screen and replication
-  ## Prepare data
-    p <- res_nano
-    p <- p[-g,] # removing the technical replicate
-    p$Replicated <- p$p < 0.05
+  library(reshape2)
+  library(Hmisc)  
+  library(forcats)
   
-    m <- match(p$Group, meta_nano$Group)
-    p$ScreenFC <- meta_nano$ScreenSuppression[m] %>% exp()
-    p <- p[-which(is.na(p$ScreenFC)),]
+  ##Load file
+  load(file="/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Validation_RNAseq/Nanostring/Results/Final_Revised_NatNeuro/ProcessedData.rda")    
   
-    p$NanoFC <- 2 ^ p$log2fc
-    # source("../../../../Manuscript/Figs/FinalFigureFunctions.R")
-    p$Replicated <- factor(p$Replicated, levels = c("TRUE", "FALSE"))
-    levels(p$Replicated) <- c("FDR < 0.05", "ns")
-    
-    r <- cor(p$ScreenFC, p$NanoFC, method = "p") %>% signif(2)
-    txt <- paste0("r = ", r)
   
-  ## Plot
-    # pdf(file = "Fig2D - scRNAseq vs Nanostring.pdf", height = 2.8, width = 3)
-    pdf_mainDE(figNo = "2D", title = "Nanostring vs scRNAseq", h = 2.8, w = 3)
-    ggplot(p, aes(x = ScreenFC, y = NanoFC, fill = Replicated, label = Group)) +
-      geom_point(shape = 21, colour = "black", size = 3) +
-      theme_bw() +
-      annotate("text", label = txt, x = 1.15, y = 0.05, size = 3) +
-      scale_fill_manual(values = pals$Primary[c(8,4)]) +
-      labs(x = "scRNA-seq fold-change", y = "Nanostring fold-change") +
-      theme(legend.position = c(0.25, 0.85), legend.background = element_rect(colour = "black"),
-            legend.title = element_text(size = 10, vjust = -0.5), legend.text = element_text(size = 8),
-            legend.key.size = unit(0.5, "cm"),
-            legend.spacing.x = unit(0, "cm"), legend.margin = margin(t = 0, r = 0.1, b = 0.1, l = 0.1, unit = "cm")) +
-      theme(panel.grid = invis, panel.border = invis, axis.line = element_line(),
-            axis.text.y = element_text(angle = 90, vjust = 0.5, hjust = 0.5),
-            axis.title = element_text()) +
-      guides(fill = guide_legend(title = "Nanostring")) +
-      geom_abline(slope = 1, intercept = 0, alpha = 0.2, linetype = 2) +
-      geom_vline(xintercept = 1, alpha = 0.2, linetype = 2) +
-      geom_hline(yintercept = 1, alpha = 0.2, linetype = 2) +
-      scale_y_continuous(limits = c(0,1.3), expand = c(0,0), breaks = c(0.5, 1)) +
-      scale_x_continuous(limits = c(0,1.3), expand = c(0,0), breaks = c(0, 0.5, 1))
-
+  #Remove 300ng input samples
+  meta_nano_filt<-meta_nano[c(meta_nano$Input_ng=="150"),]
+  
+  #Remove pool samples
+  meta_nano_filt<-meta_nano_filt[c(meta_nano_filt$Pool=="FALSE"),] 
+  
+  #match metadata and expression data files order  
+  index=match(rownames(meta_nano_filt), colnames(exp_nano))
+  exp_nano=exp_nano[,index]
+  
+  #Divide by 1000 for easy plotting axis
+  exp_nano<- exp_nano/1000
+  
+  #Create expression data file with relevant experimental information
+  nano_data<-exp_nano
+  colnames(nano_data)<- meta_nano_filt$Sample 
+  nano_data<-t(nano_data)
+  nano_data<-as.data.frame(nano_data)
+  nano_data<-cbind(Batch = meta_nano_filt$Batch,Target = meta_nano_filt$Target, Enh = meta_nano_filt$Enh, nano_data)
+  nano_data[nano_data$Target == "Neg"& is.na(nano_data$Enh), "Enh"] <- "Neg"
+  
+  
+  nano_data$Enh_ID<- sub("_.*", "",nano_data$Enh )  
+  
+  #Separate by batch
+  nano_data_2_3<-nano_data[c(nano_data$Batch=="Run_2"|nano_data$Batch=="Run_3"),]
+  nano_data_4_5<-nano_data[c(nano_data$Batch=="Run_4"|nano_data$Batch=="Run_5"),]
+  
+  #Plots
+  pal_iv_discrete2_reorder<-c("#3a5f9a","#fc9d77","#f3ccde","#6f083d","#dd5d2b","#2c2c54","#ddf4f8")
+  
+  
+  #plot
+  
+  #Batch 2+3
+  for(i in ((unique(nano_data_2_3$Target[nano_data_2_3$Target != "Neg"])))){
+    nano_data_2_3$Condition<-ifelse(nano_data_2_3$Target==i,TRUE, FALSE)
+    nano_data_2_3$Group<- ifelse(nano_data_2_3$Condition == TRUE,nano_data_2_3$Enh_ID,"Control")
+    pdf(file = paste0(i, "_no_pool.pdf"), height = 3, width = 1.4 + (length(unique(nano_data_2_3$Group))/2))
+    print(ggplot(nano_data_2_3, aes_string(x="Group", y=i, fill="Group")) +
+            geom_dotplot(binaxis="y", stackdir="center", stackratio=1, dotsize=1.8)+
+            stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),geom = "linerange", size=1)+
+            stat_summary(geom = "point", shape = "-", size = 8, fun = mean) +
+            scale_fill_manual(values=pal_iv_discrete2_reorder[1:length(unique(nano_data_2_3$Group))])+
+            theme_classic() +
+            theme(legend.position="none",text = element_text(size=13),axis.text.x=element_text(size=12),
+                  axis.text.y=element_text(size=12),plot.title = element_text(margin=margin(b = 20, unit = "pt")))+
+            scale_y_continuous()+
+            labs(title = i, x= invis, y = invis))
     dev.off()
-    
-## QC samples
-  p <- meta_nano[,c("Batch", "FOV_Ratio", "Binding_Dens", "Pos_R2")]
-  # p <- melt(p, id.vars = "Batch")
-  p$Batch <- gsub("_", " ", p$Batch)
-  # levels(p$variable) <- c("FOV Ratio", "Binding Density", "Positive Control R2")
+  }
   
-  # pdf(file = "SFig12A-C - Nanostring QC.pdf", height = 2.5, width = 7.5/3)
-  pdf_mainDE(figNo = "SFig12A-C", title = "Nanostring QC", h = 2.8, w = 7.5/3)
   
-  # plot FOV ratio
-  ggplot(p, aes(x = Batch, y = FOV_Ratio, colour = Batch)) +
-    geom_quasirandom() +
-    scale_colour_manual(values = pals$Primary_Darker)  +
-    theme_bw() +
-    theme(legend.position = "none", panel.border = invis, panel.grid = invis, axis.line.y = element_line(),
-          axis.text.y = text90) +
-    scale_y_continuous(limits = c(0, 1.05), expand = c(0,0), breaks = c(0, 0.25, 0.5, 0.75, 1)) +
-    geom_hline(yintercept = 0.75, linetype = 2, colour = "grey75") +
-    labs(y = "FOV ratio")
+  #Batch 4+5
+  for(i in ((unique(nano_data_4_5$Target[nano_data_4_5$Target != "Neg"])))){
+    nano_data_4_5$Condition<-ifelse(nano_data_4_5$Target==i,TRUE, FALSE)
+    nano_data_4_5$Group<- ifelse(nano_data_4_5$Condition == TRUE,nano_data_4_5$Enh_ID,"Control")
+    pdf(file = paste0(i, "_no_pool.pdf"), height = 3, width = 1.4 + (length(unique(nano_data_4_5$Group))/2))
+    print(ggplot(nano_data_4_5, aes_string(x="Group", y=i, fill="Group")) +
+            geom_dotplot(binaxis="y", stackdir="center", stackratio=1, dotsize=1.8)+
+            stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),geom = "linerange", size=1)+
+            stat_summary(geom = "point", shape = "-", size = 8, fun = mean) +
+            scale_fill_manual(values=pal_iv_discrete2_reorder[1:length(unique(nano_data_4_5$Group))])+
+            theme_classic() +
+            theme(legend.position="none",text = element_text(size=13),axis.text.x=element_text(size=12),
+                  axis.text.y=element_text(size=12),plot.title = element_text(margin=margin(b = 20, unit = "pt")))+
+            scale_y_continuous()+
+            labs(title = i, x= invis, y = invis))
+    dev.off()
+  }
   
-  # plot binding density
-  ggplot(p, aes(x = Batch, y = Binding_Dens, colour = Batch)) +
-    geom_quasirandom() +
-    scale_colour_manual(values = pals$Primary_Darker)  +
-    theme_bw() +
-    theme(legend.position = "none", panel.border = invis, panel.grid = invis, axis.line.y = element_line(),
-          axis.text.y = text90) +
-    scale_y_continuous(limits = c(0, 2.2), expand = c(0,0), breaks = c(0, 0.5, 1, 1.5, 2)) +
-    geom_hline(yintercept = c(0.1, 2), linetype = 2, colour = "grey75") +
-    labs(y = "Binding density")
   
-  # plot r2
-  ggplot(p, aes(x = Batch, y = Pos_R2, colour = Batch)) +
-    geom_quasirandom() +
-    scale_colour_manual(values = pals$Primary_Darker)  +
-    theme_bw() +
-    theme(legend.position = "none", panel.border = invis, panel.grid = invis, axis.line.y = element_line(),
-          axis.text.y = text90) +
-    scale_y_continuous(limits = c(0, 1.05), expand = c(0,0), breaks = c(0, 0.25, 0.5, 0.75, 1)) +
-    geom_hline(yintercept = 0.95, linetype = 2, colour = "grey75") +
-    labs(y = "Positive control linearity (R2)")
-  
+  #PCGF5
+  nano_data_4_5$Condition<-ifelse(nano_data_4_5$Target=="ANKRD1",TRUE, FALSE)
+  nano_data_4_5$Group<- ifelse(nano_data_4_5$Condition == TRUE,nano_data_4_5$Enh_ID,"Control")
+  pdf(file = "PCGF5_no_pool.pdf", height = 3, width = 1.4 + (length(unique(nano_data_4_5$Group))/2))
+  print(ggplot(nano_data_4_5, aes_string(x="Group", y="PCGF5", fill="Group")) +
+          geom_dotplot(binaxis="y", stackdir="center", stackratio=1, dotsize=1.8)+
+          stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),geom = "linerange", size=1)+
+          stat_summary(geom = "point", shape = "-", size = 8, fun = mean) +
+          scale_fill_manual(values=pal_iv_discrete2_reorder[1:length(unique(nano_data_4_5$Group))])+
+          theme_classic() +
+          theme(legend.position="none",text = element_text(size=13),axis.text.x=element_text(size=12),
+                axis.text.y=element_text(size=12),plot.title = element_text(margin=margin(b = 20, unit = "pt")))+
+          scale_y_continuous()+
+          labs(title = "PCGF5", x= invis, y = invis))
   dev.off()
-    
-## QC genes!
-  # for each gene, compare its expression to negative control
-  
-  # recollect the expression matrix, to include BEST1
-  p <- lapply(nano, function(x) {
-    y <- as.data.frame(x$exprs.raw) # expression matrix
-    rownames(y) <- x$dict.raw$Name # rename rows to gene name
-    y <- y[c(unique(res_nano$Gene), "BEST1"),] # filter genes
-    
-  }) 
-  p <- do.call("cbind", p)
-  
-  p <- t(p) %>% as.data.frame()
-  p$TestedGene <- meta_nano$Target
-  p$TestedGene2 <- "."
-  p$TestedGene2[which(p$TestedGene == "ANKRD1")] <- "PCGF5"
-  p$TestedGene2[which(p$TestedGene == "FTH1")] <- "BEST1"
-  p$Threshold <- meta_nano$Neg_BgThresh
-  p <- melt(p, id.vars = c("Threshold", "TestedGene", "TestedGene2"))
-  colnames(p) <- c("Threshold", "TestedGene", "TestedGene2", "Gene", "Exp")
-  p <- p[-which(p$TestedGene == p$Gene | p$TestedGene2 == p$Gene),] # remove cases where the gene being quantified and the target gene are the same
-  p$BelowThreshold <- p$Exp < p$Threshold
-  
-  order <- aggregate(Exp~Gene, data = p, FUN = mean)
-  order <- order[order(-order$Exp),]
-  p$Gene <- factor(p$Gene, levels = order$Gene)
-  
-  # plot
-  # pdf(file = "SFig12D - Nanostring QC (Genes).pdf", height = 3, width = 7)
-  pdf_mainDE(figNo = "SFig12D", title = "Nanostring QC on genes", h = 3, w = 7)
-  ggplot(p, aes(x = Gene, y = Exp, colour = BelowThreshold)) +
-    geom_quasirandom() +
-    theme_bw() +
-    scale_colour_manual(values = pals$Primary[7:8]) +
-    scale_y_continuous(trans = "log10", labels = scales::comma) +
-    labs(y = "NanoString raw digital count") +
-    theme(panel.border = invis, axis.line.y = element_line(), axis.ticks.x = invis, axis.title.x = invis,
-          panel.grid = invis, axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
-    guides(colour = guide_legend(title = "Below\nexpression\nthreshold"))
-  dev.off()    
   
   
+  
+  #Wide plot for multiple enhancers per gene
+  
+  #Batch 2+3
+  for(i in c("LGALS3","HSPB1")){
+    nano_data_2_3$Condition<-ifelse(nano_data_2_3$Target==i,TRUE, FALSE)
+    nano_data_2_3$Group<- ifelse(nano_data_2_3$Condition == TRUE,nano_data_2_3$Enh_ID,"Control")
+    pdf(file = paste0(i, "_no_pool.pdf"), height = 3, width = 1.4 + (5/2))
+    print(ggplot(nano_data_2_3, aes_string(x="Group", y=i, fill="Group")) +
+            geom_dotplot(binaxis="y", stackdir="center", stackratio=1, dotsize=1.8)+
+            stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),geom = "linerange", size=1)+
+            stat_summary(geom = "point", shape = "-", size = 8, fun = mean) +
+            scale_fill_manual(values=pal_iv_discrete2_reorder[1:length(unique(nano_data_2_3$Group))])+
+            theme_classic() +
+            theme(legend.position="none",text = element_text(size=13),axis.text.x=element_text(size=12),
+                  axis.text.y=element_text(size=12),plot.title = element_text(margin=margin(b = 20, unit = "pt")))+
+            scale_y_continuous()+
+            labs(title = i, x= invis, y = invis))
+    dev.off()
+  }
+  
+  
+  #Batch 4+5 
+  for(i in c("NEAT1","PTMA")){
+    nano_data_4_5$Condition<-ifelse(nano_data_4_5$Target==i,TRUE, FALSE)
+    nano_data_4_5$Group<- ifelse(nano_data_4_5$Condition == TRUE,nano_data_4_5$Enh_ID,"Control")
+    pdf(file = paste0(i, "_no_pool.pdf"), height = 3, width = 1.4 + (5/2))
+    print(ggplot(nano_data_4_5, aes_string(x="Group", y=i, fill="Group")) +
+            geom_dotplot(binaxis="y", stackdir="center", stackratio=1, dotsize=1.8)+
+            stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),geom = "linerange", size=1)+
+            stat_summary(geom = "point", shape = "-", size = 8, fun = mean) +
+            scale_fill_manual(values=pal_iv_discrete2_reorder[1:length(unique(nano_data_4_5$Group))])+
+            theme_classic() +
+            theme(legend.position="none",text = element_text(size=13),axis.text.x=element_text(size=12),
+                  axis.text.y=element_text(size=12),plot.title = element_text(margin=margin(b = 20, unit = "pt")))+
+            scale_y_continuous()+
+            labs(title = i, x= invis, y = invis))
+    dev.off()
+  }
+  
+  
+  
+  #HSPB1 Plot
+  pal_iv_discrete2_reorder2<-c("#3a5f9a","#2c2c54","#fc9d77","#f3ccde","#6f083d","#dd5d2b","#ddf4f8")
+  
+  
+  nano_data_HS<-nano_data[c(nano_data$Batch=="Run_1"|nano_data$Batch=="Run_2"|nano_data$Batch=="Run_3"),]
+  nano_data_HS$HS<-ifelse(nano_data_HS$Target == "HSPB1",nano_data_HS$Enh_ID,
+                          ifelse(nano_data_HS$Batch=="Run_1"&nano_data_HS$Target != "HSPB1", "Control1", "Control2"))
+  pdf(file = "HSPB1_Batch1-3.pdf", height = 3, width = 5.5)
+  print(ggplot(nano_data_HS, aes_string(x=forcats::fct_relevel(nano_data_HS$HS,"Control1", "Enh854", "Control2", 
+                                                               "Enh855", "Enh857"), y="HSPB1", fill="HS")) +
+          geom_dotplot(binaxis="y", stackdir="center", stackratio=1, dotsize=1.8)+
+          stat_summary(fun.data=mean_sdl, fun.args = list(mult=1),geom = "linerange", size=1)+
+          stat_summary(geom = "point", shape = "-", size = 8, fun = mean) +
+          scale_fill_manual(values=pal_iv_discrete2_reorder2[1:length(unique(nano_data_HS$HS))])+
+          theme_classic() +
+          theme(legend.position="none",text = element_text(size=13),axis.text.x=element_text(size=12),
+                axis.text.y=element_text(size=12),plot.title = element_text(margin=margin(b = 20, unit = "pt")))+
+          scale_y_continuous()+
+          labs(title = "HSPB1", x= invis, y = invis))
+  dev.off()
+  
+
   
 ################################################################################################################################ #
 ## Exemplar: NEAT1 ----

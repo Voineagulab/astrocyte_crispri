@@ -31,7 +31,7 @@ update_enr_fractions <- function(dat) {
 }
 ## 4A: GO
   ## Read in results from clusterprofiler
-    go <- read.csv("../../../FullScale/Results/3_HitEnrichment/Genes/GO - Clusterprofiler.csv", row.names = 1)
+    go <- read.csv("../../../FullScale/Results/3_HitEnrichment/Genes/Wellpowered/GO - Clusterprofiler.csv", row.names = 1)
   
   ## Columns
     colnames(go) <- c("Ontology", "GO_ID", "GO_Description", "HitRatio", "NonhitRatio", "P", "PAdj", "Q", "HitGeneSymbols", "Count")
@@ -42,11 +42,11 @@ update_enr_fractions <- function(dat) {
     go$NonhitRatio <- gsub("/", " of ", go$NonhitRatio)
     
   ## Save (no filter)
-    write.csv(go, file = "4A_GO.csv", row.names = FALSE)
+    write.csv(go, file = "4A_GO_wellpowered.csv", row.names = FALSE)
 
 
 ## 4B: Gene functional annotations
-    load("../../../FullScale/Results/3_HitEnrichment/Genes/Final.rda", verbose = TRUE)
+    load("../../../FullScale/Results/3_HitEnrichment/Genes/Wellpowered/Final.rda", verbose = TRUE)
     
   ## Signed gene annotations
     # get downregulations
@@ -101,11 +101,11 @@ update_enr_fractions <- function(dat) {
     out <- out[,keepCols]
     
     # save as table
-    write.csv(out, "4B_SignedAnnotations.csv", row.names = FALSE)
+    write.csv(out, "4B_SignedAnnotations_Wellpowered.csv", row.names = FALSE)
   
 ## 4C: Enrichments
-  load("../../../FullScale/Results/3_HitEnrichment/Genes/Final.rda", verbose = TRUE)
-  
+  load("../../../FullScale/Results/3_HitEnrichment/Genes/Wellpowered/Final.rda", verbose = TRUE)
+
   ## Combine the two enrichment dataframes
     # relabel resources
     enrichments.combined$Resource <- paste0(enrichments.combined$Resource, "_CombinedStudies") %>% 
@@ -123,5 +123,5 @@ update_enr_fractions <- function(dat) {
     enr <- update_enr_fractions(enr)
 
   # Save
-    write.csv(enr, "4C_SignedEnrichments.csv", row.names = FALSE)
+    write.csv(enr, "4C_SignedEnrichments_wellpowered.csv", row.names = FALSE)
     
