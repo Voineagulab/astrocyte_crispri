@@ -136,6 +136,15 @@ Output:Candidate annotation upset.pdf
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
 Output:Candidate annotation barplot.pdf
 
+############################ Figure S3
+####3A
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
+Output:Sfig3A - Script LibraryDesign - Candidate length histogram.pdf
+
+####3B
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
+Output:Sfig3B - Script LibraryDesign - Genes tested per candidate.pdf
+
 ############################ Figure S4
 ####4A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
@@ -178,15 +187,19 @@ Output:Downregulation Distribution.pdf
 ############################ Figure S5
 ####5B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
-Output:Scatterplot RNAseq vs TTseq.pdf
+Output:5B - Script tt - Scatterplot RNAseq vs TTseq.pdf
 
 ####5C
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
-Output:eRNA across thresholds.pdf
+Output:5C - Script tt - eRNA across thresholds.pdf
 
 ####5D
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
-Output:FANTOM5.pdf
+Output:5D - Script tt - FANTOM5.pdf
+
+####5E
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
+Output:5E - Script tt - FANTOM5 vs TTseq.pdf
 
 ############################ Figure S7
 ####7A
@@ -236,3 +249,14 @@ Output:Nanostring QC.pdf
 ####12D
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Output:Nanostring QC on genes.pdf
+
+
+############################ Figure S13
+####13A
+Script: 3_CRISPRi/3f_PowerSimulations.R
+Output:Power Simulation - All variables V2.pdf
+
+####13B
+Script: 3_CRISPRi/3f_PowerSimulations.R
+Output:Proportion well-powered (wide).pdf
+
