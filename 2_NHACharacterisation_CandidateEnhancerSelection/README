@@ -4,5 +4,5 @@ These scripts contain code to select our 979 candidate enhancer regions, as well
 2b: prioritisation of top sgRNA for each candidate enhancer
 2c: selection of positive control guides validated by Gasperini et al. (2019) in K562 cells
 2d: creating a list of the final guides
-2e: dCas9-KRAB.R :comparison of gene expression in NHA cells with and without dCas9-KRAB integration
-2f: NHA_RNAseq_vs_Imunopanned.R : comparison of gene expression in NHA cells with data from immunopanned astrocytes
+2e: comparison of gene expression in NHA cells with and without dCas9-KRAB integration
+2f: comparison of gene expression in NHA cells with data from immunopanned astrocytes
