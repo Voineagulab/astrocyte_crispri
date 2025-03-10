@@ -127,6 +127,11 @@ Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SanityChecks_EGrf.R
 Output:NHA_EGRF_OverlapBarplot_0.5RPKM.pdf
 
 
+############################ Figure S1
+####1A
+Script:2_NHACharacterisation_CandidateEnhancerSelection/2e_dCas9-KRAB.R
+Output:dCas9-KRAB.pdf
+
 ############################ Figure S2
 ####2A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
