@@ -132,6 +132,10 @@ Output:NHA_EGRF_OverlapBarplot_0.5RPKM.pdf
 Script:2_NHACharacterisation_CandidateEnhancerSelection/2e_dCas9-KRAB.R
 Output:dCas9-KRAB.pdf
 
+####1B
+Script:2_NHACharacterisation_CandidateEnhancerSelection/2g_PCA_ATAC_NHA_Herring_Nott.R
+Output:PCA_NHA_ATAC validation.pdf
+
 ############################ Figure S2
 ####2A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
