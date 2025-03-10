@@ -10,14 +10,8 @@ library(SeuratDisk)
 library(Seurat)
 source("../../../../FullScale/Scripts/Functions.R")
 
-## The direct reading in of the h5ad via SeuratDisk returns the following error:
-  # Error in dfgroup[[tname]][] : 
-  # object of type 'environment' is not subsettable
-
-## Thus I will first use anndata to load it in
+##  use anndata to load
   scanpy <- read_h5ad("Processed_data_RNA-all_full-counts-and-downsampled-CPM.h5ad")
-  
-  
 ################################################################################################################################ #
 ## Get counts ----
 
