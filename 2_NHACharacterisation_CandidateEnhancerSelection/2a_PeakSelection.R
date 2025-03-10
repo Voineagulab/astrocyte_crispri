@@ -58,7 +58,6 @@ library(Seurat)
   
 ################################################################################################################################ #
 ## Load in data, and ready for intersections! ----
-
   
 ## Whilst I am not process this in, I will note some statistics of it: in-house atac-seq from cultured astrocytes
   GOK8873A1 <- read.table(inhouse.dir, sep = "\t")
