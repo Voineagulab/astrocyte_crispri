@@ -1,4 +1,4 @@
-## This script applies cellranger's count function to the combined data from NovaSeq1, NovaSeq2, and hnPCR2
+## This script applies cellranger's count function to the combined data from NovaSeq1, NovaSeq2, and hnPCR2 sequencing runs
 
 ## Directories
 
