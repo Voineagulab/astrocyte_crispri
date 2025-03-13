@@ -2,7 +2,7 @@ Scripts in this folder concern the functional annotation of our functional enhan
 
 ./Beluga: predicting the effect of known and hypothetical variants in functional enhancers using  *in silico* mutagenesis, courtesy of the Beluga algorithm (Zhou et al., 2019: https://www.nature.com/articles/s41588-018-0160-6)
 
-./Chromatin: these R scripts explore the chromatin and DNA annotation of functional enhancers, such as superenhancer status, or trends across tissues and development.
+./Chromatin: these R scripts explore the chromatin properties of functional enhancers, such as superenhancer status, or changes in chromatin state across tissues and development.
 
 ./EnhancerTranscription: TTseq and CAGE expression at functional enhancers.
 
