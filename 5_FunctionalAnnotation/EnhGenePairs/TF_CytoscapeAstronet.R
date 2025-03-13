@@ -184,5 +184,5 @@ write.csv(TEGnet, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publicat
 write.csv(TEGnodes, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/AstroNodes.TEG_v2.csv", row.names = FALSE, quote = FALSE)
 sink()
 
-old=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/AstroNodes.TEG.csv")
-setdiff(old$Node, TEGnodes$Node)
+#old=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/AstroNodes.TEG.csv")
+#setdiff(old$Node, TEGnodes$Node)
