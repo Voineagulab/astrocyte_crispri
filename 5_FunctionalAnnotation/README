@@ -10,7 +10,7 @@ Scripts in this folder concern the functional annotation of our functional enhan
     EnhGenePairs.R: functional annotations that relate to the pair, rather than either component individually.
     TF_CytoscapeAstronet.R: construction of the TF-enhancer-gene regulatory network.
 
-./RegulatedGenes: R scripts that explore what is known about the function and dysregulation of enhancer-regulated genes in astrocytes.
+./RegulatedGenes: R scripts that annotates hit genes with ontology enrichments, disease and phenotype data, cell-type and tissue regulation, and astrocyte-specific expression in disorders.
 
 ./Tobias_TFs: TOBIAS (Bentsen et al., 2020; https://www.nature.com/articles/s41467-020-18035-1) is an algorithm for transcription factor (TF) binding from an ATAC-seq signal. These scripts run the algorithm and explore TF binding patterns in functional enhancers and inactive candidates.
 
