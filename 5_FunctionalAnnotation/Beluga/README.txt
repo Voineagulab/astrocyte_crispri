@@ -7,7 +7,7 @@ getFasta.sh Extract FASTA sequences for enhancer regions
 
 
 Run order for Beluga disease variants vcf (all positions in Hits):
-First run ../getFasta.sh to extract FASTA sequences from the HG38 genome. 
+First run getFasta.sh to extract FASTA sequences from the HG38 genome. 
 Next, execute createVCFs.R to generate VCF files, ensuring positions are adjusted by +1 (posplus1) to match Beluga’s reference genome format. 
 Then, upload the VCF files to the Beluga web tool, selecting Model: Beluga and Genome: HG38. BelugaVariants.R to parse the disease impact scores (DIS), merge results with enhancer data, and perform downstream analyses. 
 
