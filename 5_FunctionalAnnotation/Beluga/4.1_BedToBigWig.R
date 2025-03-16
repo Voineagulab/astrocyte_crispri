@@ -1,5 +1,6 @@
 # @author: Irina Voineagu + Sam Bagot
 # @date: 18-11-23
+# This script creates BED graph files (.bedGraph) for visualization in genome browsers
 
 beluga=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Results/Beluga/BelugaVariants/BelugaVariants.csv")
 makebedGraph <- function(bed, filename) {
