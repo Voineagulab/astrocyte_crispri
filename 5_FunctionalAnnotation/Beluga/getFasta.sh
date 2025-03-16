@@ -1,4 +1,5 @@
 #!/bin/bash
+#This script extracts FASTA sequences for enhancer regions
 #sed "s/^chr//" /mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/Variants/DeepLearning/Webtool_Input/Beluga_2000bp.bed > /mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/Variants/DeepLearning/Webtool_Input/Beluga_2000bp_nochr.bed
 
 OUT="/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Data/PeakData/"
