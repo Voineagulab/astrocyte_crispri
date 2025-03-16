@@ -1,4 +1,4 @@
-####### Disease impact score (DIS) values were compared between SNPs within 1kb of functional hits and powered non-hit.
+####### This script compare Disease impact score (DIS) values between SNPs within 1kb of functional hits and powered non-hit.
 setwd("~/Library/CloudStorage/GoogleDrive-ivlabunsw@gmail.com/My Drive/MANUSCRIPTS_IN PROGRESS/CROPseq_MS/Manuscript/Resubmission_NatNeuro/SuppFigs_tables")
 dis=readxl::read_xlsx("Supplementary Table 8 - Deep learning-derived disease scores for variants in functional enhancers.xlsx",
                   sheet="8A_SNPs")
