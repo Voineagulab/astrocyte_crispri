@@ -1,7 +1,7 @@
 ################
 ##
 ##
-## Create VCFs for all bp in hit enhancers
+## Create VCFs for all possible sequence variants at each nucleotide position for the 145 functional enhancers
 ## @author: Sam Bagot
 ## @date: 24-10-23
 ################
