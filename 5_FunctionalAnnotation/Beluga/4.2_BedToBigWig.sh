@@ -1,4 +1,5 @@
 #!/bin/bash
+#This  script converts BED graph files into BigWig files
 ###### on RNA2
 
 cd /mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Results/Beluga/BelugaVariants/
