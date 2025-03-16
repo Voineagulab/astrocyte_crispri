@@ -3,7 +3,7 @@
 # BelugaVariants
 # @author: Sam Bagot
 # @date: 25-10-23
-#
+#Process the Beluga outputs for the 145 functional enhancers. 
 ####################
 
 setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/")
