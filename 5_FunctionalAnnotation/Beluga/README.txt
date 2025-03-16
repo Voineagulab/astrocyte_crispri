@@ -1,4 +1,4 @@
-getFasta.sh 6. Extract FASTA sequences for enhancer regions
+getFasta.sh Extract FASTA sequences for enhancer regions
 1_KnownVariants.R Extracts SNPs located within a 1 kb window of the tested enhancers and predicts their disease-impact scores (DIS) using Beluga.
 2_CreateVCF.R Creates VCFs for all possible sequence variants at each nucleotide position for the 145 functional enhancers
 3_BelugaVariants.R Processes the Beluga outputs for the 145 functional enhancers.
