@@ -1,7 +1,6 @@
 ################
 ##
-##
-## Beluga Known variants VCF analysis
+#This script extracts SNPs located within a 1 kb window of the tested enhancers and predicts their disease-impact scores (DIS) using Beluga.
 ## @author: Sam Bagot
 ## @date: 20-10-23
 ################
