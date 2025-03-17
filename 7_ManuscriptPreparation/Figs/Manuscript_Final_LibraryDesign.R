@@ -1,4 +1,4 @@
-
+#This script generates figures 1D, 4F, S2A, S2B, S3A and S3B.
 ## Setup
   setwd("/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_LibraryDesign/")
   source("../../../FullScale/Scripts/Functions.R")
