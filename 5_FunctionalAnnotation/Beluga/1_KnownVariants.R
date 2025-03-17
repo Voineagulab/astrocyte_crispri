@@ -1,7 +1,7 @@
 ################
 ##
 #This script extracts SNPs located within a 1 kb window of the CRISPRi tested enhancers 
-# Prepares the data for disease-impact scores (DIS) prediction using Beluga https://hb.flatironinstitute.org/deepsea/?analysis=insilico. 
+# Prepares the data for disease-impact scores (DIS) prediction using Beluga https://hb.flatironinstitute.org/sei/
 # Processes the output of the online tool
 # Carries out statistical tests comparing the DIS scores between hit and non-hit enhancers.
 
