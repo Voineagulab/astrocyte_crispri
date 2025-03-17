@@ -2,7 +2,7 @@
 ##
 ##Tobias Expressed genes. 
 ## @author: Sam Bagot
-##This script processes TF binding motifs downloaded from JASPAR 
+##This script identify expressed TFs and generate files for use in TOBIAS analysis
 ##
 #################
 setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPseq/EnhancerPredictionModels/")
