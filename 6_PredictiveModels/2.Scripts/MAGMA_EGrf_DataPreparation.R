@@ -1,10 +1,7 @@
-####Prepare MAGMA GENELOC_FILE for distances 
+#This script generates background and set files used for MAGMA analyses
+
 remove(list=ls());gc()
 source("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/GitHub/Scripts/6.Predictive_models/Finalised/2.Scripts/Functions.R")
-
-###########################################################################
-#Script for preparing Loc and Set files used for EGrf MAGMA analyses 
-############################################################################
 
 #Prepare background data including Predicted enhancers corresponding to EGPs with RPKM > 0.5 (loc. file)
 All_EGPs <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/GitHub/Scripts/6.Predictive_models/Finalised/3.Predictions/RF_Results/Astrocytes_All_Intergenic_Predictions/All_EGPs.csv")
@@ -18,7 +15,7 @@ All_EGPs=unique(All_EGPs)
 
 dim(unique(All_EGPs))
 
-#write loc file
+#write loc file (background file)
 write.bed(All_EGPs, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/GitHub/Scripts/6.Predictive_models/MAGMA/EGrf/Allintergenic_peaks_background_0.5RPKM.loc")
 
 #####Prepare set files: Grouping Predicted Enhancers according to distance with closest gene:  0 to 50, 50 to 200 and 200 to 500KB
@@ -81,7 +78,6 @@ table(set_data[set_data$category=="200_500KB",]$Enh %in%
         Predictions_RF[Predictions_RF$pass_rf==TRUE & Predictions_RF$Gene.RNAseq_RPKM>0.5 & Predictions_RF$Distance >= 200000,]$Enh)
 
 #All Looks good!
-
 
 #Save file as a set  file
 write.bed(set_data, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/GitHub/Scripts/6.Predictive_models/MAGMA/EGrf/EGrf_distance_05RPKM.set")
