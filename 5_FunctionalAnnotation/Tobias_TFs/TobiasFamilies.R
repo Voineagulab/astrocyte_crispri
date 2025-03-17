@@ -1,4 +1,4 @@
-#Compare Families of TFs 
+#This script compares families of TFs 
 
 setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPseq/EnhancerPredictionModels/")
 library("ggplot2")
