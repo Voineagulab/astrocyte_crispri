@@ -1,6 +1,6 @@
 ################
 #
-#Tobias R Functions
+#This script define R Functions used for TOBIAS analyses.
 #@author Sam Bagot
 #@Date: 23-03-03
 #
