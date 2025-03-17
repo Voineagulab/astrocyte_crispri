@@ -1,3 +1,5 @@
+#This script define the functions sourced in RunRFmodels.R
+
 ###Function for Integrating Tobias Bound and Unbound Transcription Factor Data
 addTobiasBound <- function (
     df,            # df: A data frame to which Tobias binding data will be added.
