@@ -1,3 +1,4 @@
+#This script generates figures 3D, 4C, and S5
 ## Setup
   setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_TTseq/")
   library(tidyverse)
