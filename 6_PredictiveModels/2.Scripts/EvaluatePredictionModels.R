@@ -1,3 +1,4 @@
+#This script carries out the model performance evaluations and produces the corresponding manuscript figures and supplementary tables
 library("boot")
 
 rm(list=ls())
