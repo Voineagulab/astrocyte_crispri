@@ -1,6 +1,6 @@
 ##########
 ##
-##Aggregate Signal plots in R
+##This script define a function for aggregating signal footprinting data from TOBIAS and prepares it for visualization in R
 ##
 ## @author: Gavin Sutton & Sam Bagot
 ## @23-11-01
