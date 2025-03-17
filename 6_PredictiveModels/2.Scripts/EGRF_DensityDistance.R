@@ -1,5 +1,5 @@
 ###########################################################################################
-##Sanity checks: Distance density plot between Egrf Predicted enhancer midpoint and the genes TSS
+##This script computes and plots the median enhancer-gene distance in EGrf predictions
 ##########################################################################################
 
 
