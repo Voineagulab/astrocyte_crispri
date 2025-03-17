@@ -1,3 +1,5 @@
+#This script identifies EGrf predictions that overlap with experimentally validated enhancers in K562 cells (data from Yao et al.), super-enhancers (NHA data from Hnisz et al.), and those crossing at least one TAD boundary (Hi-C data from Rajarajan et al.)
+
 ################################################################################################################################ #
 #Intersection all NHA intergenic Peaks detected with TAD boundaries, super enhancers and validated enhancers 
 ################################################################################################################################ #
@@ -33,8 +35,7 @@ x_JP=All_EGPs[c("Pair", "Enh.Pos", "TSS", "Enh.start", "Enh.end")]
 x_JP$chr= splitter(x_JP$Enh.Pos, ":", 1)
 x_JP$Coord1 = x_JP$TSS
 
-# get the end, which is Enh's end or start (whichever is closer!)
-##Take coordinate 2 from my dataset
+# Gen coordinates
 x_JP$use.left <- (abs(x_JP$TSS - x_JP$Enh.start)) < (abs(x_JP$TSS - x_JP$Enh.end))
 x_JP$Coord2=ifelse(x_JP$use.left==TRUE, x_JP$Enh.start, x_JP$Enh.end)
 
@@ -57,14 +58,14 @@ system(call, intern = FALSE, wait = TRUE)
 tad_overlap <- read.delim("Scripts/6.Predictive_models/Sanity_checks/Tad_Vs_Allintergenic_Overlap.bed", header = FALSE)
 colnames(tad_overlap) <- c("EGP_Chr", "EGP_Start", "EGP_End", "EGP", "TAD_Chr", "TAD_Start", "TAD_End", "TAD_ID", "Overlap_bp")
 
-## Compute how much of the EGP is contained within a tad
+## Compute fraction of EGP contained within a tad
 tad_overlap$EGP_Distance <- (tad_overlap$EGP_End - tad_overlap$EGP_Start)
 tad_overlap$Overlap_Frac <- tad_overlap$Overlap_bp / tad_overlap$EGP_Distance
 
 ## Now categorise each EGP
 pair2tad_JP <- All_EGPs[,c("Pair","pass_rf", "Enh.Pos")]
 
-# define basic true/false statements to determine categories
+# Determine categories
 within <- tad_overlap$EGP[which(tad_overlap$Overlap_Frac == 1)] 
 
 cross <- tad_overlap$EGP[which(tad_overlap$Overlap_Frac < 1)] 
@@ -86,7 +87,7 @@ write.csv(pair2tad_JP, "Scripts/6.Predictive_models/Sanity_checks/Pair-TAD Annot
 
 
 ##################################################################################################################################
-# Prepare bed file on all NHA intergenic peaks detected using now only Peak coordinates (presumably enhancers)
+# Prepare bed file on all NHA intergenic peaks detected using now only Peak coordinates 
 ##################################################################################################################################
 
 ## Create a bed file with enhancers coordinates; enh start point and enh end point
