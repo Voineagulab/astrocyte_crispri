@@ -1,3 +1,4 @@
+#This script generates figures 6A, 6B, 6C and S8A
 ## Setup
   setwd("/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_eQTL/")
   library(tidyverse)
