@@ -1,5 +1,5 @@
 #################################################
-##This script applies EGrf to predict EGPs for intergenic ATAC-seq peaks not included in the CRISPRi screen
+##Script that applies EGrf to all intergenic peaks not tested in the CRISPRi screen and predicts their effect on genes within 500kb
 ##############################################
 
 #Load data
