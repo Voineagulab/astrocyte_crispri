@@ -1,7 +1,7 @@
 ################
 ##
 #This script extracts SNPs located within a 1 kb window of the CRISPRi tested enhancers 
-# Prepares the data for disease-impact scores (DIS) prediction using Beluga https://hb.flatironinstitute.org/sei/
+# Prepares the data for disease-impact scores (DIS) prediction using the Beluga model as implemented at  https://hb.flatironinstitute.org/sei/
 # Processes the output of the online tool
 # Carries out statistical tests comparing the DIS scores between hit and non-hit enhancers.
 
@@ -50,11 +50,12 @@ out_vcf$SNP.pos <- out_vcf$SNP.pos + 1
 write.table(out_vcf, file = "Results/Beluga/KnownVariants/OverlappingSNPs.recode.formatted_posplus1.vcf", quote = F, row.names = F, col.names = F, sep = "\t")
 
 #Links to download the Sei/Beluga Results
-#New Sei with updated SNPs and pos +1 
+#Sei with updated SNPs and pos +1 
 #https://hb.flatironinstitute.org/deepsea/jobs/3de40fcf-ddb9-4ca9-8699-37ac1c69b521/
-#New Beluga with updated SNPs and pos +1 
+#Beluga with updated SNPs and pos +1 
 #https://hb.flatironinstitute.org/deepsea/jobs/746aa96f-3894-4344-b085-b8b1b81b08c2/
 
+# Use the Beluga model results for downstream analyses
 beluga_results<- read.table("Results/Beluga/KnownVariants/BelugaResults/746aa96f-3894-4344-b085-b8b1b81b08c2_OverlappingSNPs.recode.formatted_posplus1_VARIANT_dis.tsv", sep = "\t", header = T)
 colnames(beluga_results) <- c("CHROM", "SNP.pos", "end", "KnownVariants_DIS_max_score")
 beluga_results <- merge(beluga_results, unique(snp2peak[,c("SNP","CHROM", "SNP.pos","Enh", "Hit")]))
