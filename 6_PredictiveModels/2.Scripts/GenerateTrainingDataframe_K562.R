@@ -1,5 +1,5 @@
 ##############
-##
+##This script generates the training dataset TrainingDataframe_K562.csv 
 ##Generate Data.frame for ENCODE-E2G EGP 
 ## NOTE: HG38
 ## Sam Bagot
