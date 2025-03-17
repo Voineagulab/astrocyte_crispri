@@ -2,7 +2,7 @@
 ##
 ##Tobias Expressed genes. 
 ## @author: Sam Bagot
-##This script identify processess TFs from JASPER and generate files for use in TOBIAS analysis
+##This script identify processess TFs from JASPAR and generate files for use in TOBIAS analysis
 ##
 #################
 setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPseq/EnhancerPredictionModels/")
