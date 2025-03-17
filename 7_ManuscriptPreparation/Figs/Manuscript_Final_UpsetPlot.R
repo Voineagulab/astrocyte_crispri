@@ -1,3 +1,4 @@
+#This script generates figure 1E.
 rm(list=ls())
 data=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullLibrary_Selection/Results/Final_List/NHA_Peaks_Annotated.csv")
 
