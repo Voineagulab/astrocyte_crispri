@@ -1,5 +1,5 @@
 #!/bin/bash
-
+##This script defines path directories for files used in TOBIAS  analysis
 #using the BAM they said they used for predictions instead
 ATAC_BAM="/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Data/K562Data/ENCODE_rE2G/DNase/ENCFF205FNC.bam"
 GENOME="/home/rna2/REFERENCE/HUMAN/GRCh38_hg38/GRCh38/Genome/UCSC/hg38.fa"
