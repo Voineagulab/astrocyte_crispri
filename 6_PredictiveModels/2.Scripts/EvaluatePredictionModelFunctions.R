@@ -1,3 +1,4 @@
+#This script define the functions sourced in EvaluatePredictionModels.R
 library(ggplot2)
 library(ranger)
 library(caret)
