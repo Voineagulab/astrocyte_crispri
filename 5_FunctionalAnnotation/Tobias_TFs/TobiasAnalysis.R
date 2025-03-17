@@ -1,4 +1,4 @@
-#analysis of Tobias outputs for bindetect (not compare)
+#This script analyzes Tobias outputs
 #
 #23-03-03
 #
@@ -11,7 +11,7 @@ library(tidyr)
 library(gprofiler2)
 
 ###############
-## load Expressed TFs are expressed and general data loading
+## load data
 ############### 
 homo_TFs <- read.csv("Results/Tobias/ExpressedTFs/Expressed_TFs.csv")
 load("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/PreprocessedData/Bulk_ATAC_RNAseq/RESULTS/RNAseq/geneData.rda")
