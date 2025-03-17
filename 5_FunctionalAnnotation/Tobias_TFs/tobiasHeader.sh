@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#This script defines path directories for files used in TOBIAS  analysis
 ATAC_BAM="/mnt/Data0/PROJECTS/CROPSeq/PreprocessedData/Bulk_ATAC_RNAseq/GOK8505-GOK8837/GOK8837A1/Mapping/filtered_bam/NHA_ATAC_S3.filtered.bam"
 GENOME="/home/rna2/REFERENCE/HUMAN/GRCh38_hg38/GRCh38/Genome/UCSC/hg38.fa"
 PEAKS="/mnt/Data0/PROJECTS/CROPSeq/PreprocessedData/Bulk_ATAC_RNAseq/GOK8505-GOK8837/GOK8837A1/Mapping/MACS2/NHA_ATAC_S3.filtered.BAM_peaks.narrowPeak"
