@@ -1,3 +1,4 @@
+#This script generates the training dataset TrainingDataframe_Astrocytes.csv
 #04-01-23
 #Sam Bagot
 #Modified by IV and JP: 1.1_CreateEGPdataframe_JP_IV
