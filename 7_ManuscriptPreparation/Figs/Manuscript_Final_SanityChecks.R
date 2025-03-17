@@ -1,3 +1,4 @@
+#This script generates figures 2B
 ## Setup
   setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_SanityChecks/")
   library(tidyverse)
