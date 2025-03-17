@@ -1,5 +1,5 @@
 ##############
-##This script generates the training dataset TrainingDataframe_K562.csv 
+##This script generates the training variables for random forest prediction models applied to K562 data 
 ##Generate Data.frame for ENCODE-E2G EGP 
 ## NOTE: HG38
 ## Sam Bagot
