@@ -1,4 +1,4 @@
-
+#This script generates figures 2A, 2C, 3A, 3B, 5C, S4G, S4H, S4I, S11 and S12
 ## Setup
   setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_MainDE/Final/")
   library(tidyverse)
