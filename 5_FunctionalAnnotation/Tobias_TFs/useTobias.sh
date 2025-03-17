@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#This doesn't work and was hard to work around
+#This script run TOBIAS
 #conda install tobias -c bioconda
 #conda env create -n tobias python=3.6.0
 #pip install tobias
