@@ -15,8 +15,8 @@ This repository contains the data and analysis scripts corresponding to the sect
 
 ## Scripts
 
-- `GenerateTrainingData_Astrocytes.R`: Generates `TrainingDataframe_Astrocytes.csv`, using data in `/InputData/Astrocytes`.
-- `GenerateTrainingData_K562.R`: Generates `TrainingDataframe_K562.csv`, using data in `/InputData/K562`.
+- `GenerateTrainingData_Astrocytes.R`: Generates the training variables `TrainingDataframe_Astrocytes.csv` for random forest prediction models applied to Astrocyte data, using data in `/InputData/Astrocytes`.
+- `GenerateTrainingData_K562.R`: enerates the training variables `TrainingDataframe_K562.csv` for random forest prediction models applied to K562 data, using data in `/InputData/K562`.
 - `RunRFmodels.R`: Carries out all the random forest model training and prediction.
 - `Functions.R`: Functions sourced in `RunRFmodels.R`.
 - `EvaluatePredictionModels.R`: Carries out the model performance evaluations and produces the manuscript figures and supplementary tables.
