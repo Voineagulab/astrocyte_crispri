@@ -1,3 +1,4 @@
+#This script generates figures S4A-S4E and S10
 ## Setup
   setwd("/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_SequencingQC/")
   library(tidyverse)
