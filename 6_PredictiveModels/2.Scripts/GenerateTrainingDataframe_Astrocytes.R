@@ -1,4 +1,5 @@
-#This script generates the training dataset TrainingDataframe_Astrocytes.csv
+###This script generates the training variables for random forest prediction models applied to Astrocyte data 
+
 #04-01-23
 #Sam Bagot
 #Modified by IV and JP: 1.1_CreateEGPdataframe_JP_IV
