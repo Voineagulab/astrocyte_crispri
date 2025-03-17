@@ -1,3 +1,4 @@
+#This script generates figure S7.
 #############
 ##
 ## Transcription factor related manuscript plots
