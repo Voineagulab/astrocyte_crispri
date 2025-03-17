@@ -1,4 +1,5 @@
 #!/bin/bash
+#This script generate aggregate footprinting plots comparing bound and unbound transcription factors (TFs) at enhancer regions
 source /home/rna2/PROGRAMS/miniconda3/etc/profile.d/conda.sh
 conda activate tobias
 cd "/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Results/Tobias/"
