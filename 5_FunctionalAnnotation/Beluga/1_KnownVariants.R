@@ -1,6 +1,10 @@
 ################
 ##
-#This script extracts SNPs located within a 1 kb window of the tested enhancers and predicts their disease-impact scores (DIS) using Beluga.
+#This script extracts SNPs located within a 1 kb window of the CRISPRi tested enhancers 
+# Prepares the data for disease-impact scores (DIS) prediction using Beluga https://hb.flatironinstitute.org/deepsea/?analysis=insilico. 
+# Processes the output of the online tool
+# Carries out statistical tests comparing the DIS scores between hit and non-hit enhancers.
+
 ## @author: Sam Bagot
 ## @date: 20-10-23
 ################
@@ -66,7 +70,7 @@ max_Dis <- aggregate(beluga_results$KnownVariants_DIS_max_score, by = list(belug
 colnames(max_Dis) <- c("Enh", "Beluga.MaxDisScore")
 write.csv(max_Dis,"Results/Beluga/KnownVariants/MaxBelugaDiseaseScores.csv", row.names = F)
 
-#Statss on beluga max score
+#Stats on beluga max score
 ft.dis <-fisher.test(beluga_results$Hit,beluga_results$KnownVariants_DIS_max_score > - log10(0.05)) #fisher.test(beluga_results$KnownVariants_DIS_max_score > 2, beluga_results$Hit)
 t.dis <- t.test(beluga_results[beluga_results$Hit,]$KnownVariants_DIS_max_score,beluga_results[! beluga_results$Hit,]$KnownVariants_DIS_max_score)
 ft.dis
