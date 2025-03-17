@@ -1,3 +1,4 @@
+#This script generates figures 1C
 rm(list=ls())
 
 ## Setup
