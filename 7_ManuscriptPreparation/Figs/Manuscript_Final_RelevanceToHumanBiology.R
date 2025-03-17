@@ -1,3 +1,4 @@
+#This script generates figures 4A and 5A
 ## Setup
   setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_RelevanceToHumanBiology/")
   library(tidyverse)
