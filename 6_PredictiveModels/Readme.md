@@ -22,7 +22,7 @@ This repository contains the data and analysis scripts corresponding to the sect
 - `EvaluatePredictionModels.R`: Carries out the model performance evaluations and produces the manuscript figures and supplementary tables.
 - `EvaluatePredictionModelFunctions.R`: Functions sourced in `EvaluatePredictionModels.R`.
 - `EGrf_AllIntergenicPeaks_Pred.R`: Script that applies EGrf to all intergenic peaks not tested in the CRISPRi screen and predicts their effect on genes within 500kb.
-- `EGRF_OverlapBarplot_datapreparation.R`: Generates data for plotting Fig 7c (`NHA_EGRF_OverlapBarplot_0.5RPKM.pdf`)
+- `EGRF_OverlapBarplot_datapreparation.R`: Identifies EGrf predictions that overlap with validated enhancers, super-enhancers, and those crossing TAD boundaries. Generates data for plotting Fig 7c (`NHA_EGRF_OverlapBarplot_0.5RPKM.pdf`)
 - `EGRF_DensityDistance.R`: Compute and plot median enhancer-gene distance in EGrf predictions 
 - `EGRF_TTseq.R`: TT-seq examination in EGrf predictions
 - `MAGMA_EGrf_DataPreparation`: Generates background `Allintergenic_peaks_background_0.5RPKM.loc` and set `EGrf_distance_05RPKM.set` files used for MAGMA analyses
