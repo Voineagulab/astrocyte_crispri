@@ -1,3 +1,4 @@
+#!/bin/bash
 #This script Run MAGMA enrichment analyses in EGrf enhancers
 
 ##This part Run MAGMA annotation step and Gene level analyses. The MAGMA annotation step  was executed using a 1-kb window around each region.
