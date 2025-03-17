@@ -20,7 +20,7 @@ This repository contains the data and analysis scripts corresponding to the sect
 - `RunRFmodels.R`: Carries out all the random forest model training and prediction.
 - `Functions.R`: Contains functions sourced in `RunRFmodels.R`.
 - `EvaluatePredictionModels.R`: Carries out the model performance evaluations and produces the manuscript figures and supplementary tables.
-- `EvaluatePredictionModelFunctions.R`: Functions sourced in `EvaluatePredictionModels.R`.
+- `EvaluatePredictionModelFunctions.R`: Contains functions sourced in `EvaluatePredictionModels.R`.
 - `EGrf_AllIntergenicPeaks_Pred.R`: Applies EGrf to all intergenic peaks not tested in the CRISPRi screen and predict their effect on genes within 500kb.
 - `EGRF_OverlapBarplot_datapreparation.R`: Identifies EGrf predictions that overlap with validated enhancers, super-enhancers, and those crossing TAD boundaries. Generates data for plotting Fig 7c (`NHA_EGRF_OverlapBarplot_0.5RPKM.pdf`)
 - `EGRF_DensityDistance.R`: Computes and plots the median enhancer-gene distance in EGrf predictions 
