@@ -1,7 +1,6 @@
 ################
 ##
-##
-## Create VCFs for all possible sequence variants at each nucleotide position for the 145 functional enhancers
+## Create VCFs for all possible sequence variants at each nucleotide position for the 145 functional enhancers for DIS score prediction using the Beluga model implemented at: https://hb.flatironinstitute.org/sei/
 ## @author: Sam Bagot
 ## @date: 24-10-23
 ################
