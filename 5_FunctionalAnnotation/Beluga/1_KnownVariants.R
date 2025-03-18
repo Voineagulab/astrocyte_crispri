@@ -1,4 +1,4 @@
-loratory################
+################
 ##
 #This script extracts SNPs located within a 1 kb window of the CRISPRi tested enhancers 
 # Prepares the data for disease-impact scores (DIS) prediction using the Beluga model as implemented at  https://hb.flatironinstitute.org/sei/
