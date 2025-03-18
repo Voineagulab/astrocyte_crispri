@@ -1,6 +1,9 @@
 Scripts in this folder concern the functional annotation of our functional enhancers and their regulated genes. They are organised by theme.
 
-./Beluga: predicting the effect of known and hypothetical variants in functional enhancers using  *in silico* mutagenesis, courtesy of the Beluga algorithm (Zhou et al., 2019: https://www.nature.com/articles/s41588-018-0160-6)
+./Beluga: scripts that generate input files and process the outputs of deep learning based variant effect predictions using (Zhou et al., 2019: https://www.nature.com/articles/s41588-018-0160-6). 
+Two types of data are generated:
+1. In silico mutagenesis data using https://hb.flatironinstitute.org/deepsea/?analysis=insilico , which predicts the effects of all variants in an enhancer on chromatin state.
+2. Disease impact scores using https://hb.flatironinstitute.org/sei/ applied to a) all SNPs in Hit and Non-hit enhancers and b) all possible variants in Hit enhancers.
 
 ./Chromatin: these R scripts explore the chromatin properties of functional enhancers, such as superenhancer status, or changes in chromatin state across tissues and development.
 
