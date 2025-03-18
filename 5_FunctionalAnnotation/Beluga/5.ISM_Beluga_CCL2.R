@@ -1,5 +1,7 @@
 ####### This script compares Disease impact score (DIS) values between SNPs within 1kb of functional hits and powered non-hit enhancers
-####### and generates the figure displaying the DIS scores for all variants within Enh427, which regulates CCL2
+####### and generates the figure displaying variant effect predictions for all variants within Enh427, which regulates CCL2
+## ISM data generated using https://hb.flatironinstitute.org/deepsea/?analysis=insilico
+## DIS scores generated using https://hb.flatironinstitute.org/sei/
 
 ####### Fisher test
 setwd("~/Library/CloudStorage/GoogleDrive-ivlabunsw@gmail.com/My Drive/MANUSCRIPTS_IN PROGRESS/CROPseq_MS/Manuscript/Resubmission_NatNeuro/SuppFigs_tables")
