@@ -97,6 +97,7 @@ TF_facts <- function(unbound_bound, factor = "TF_Counts") {
   return(values)
 }
 
+#Processes transcription factor (TF) pairs from JASPAR 2022 and evaluate their expression.
 #RPKM is data.frame of format EnsID, RPKM
 gethomo_TFs <- function (RPKM, all_EnsIDs) {
   homo_TFs <- read.table("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/PublicData/TF_BindingSites/JASPAR2022_human_TF.txt")
