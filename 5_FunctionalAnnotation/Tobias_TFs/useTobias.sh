@@ -1,6 +1,11 @@
 #!/bin/bash
 
-#This script runs TOBIAS
+# This script runs the TOBIAS pipeline for footprinting analysis on ATAC-seq data:  
+# 1) ATACorrect: Performs bias correction of ATAC-seq reads.  
+# 2) ScoreBigwig: Calculates footprint scores from corrected cut sites.  
+# 3) BINDetect: Estimates differentially bound motifs based on scores, sequence, and motif.  
+# The script further processes TOBIAS outputs.
+
 #conda install tobias -c bioconda
 #conda env create -n tobias python=3.6.0
 #pip install tobias
@@ -33,6 +38,7 @@ if [[ !  -d "$OUTDIR"  ]]
 then
     mkdir -p $OUTDIR
 fi
+
 #VERY SLOW ~5hrs 
 echo "Running TOBIAS ATACorrect"
 TOBIAS ATACorrect \
