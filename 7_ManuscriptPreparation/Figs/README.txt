@@ -155,12 +155,12 @@ Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
 Output:Sfig3B - Script LibraryDesign - Genes tested per candidate.pdf
 
 ####3C
-Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
-Output:Sfig3B - Script LibraryDesign - Genes tested per candidate.pdf
+Script:7_ManuscriptPreparation/Figs/Manuscript_final_enhancer_coverage_module_significance.R
+Output:Nott_StatsCoverage_heatmap.pdf
 
 ####3D
-Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
-Output:Sfig3B - Script LibraryDesign - Genes tested per candidate.pdf
+Script:7_ManuscriptPreparation/Figs/Manuscript_final_enhancer_coverage_module_significance.R
+Output:Nott_Coverage_heatmap.pdf
 
 ############################ Figure S4
 ####4A
