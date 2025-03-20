@@ -154,6 +154,14 @@ Output:Sfig3A - Script LibraryDesign - Candidate length histogram.pdf
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
 Output:Sfig3B - Script LibraryDesign - Genes tested per candidate.pdf
 
+####3C
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
+Output:Sfig3B - Script LibraryDesign - Genes tested per candidate.pdf
+
+####3D
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
+Output:Sfig3B - Script LibraryDesign - Genes tested per candidate.pdf
+
 ############################ Figure S4
 ####4A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
