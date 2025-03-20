@@ -1,5 +1,5 @@
 # This script generates a heatmap of enhancer coverage (ATAC-seq, H3K27ac, H3K4me3) across cell types
-#and assesses module significance using Kruskal-Wallis and Wilcoxon tests, based on Nott et al. (2019).
+#and assesses module significance using Kruskal-Wallis and Wilcoxon tests;  H3K27ac and H3K4me3 data from  Nott et al. (2019).
 #Generates Sup Fig3C and Sup Fig3D
 
 # Load necessary libraries
