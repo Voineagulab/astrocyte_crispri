@@ -1,6 +1,6 @@
 Aggregate_Signal.R Defines a function for aggregating signal footprinting data from TOBIAS and prepares it for visualization in R
 
-TobiasAggregatePlots.sh Generate aggregates footprinting plots comparing bound and unbound transcription factors (TFs) at enhancer regions
+TobiasAggregatePlots.sh Generates aggregate plots of ATAC-seq signals across all sites using the PlotAggregate function from TOBIAS, comparing chromatin accessibility at enhancer regions between bound and unbound transcription factors (TFs)
 
 TobiasAnalysis.R Analyzes TOBIAS outputs
 
