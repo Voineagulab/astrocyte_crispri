@@ -1,5 +1,5 @@
 #!/bin/bash
-#This script generate aggregate footprinting plots comparing bound and unbound transcription factors (TFs) at enhancer regions
+#This script generates aggregate plots of ATAC-seq signals across all sites using the PlotAggregate function from TOBIAS, comparing chromatin accessibility at enhancer regions between bound and unbound transcription factors (TFs)
 source /home/rna2/PROGRAMS/miniconda3/etc/profile.d/conda.sh
 conda activate tobias
 cd "/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Results/Tobias/"
