@@ -2,8 +2,9 @@
 ##
 ##Tobias Expressed genes. 
 ## @author: Sam Bagot
-##This script apply the function gethomo_TFs (defined at TobiasRFunctions.R) to retrieve and process TFs from JASPAR, 
-##and subsequently generate files for being used in TOBIAS analysis (useTobias.sh)
+## This script applies the function gethomo_TFs (defined in TobiasRFunctions.R) to retrieve and process TFs from JASPAR,  
+## and subsequently generates files containing the motif input used during the TOBIAS pipeline (useTobias.sh).
+
 
 #################
 setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPseq/EnhancerPredictionModels/")
