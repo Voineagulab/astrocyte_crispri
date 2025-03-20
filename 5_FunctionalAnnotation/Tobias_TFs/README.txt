@@ -1,27 +1,12 @@
-Aggregate_Signal.R Defines a function for aggregating signal footprinting data from TOBIAS and prepares it for visualization in R
-
-TobiasAggregatePlots.sh Generates aggregate plots of ATAC-seq signals across all sites using the PlotAggregate function from TOBIAS, comparing chromatin accessibility at enhancer regions between bound and unbound transcription factors (TFs)
-
-TobiasAnalysis.R Analyzes TOBIAS outputs
-
-TobiasExpressedGenes.R Processesses TFs from JASPAR and generate files for use in TOBIAS analysis
-
-TobiasFamilies.R Compares families of TFs
-
-tobiasHeader.sh Defines path directories for files used in TOBIAS  analysis
-
-tobiasHeaderENCODE.sh Defines path directories for files used in TOBIAS  analysis
-
-TobiasRFunctions.R Defines R Functions used for TOBIAS analyses.
-
-useTobias.sh Runs TOBIAS
-
 
 #The usage order for running TOBIAS was the following:
-TobiasExpressedGenes.R 
-useTobias.sh tobiasHeader.sh
-useTobias.sh tobiasHeaderENCODE.sh
-TobiasAnalysis.R
-TobiasFamilies.R
-TobiasAggregatePlots.sh
-Aggregate_Signal.R
+
+TobiasExpressedGenes.R :Processesses TFs from JASPAR and generate files for use in TOBIAS analysis
+useTobias.sh tobiasHeader.sh: Runs TOBIAS on in-house ATAC-seq data from NHA cells.
+useTobias.sh tobiasHeaderENCODE.sh Runs TOBIAS on in-house ENCODE DNase-seq data from K562 cells (not included in the manuscript).
+TobiasAnalysis.R: Analyzes TOBIAS outputs
+TobiasFamilies.R: Compares families of TFs
+TobiasAggregatePlots.sh: Generates aggregate plots of ATAC-seq signals across all sites using the PlotAggregate function from TOBIAS, comparing chromatin accessibility at enhancer regions between bound and unbound transcription factors (TFs)
+Aggregate_Signal.R:Defines a function for aggregating signal footprinting data from TOBIAS and prepares it for visualization in R
+
+TobiasRFunctions.R Defines R Functions used for TOBIAS analyses.
