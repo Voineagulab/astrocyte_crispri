@@ -122,6 +122,14 @@ Script:5_FunctionalAnnotation/Beluga/5.ISM_Beluga_CCL2.R
 Output:Enh427_ISM.pdf
 
 ############################ Figure7
+####7A
+Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R.R
+Output:8A.Benchmarking.pdf
+
+####7B
+Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R.R
+Output:8B.Performance_Astrocytes_K562_PR.pdf
+
 ####7C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SanityChecks_EGrf.R
 Output:NHA_EGRF_OverlapBarplot_0.5RPKM.pdf
@@ -227,6 +235,27 @@ Output:JASPAR class enrichments.pdf
 ####8A
 Script Manuscript_Final_eQTL.R
 Output eqtl vs crispri (per study).pdf
+
+############################ Figure S9
+####9A
+Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
+Output:8C.Astrocytes_Variable_Prediction.pdf
+
+####9C
+Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
+Output:8A.Benchmarking.pdf
+
+####9D
+Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
+Output:8B.Performance_Astrocytes_K562_PR.pdf
+
+####9E
+Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
+Output:8C.Astrocytes_Variable_Prediction.pdf
+
+####9F
+Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
+Output:8D.Astrocytes_RFimportance.pdf & 8D.K562_RFimportance.pdf
 
 ############################ Figure S10
 ####10A
