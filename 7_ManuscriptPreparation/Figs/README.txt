@@ -64,6 +64,10 @@ Outputs:
 Reads in hits versus non-hits.pdf
 Reads Reads in hits versus non-hits.txt
 
+#####3E
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
+Output: Reads in hits versus non-hits.pdf
+
 #####3F
 Script:Script:5_FunctionalAnnotation/WGCNAenh.R
 Output:
