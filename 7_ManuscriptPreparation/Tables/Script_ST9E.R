@@ -9,10 +9,7 @@ All_EGPs <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/GitHu
 
 #Load CRISPRi screen data
 res.final <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv") #Load Crispri hits
-
-#Duplicate object and subset EGPs by those predicted by EGRF and  > 0.5PRKM
 Supplementary_Table_9=All_EGPs
-Supplementary_Table_9=Supplementary_Table_9[Supplementary_Table_9$pass_rf==TRUE & Supplementary_Table_9$Gene.RNAseq_RPKM>0.5  & !All_EGPs$Enh.Pos %in% res.final$Enh.Pos,]
 
 ##############################################################################
 #Sort ttseq data
@@ -69,18 +66,25 @@ Supplementary_Table_9$Enh.NascentEnriched <- ifelse(
 
 #Set order of columns as follow:
 Column_order <- c("Enh", "EnhID", "Gene", "Pair", "EnsID", "Distance", "TSS", "Gene.Nearest", 
-            "Gene.RNAseq_Counts", "Gene.RNAseq_CPM", "Gene.RNAseq_RPKM", "Gene.Housekeeping", 
-            "Gene.StabilityIndex", "Enh.chr", "Enh.start", "Enh.end", "Enh.Pos", 
-            "ATACseq.Pileup", "Enh.Midpoint", "Chip.H3K27ac", "Chip.H3K4me3", 
-            "Enh.TTseqCount_NegStrand", "Enh.TTseqCount_PosStrand", 
-            "Enh.RNAseqCount_NegStrand", "Enh.RNAseqCount_PosStrand", "Enh.NascentEnriched", 
-            "Enh.eRNA", "numTSSEnhGene", "rf_pred", "Gene.Tested", "pass_rf")
+                  "Gene.RNAseq_Counts", "Gene.RNAseq_CPM", "Gene.RNAseq_RPKM", "Gene.Housekeeping", 
+                  "Gene.StabilityIndex", "Enh.chr", "Enh.start", "Enh.end", "Enh.Pos", 
+                  "ATACseq.Pileup", "Enh.Midpoint", "Chip.H3K27ac", "Chip.H3K4me3", 
+                  "Enh.TTseqCount_NegStrand", "Enh.TTseqCount_PosStrand", 
+                  "Enh.RNAseqCount_NegStrand", "Enh.RNAseqCount_PosStrand", "Enh.NascentEnriched", 
+                  "Enh.eRNA", "numTSSEnhGene", "rf_pred", "Gene.Tested", "pass_rf")
 
 Supplementary_Table_9=Supplementary_Table_9[Column_order]
 
 #Define pair column asenh pos + gene
 Supplementary_Table_9$Pair=paste0(Supplementary_Table_9$Enh.Pos,"_", Supplementary_Table_9$Gene)
 
-#Export Table
-write.csv(Supplementary_Table_9, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable9_RandomForests/9E_RandomForestPredictedHits.csv")
+##Subset EGPs by those predicted by EGRF and  > 0.5PRKM (this give Stable 9E)
+Supplementary_Table_9E=Supplementary_Table_9[Supplementary_Table_9$pass_rf==TRUE & Supplementary_Table_9$Gene.RNAseq_RPKM>0.5  & !All_EGPs$Enh.Pos %in% res.final$Enh.Pos,]
+dim(Supplementary_Table_9E)
 
+#Export Tables
+write.csv(Supplementary_Table_9E, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable9_RandomForests/9E_RandomForestPredictedHits.csv")
+
+#Subset EGPs to those predicted by the Random Forest model and not tested in our CRISPRi screening. This generates Stable9G (EGrf EGP all predictions)
+Supplementary_Table_AllPreds=Supplementary_Table_9[Supplementary_Table_9$pass_rf==TRUE & !All_EGPs$Enh.Pos %in% res.final$Enh.Pos,]
+write.csv(Supplementary_Table_AllPreds, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable9_RandomForests/9_AllRandomForestPredictedHits.csv")
