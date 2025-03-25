@@ -47,6 +47,11 @@ TAD.txt
 #####2C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Output:Nanostring vs scRNAseq.pdf
+
+#####2D
+Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
+Output:nEnh Per Gene.pdf
+
 ############################ Figure3
 #####3A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
@@ -201,15 +206,11 @@ Output:dCas9KRAB.pdf
 
 ####4G
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:nEnh Per Gene.pdf
-
-####4H
-Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Outputs:
 Downregulation Percentage.pdf
 Downregulation Percentage.txt
 
-####4I
+####4H
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Output:Downregulation Distribution.pdf
 
