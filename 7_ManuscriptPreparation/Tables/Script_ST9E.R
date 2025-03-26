@@ -85,6 +85,7 @@ dim(Supplementary_Table_9E)
 #Export Tables
 write.csv(Supplementary_Table_9E, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable9_RandomForests/9E_RandomForestPredictedHits.csv")
 
-#Subset EGPs to those predicted by the Random Forest model and not tested in our CRISPRi screening. This generates Stable9G (EGrf EGP all predictions)
-Supplementary_Table_AllPreds=Supplementary_Table_9[Supplementary_Table_9$pass_rf==TRUE & !All_EGPs$Enh.Pos %in% res.final$Enh.Pos,]
+#Subset By RNA-seq expression > 0.5 RPKM and enhancers not tested in our CRISPRi screening. This generates Stable9G (EGrf EGP all predictions)
+Supplementary_Table_AllPreds=Supplementary_Table_9[Supplementary_Table_9$Gene.RNAseq_RPKM>0.5 & !All_EGPs$Enh.Pos %in% res.final$Enh.Pos,]
+
 write.csv(Supplementary_Table_AllPreds, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable9_RandomForests/9_AllRandomForestPredictedHits.csv")
