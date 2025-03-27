@@ -133,7 +133,7 @@ Output:Enh427_ISM.pdf
 ############################ Figure7
 ####7A
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R.R
-Output:8A.Benchmarking.pdf
+Output:7A_BoxplotAstro_AUPRC_1000bootstraps.pdf
 
 ####7B
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R.R
@@ -246,9 +246,13 @@ Output eqtl vs crispri (per study).pdf
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
 Output:8C.Astrocytes_Variable_Prediction.pdf
 
+####9B
+Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
+Output:Bootstrapping_AstrocytesPlusonly.pdf
+
 ####9C
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
-Output:8A.Benchmarking.pdf
+Output:SFig9C_BoxplotK562_AUPRC_1000bootstraps.pdf
 
 ####9D
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
