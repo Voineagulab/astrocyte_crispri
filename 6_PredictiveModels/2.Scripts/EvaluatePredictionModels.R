@@ -87,6 +87,90 @@ pdf("8A.Benchmarking.pdf",w_margin / 3, height = w_margin /2)
 benchmarkK562Astro(bootstrap_Astro$PR, bootstrap_K562$PR, cols_benchmarking, y.column = "name")
 dev.off()
 
+######################## 
+###### Fig 7A: Boxplot of AUPRC values across 1000 fold bootstraps between the different models in Astrocytes 
+col_boxplot = c(
+  EGrf              = "#dd5d2b",
+  TAPseq.rf         = "#f3ccde",
+  Distance          = "#000000",
+  ABC_Score         = "#8dcace",
+  rE2G.DNAseOnly    = "#3d8f80",
+  rE2G.Extended     = "#3a5f9a",
+  EGrf.Extended     = "#6f083d",
+  rE2G.Extended.rf  = "grey"
+  
+)
+
+AUPRC_astro=data.frame(do.call("rbind",bootstrap_Astro$PR_FULL))
+AUPRC_astro=melt(AUPRC_astro, variable.name = "Model", value.name = "AUPRC")
+
+
+#Provide significance data (can be extracted from bootstrap_Astro$PR, where * p <0.05 and ** p< 0.005)
+stars_df <- data.frame(
+  Model = c("EGrf", "rE2G.DNAseOnly", "ABC_Score", "TAPseq.rf", "Distance"),
+  value = c(0.75, 0.75, 0.75, 0.75, 0.75),  # set Y-position above your data range
+  label = c("", "*", "**", "**", "**")    # use "" for no star
+)
+
+stars_df$Model <- factor(stars_df$Model, levels = c("EGrf", "rE2G.DNAseOnly", "ABC_Score", "TAPseq.rf", "Distance"))
+
+
+# Generate violin/boxlot for Fig 7A
+pdf("7A_BoxplotAstro_AUPRC_1000bootstraps.pdf",w_margin / 2.8, height = w_margin /3.1)
+
+ggplot(data = AUPRC_astro[AUPRC_astro$Model %in% c(
+  "Distance", "TAPseq.rf", "rE2G.DNAseOnly", "ABC_Score", "EGrf"
+), ],
+aes(x = Model, y = AUPRC, fill = Model)) +
+  geom_boxplot(outlier.size = 0.1) +
+  scale_fill_manual(values = col_boxplot) +
+  scale_x_discrete(limits = c("EGrf", "rE2G.DNAseOnly", "ABC_Score", "TAPseq.rf", "Distance"),
+                   labels = c("EGrf", "rE2G\nDNAseOnly", "ABC\nScore", "TAPseq.rf", "Distance"))  +
+                   
+  geom_text(data = stars_df, aes(x = Model, y = value, label = label), inherit.aes = FALSE) +
+  theme_bw() + theme(panel.grid = element_blank(),
+                     axis.title = ts(8), axis.line = element_line(), legend.position = "",
+                     axis.text.x = element_text(size = 6),  
+                     axis.text.y = element_text(size = 7))
+
+dev.off()
+
+
+######################## 
+######SupF9C: Boxplots of AUPRC values across 1000 fold bootstraps between the different models in K562
+AUPRC_K562=data.frame(do.call("rbind",bootstrap_K562$PR_FULL))
+AUPRC_K562=melt(AUPRC_K562, variable.name = "Model", value.name = "AUPRC")
+
+#Provide significance data (can be extracted from bootstrap_Astro$PR, where * p <0.05 and ** p< 0.005)
+stars_df_K562 <- data.frame(
+  Model =c("EGrf.Extended", "rE2G.Extended", "rE2G.Extended.rf",
+           "EGrf", "rE2G.DNAseOnly","ABC_Score","TAPseq.rf","Distance"),
+  value = c(0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75),  # set Y-position above your data range
+  label = c("", "", "", "**", "**","**", "**", "**")    # use "" for no star
+)
+
+AUPRC_K562$Model <- factor(AUPRC_K562$Model, levels = c("EGrf.Extended", "rE2G.Extended", "rE2G.Extended.rf",
+                                                              "EGrf", "rE2G.DNAseOnly","ABC_Score","TAPseq.rf","Distance"))
+pdf("SFig9C_BoxplotK562_AUPRC_1000bootstraps.pdf",w_margin / 1.4, height = w_margin /2.5)
+ggplot(data = AUPRC_K562[AUPRC_K562$Model %in% c("EGrf.Extended", "rE2G.Extended", "rE2G.Extended.rf",
+                                                 "EGrf", "rE2G.DNAseOnly","ABC_Score","TAPseq.rf","Distance"),],
+aes(x = Model, y = AUPRC, fill = Model)) +
+  geom_boxplot(outlier.size = 0.1) +
+  #geom_violin() +
+  scale_fill_manual(values = col_boxplot) +
+  scale_x_discrete(limits = c("EGrf.Extended", "rE2G.Extended", "rE2G.Extended.rf",
+                                                 "EGrf", "rE2G.DNAseOnly","ABC_Score","TAPseq.rf","Distance"),
+                   labels = c("EGrf.\nExtended", "rE2G.\nExtended", "rE2G.\nExtended.rf",
+                              "EGrf", "rE2G.\nDNAseOnly","ABC\nScore","TAPseq.rf","Distance"))  +
+  
+  geom_text(data = stars_df_K562, aes(x = Model, y = value, label = label), inherit.aes = FALSE) +
+  theme_bw() + theme(panel.grid = element_blank(),
+                     axis.title = ts(9), axis.line = element_line(), legend.position = "",
+                     axis.text.x = element_text(size = 7),  
+                     axis.text.y = element_text(size = 8))
+
+dev.off()
+
 
 ################
 #Code for fig 8D
