@@ -466,12 +466,13 @@ bootstrap.AUCs <- function (df, #Dataframe containing the dataset.
     bootstrapROCs[[i]] <- unlist(lapply(aucLists[[2]], function(x) {return(x$auc) }))
   }
   # Summarizing the bootstrap results for PR and ROC AUCs.
+  bootstrapPRAUCs_FULL=bootstrapPRAUCs #AUPRC values across 1000 fold bootstraps
+  bootstrapROCs_FULL=bootstrapROCs #ROC values across 1000 fold bootstraps
   bootstrapPRAUCs <- bootstrap.sum(bootstrapPRAUCs, variables,  p.value_comp)
   bootstrapROCs <- bootstrap.sum(bootstrapROCs, variables,  p.value_comp)
   
-  return(list(PR = bootstrapPRAUCs,ROC = bootstrapROCs))
+  return(list(PR = bootstrapPRAUCs,ROC = bootstrapROCs, PR_FULL=bootstrapPRAUCs_FULL, RC_FULL=bootstrapROCs_FULL))
 }
-
 
 # Function to create barplots showing AUPRC in rf models adding variables one at a time, 
 comparison.barplot <- function(df, #Dataframe containing the dataset
