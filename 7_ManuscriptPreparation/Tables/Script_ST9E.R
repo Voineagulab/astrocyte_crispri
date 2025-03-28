@@ -82,6 +82,22 @@ Supplementary_Table_9$Pair=paste0(Supplementary_Table_9$Enh.Pos,"_", Supplementa
 Supplementary_Table_9E=Supplementary_Table_9[Supplementary_Table_9$pass_rf==TRUE & Supplementary_Table_9$Gene.RNAseq_RPKM>0.5  & !All_EGPs$Enh.Pos %in% res.final$Enh.Pos,]
 dim(Supplementary_Table_9E)
 
+#Provide further gene and brain enhancer annotations (extracted from SupTable 1)
+library(readxl)
+SupTable1 <- read_excel("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable1_ATAC/Supplementary Table 1 - Annotation of candidate peaks.xlsx", 
+                                                                  sheet = "1A_AllPeakAnnotation")
+#verify enhancers are included in SupTable 1 
+table(Supplementary_Table_9E$Enh %in% SupTable1$`Peak ID`)
+
+#extract gene/brain annotation from public available resources (corresponding to columns 10 to 15)
+Supplementary_Table_9E=merge(Supplementary_Table_9E, SupTable1[c(4,10:15)], by.x="Enh", by.y="Peak ID", all.x = TRUE, all.y = FALSE)
+
+#re-order new added columns
+colnames(Supplementary_Table_9E)
+Supplementary_Table_9E=Supplementary_Table_9E[c(1:28,32:37,29:31)]
+head(Supplementary_Table_9E)
+
+
 #Export Tables
 write.csv(Supplementary_Table_9E, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable9_RandomForests/9E_RandomForestPredictedHits.csv")
 
