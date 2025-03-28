@@ -85,7 +85,7 @@ dim(Supplementary_Table_9E)
 #Provide further gene and brain enhancer annotations (extracted from SupTable 1)
 library(readxl)
 SupTable1 <- read_excel("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable1_ATAC/Supplementary Table 1 - Annotation of candidate peaks.xlsx", 
-                                                                  sheet = "1A_AllPeakAnnotation")
+                        sheet = "1A_AllPeakAnnotation")
 #verify enhancers are included in SupTable 1 
 table(Supplementary_Table_9E$Enh %in% SupTable1$`Peak ID`)
 
@@ -104,4 +104,17 @@ write.csv(Supplementary_Table_9E, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Man
 #Subset By RNA-seq expression > 0.5 RPKM and enhancers not tested in our CRISPRi screening. This generates Stable9G (EGrf EGP all predictions)
 Supplementary_Table_AllPreds=Supplementary_Table_9[Supplementary_Table_9$Gene.RNAseq_RPKM>0.5 & !All_EGPs$Enh.Pos %in% res.final$Enh.Pos,]
 
+#Provide gene and brain enhancer annotations
+#extract gene/brain annotation from public available resources (corresponding to columns 10 to 15)
+Supplementary_Table_AllPreds=merge(Supplementary_Table_AllPreds, SupTable1[c(4,10:15)], by.x="Enh", by.y="Peak ID", all.x = TRUE, all.y = FALSE)
+
+#re-order new added columns
+colnames(Supplementary_Table_AllPreds)
+Supplementary_Table_AllPreds=Supplementary_Table_AllPreds[c(1:28,32:37,29:31)]
+head(Supplementary_Table_AllPreds)
+
+
 write.csv(Supplementary_Table_AllPreds, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Tables/STable9_RandomForests/9_AllRandomForestPredictedHits.csv")
+
+library(clipr)
+clipr:::write_clip(Supplementary_Table_AllPreds)
