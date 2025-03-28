@@ -37,4 +37,4 @@ Scripts that generate the manuscript figures and tables published in the manuscr
 https://voineagulabunsw.github.io/astrocyte_crispri_resource/
 
 ## Other
-Questions should be directed to Gavin Sutton (ggavinjamiesutton@gmail.com) and Irina Voineagu (i.voineagu@unsw.edu.au)
+Questions should be directed to Gavin Sutton (gjsutton1995@gmail.com) and Irina Voineagu (i.voineagu@unsw.edu.au)
