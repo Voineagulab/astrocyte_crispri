@@ -1,4 +1,4 @@
-1_KnownVariants.R Extracts SNPs located within a 1 kb window of the tested enhancers, prepares the VCF files for disease-impact scores (DIS) prediction using Beluga https://hb.flatironinstitute.org/sei/ , processes the output of the online tool, and carries out statistical tests comparing the DIS scores between SNPs in hit and non-hit enhancers.
+1_KnownVariants.R Extracts SNPs located within a 1 kb window of the tested enhancers, prepares the VCF files for disease-impact scores (DIS) prediction using Beluga https://hb.flatironinstitute.org/sei/ , processes the output of the online tool, and carries out exploratory statistical tests comparing the DIS scores between SNPs in hit and non-hit enhancers.
 
 2_CreateVCF.R Creates VCFs for ALL possible sequence variants at each nucleotide position for the 145 functional enhancers for In Silico Mutagenesis analysis using https://hb.flatironinstitute.org/deepsea/?analysis=insilico, 
 
