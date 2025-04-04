@@ -20,6 +20,9 @@ guides <- read.csv("../../../FullScale/Data/Whitelists/NHA Enh Library.csv")
     # colnames
     colnames(kn)[3:7] <- c("Hit_Enhancer", "rsID", "SNP_position", "DIS_max_score", "Escore_recalculated") 
     
+    # adjust SNP position by +1 for consistency with the dbSNP position
+    kn$SNP_position <- kn$SNP_position + 1
+    
     # filter column
     kn <- kn[,-which(colnames(kn) == "Escore_recalculated")]
 
@@ -32,7 +35,7 @@ guides <- read.csv("../../../FullScale/Data/Whitelists/NHA Enh Library.csv")
   
   ## Filter columns
     # add coordinates of variant
-    bel$Variant_Position <- paste0("chr", bel$Chr, ":", bel$end)  # using "pos" rather than "end", as this matches to our SNP annotation in other dataframes
+    bel$Variant_Position <- paste0("chr", bel$chrom, ":", bel$end)  # using "end", as this matches to our SNP annotation in other dataframes
     
     # add coordinates of enhancer
     m <- match(bel$Enh, guides$TargetID)
@@ -50,7 +53,7 @@ guides <- read.csv("../../../FullScale/Data/Whitelists/NHA Enh Library.csv")
     
     # remove disease p-value (as it's the -log10 of the score)
     bel <- bel[,-which(colnames(bel) == "DIS_max_score_p")]
-    
+
   ## Adjust column names
     colnames(bel) <- c("Enh", "Variant_PositionRelative", "ReferenceAllele", "MaxDiseaseScore", "MaxDiseaseScore_Significant", "Variant_Position", "Enh_Coord")
 
