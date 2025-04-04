@@ -98,7 +98,7 @@ options(stringsAsFactors = FALSE)
 ## On the intervening genes between enhancers and genes ----
   
 
-## A more nuanced calculation of the nearest gene
+## For each enhancer, score each gene by how many other genes are nearer
   nrst <- res.final[,c("Pair", "Enh", "Gene", "HitPermissive"),]
   nrst[,c("nNearer", "nSkip", "nSkip_Exp", "nSkip_notExp", "Distance.Category")] <- "."
   # nrst$Distance.Category <- "."
@@ -186,7 +186,7 @@ options(stringsAsFactors = FALSE)
 ## TADs ----
   
   
-## Read in
+## Read in topologically-associated domain calls from NHA cells
   tad <- read.delim("../../../../FullLibrary_Selection/PublicData_forLibrarySelectionOnly/CulturedCells/Rajarajan2018/RajarajanScience2018_Synapse/Glia.100000_hg38.bed", header = FALSE)
   
     
