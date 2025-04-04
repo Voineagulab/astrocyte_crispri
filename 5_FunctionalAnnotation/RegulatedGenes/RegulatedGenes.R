@@ -254,14 +254,14 @@ filterForWellPowered <- TRUE
   
   
   # disease set enrichments for the list of hits
-  disgenet.enrich <- disease_enrichment(entities = hit.genes,
-                                        database = "ALL",
-                                        universe = "DISGENET",
-                                        # custom_universe = bg,
-                                        vocabulary = "HGNC",
-                                        verbose = TRUE)
-
-  x_disgenet <- disgenet.enrich@qresult
+  # disgenet.enrich <- disease_enrichment(entities = hit.genes,
+  #                                      database = "ALL",
+  #                                      universe = "DISGENET",
+  #                                      # custom_universe = bg,
+  #                                      vocabulary = "HGNC",
+  #                                      verbose = TRUE)
+  #
+  # x_disgenet <- disgenet.enrich@qresult
   # write.csv(x, file = "Genes/Wellpowered/Disgenet - Enrichment (Curated).csv", row.names = FALSE)
   # GJS note: the function seems to be insensitive to the choice of universe, and defaults to all genes.
   
@@ -1299,64 +1299,4 @@ save(enrichments,
      annot.combined,
      annot.detailed, file = "Genes/Wellpowered/Final.rda")
 
-
-# ################################################################################################################################ #
-# ## Visualise ----
-# 
-# 
-# ## A heatmap
-#   x <- annot.logi
-#   rownames(x) <- x$Gene
-#   
-#   # filter columns
-#   keep.cols <- c("Hit",
-#                  "AstMarkers_Herring2022",
-#                  "AstMarkers_Foetal_Zhong2018",
-#                  "AstSubtypes_Sadick2022",
-#                  "AstAgeing_Krawczyk2022",
-#                  "AstAgeing_Palmer2021",
-#                  "AstMaturation_Zhang2016",
-#                  "AstMaturation_Krawczyk2022",
-#                  "AstActivation_iAstro_Leng2022",
-#                  "AstActivation_hiPSC_TCW_Leng2022",
-#                  "AstActivation_hiPSC_Li_Leng2022",
-#                  "AstActivation_hiPSC_Krenciko_Leng2022",
-#                  "AstDisease_AD_Sadick2022",
-#                  "AstDisease_MS_Jakel2019",
-#                  "AstDisease_ASD_Gandal2022",
-#                  "AstDisease_GBM_Zhang2016",
-#                  "AstDisease_Peritumour_Krawczyk2022",
-#                  "AstDisease_Epilepsy_Zhang2016")
-#   x <- x[,keep.cols]
-#   x[,-1] <- apply(x[,-1], 2, as.numeric)
-#   
-#   # clean column names
-#   colnames(x) <- gsub("^Ast", "", colnames(x)) %>%
-#     gsub("_Leng2022", "", .) %>%
-#     gsub("hiPSC_", "", .) %>%
-#     gsub("Disease_", "", .) %>%
-#     gsub("Krenciko", "Krencik", .) %>%
-#     gsub("Activation", "Activation", .) %>%
-#     gsub("_Zhong", "", .) %>%
-#     gsub("_", "\n", .) %>%
-#     splitter(., "2", 1) %>%
-#     gsub("iAstro_", "", .) 
-#     
-#   
-#   
-# ## Plot
-#   # row side colours to label hits
-#   rsc <- as.factor(x$Hit)
-#   levels(rsc) <- c("grey90", "firebrick1")
-#   rsc <- as.character(rsc)
-#   
-#   # plot all genes
-#   pdf(file = "Genes/Wellpowered/Heatmap of Logical - All Genes.pdf", height = 20, width = 5)
-#   gplots::heatmap.2(as.matrix(x[,-1]), RowSideColors = rsc, trace = "none", col = carto_pal(7, "ag_GrnYl"), margins = c(12, 5))
-#   dev.off()  
-#   
-#   # plot hit genes
-#   pdf(file = "Genes/Wellpowered/Heatmap of Logical - Hit Genes.pdf", height = 20, width = 5)
-#   gplots::heatmap.2(as.matrix(x[which(x$Hit),-1]), trace = "none", col = carto_pal(7, "ag_GrnYl"), margins = c(10, 5))
-#   dev.off()  
   
