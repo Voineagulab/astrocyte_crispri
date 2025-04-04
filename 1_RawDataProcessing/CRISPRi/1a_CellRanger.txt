@@ -1,7 +1,7 @@
 ## This script applies cellranger's count function to the combined data from NovaSeq1, NovaSeq2, and hnPCR2 sequencing runs
 
 ## Directories
-
+# note that the 10X cDNA libraries were sequenced on two separate NovaSeq runs for additional depth, which were pooled during mapping
 cd /mnt/Data0/PROJECTS/CROPSeq/PreprocessedData/FullScale/FinalCount
 NOVA1=/mnt/Data0/PROJECTS/CROPSeq/PreprocessedData/FullScale/GIMR_GWCCG_200802_IRIVOI_10X/211215_A00152_0509_BHWJ5MDSX2/fastq_path/GE3/
 NOVA2=/mnt/Data0/PROJECTS/CROPSeq/PreprocessedData/FullScale/GOK10263_scRNAseq_2/
