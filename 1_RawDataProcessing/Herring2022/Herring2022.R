@@ -1,6 +1,8 @@
 ## In this script, we convert the scanpy processed data produced by Herring et al 2022 
 ## to Seurat. Then, these data are pseudobulked by stage, individual, and cell-type.
 
+## Note that two separate pseudobulks are made. These differ in how the cell-subtypes are aggregated, to allow us to select the level of resolution most relevant for a given analysis
+
 ################################################################################################################################ #
 ## Setup ----
 
