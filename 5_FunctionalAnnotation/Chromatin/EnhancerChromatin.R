@@ -1074,54 +1074,12 @@
     
     write.bed(vermunt_data, vermunt_dir_in)
   
-  ## Regions of human-accelerated evolution rate from Doan 2016 (pooled from 5 past studies)
-    # doan_data_hg19 <- read_xlsx("../../../../PublicData/Doan2016/1-s2.0-S0092867416311692-mmc2.xlsx") %>% as.data.frame()
-    # colnames(doan_data_hg19) <- c("Chr", "Start", "End", "Class", "ReferenceGene", "ID_1", "ID_2", "ChromHMM", "TargetGene")
-    # doan_data_hg19 <- doan_data_hg19[,c("Chr", "Start", "End", "Class", "TargetGene")]    
-    # doan_dir_in <- "../../../../PublicData/Doan2016/Doan_hg19.bed"
-    # doan_dir_out <- "Doan.bed"
-    # write.bed(doan_data_hg19, doan_dir_in)
-    
-    # removed as one intersection in non-hits
-
-  ## Regions of human-accelerated evolution from Keough 2023 in the Zoonomia consortium
-    # keough_data <- read_xlsx("../../../../PublicData/Zoonomia/Keough_HARs/science.abm1696_table_s1.xlsx", sheet = "zooHARs") %>% as.data.frame()
-    # keough_data <- keough_data[,c("chrom", "start", "end", "simple_name")]    
-    # keough_dir_in <- "../../../../PublicData/Zoonomia/Keough_HARs/zooHARs.bed"
-    # keough_dir_out <- "Keough.bed"
-    # write.bed(keough_data, keough_dir_in)
-    
-    # removed as no intersect
-    
-  ## Regions of human-specific insertions from Kronenberg 2018 (and further processed in Keough 2023)
-    # kron_data <- read_xlsx("../../../../PublicData/Zoonomia/Keough_HARs/science.abm1696_table_s3.xlsx", sheet = "disruption_scores_hsSVs") %>% as.data.frame()
-    # kron_data <- kron_data[which(kron_data$type == "hsIns"),] # 12k insertions of 17k total
-    # kron_data <- kron_data[,c("chrom", "start", "end")]
-    # kron_dir_in <- "../../../../PublicData/Zoonomia/Keough_HARs/hsSVs.bed"
-    # kron_dir_out <- "hsSVs.bed"
-    # write.bed(kron_data, kron_dir_in)
-    
-    # removed as no intersect
-    
-
 ## Intersect
-  # doan suffices with a binary left outer join
-  # loj(nha_dir_19, doan_dir_in, doan_dir_out)
-  
   # full intersect information for Vermunt
   wawb(nha_dir_38, vermunt_dir_in, vermunt_dir_out)
   
 ## Read in and wrangle
-  # ## Doan
-  #   # read in
-  #   doan_intersect <- read.bed(doan_dir_out)
-  #   doan_intersect <- doan_intersect[which(doan_intersect$V8 != -1),] # just the one...
-  #   
-  #   # add to annotation
-  #   candidate.annot$HumanAccelerated_Doan2016 <- candidate.annot$Coord %in% doan_intersect$V4
-  #   candidate.enrich <- run.EnhancerFisher(data.column = "HumanAccelerated_Doan2016", rbind = TRUE)
-    
-  ## Vermunt
+ 
     vermunt_intersect <- read.bed(vermunt_dir_out)
     
     # add to annotation
