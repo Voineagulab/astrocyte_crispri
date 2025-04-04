@@ -12,9 +12,9 @@ options(stringsAsFactors = FALSE)
 ## Design guides for long peaks, i.e. those >= 200bp in width ----
 
 ## Parameters
-s <- 200 # this parameter represents the effective range of repression.
+s <- 200 # the assumed effective range of repression by dCas9-KRAB around a guide binding site
 remove.filtered.guides <- FALSE
-distance.between.guides <- 50
+distance.between.guides <- 50 # the minimum distance between any two pairs of guides
 
 ## Functions
   expand.bp <- function(bp, by = s, end = max(l)) {
@@ -34,7 +34,7 @@ distance.between.guides <- 50
   long.guides <- read.csv("GuideDesign/sgRNAs_long_all.csv")
   # long.guides <- long.guides[c("sgRNA.Sequence", "Strand.of.sgRNA"),]
   
-  # filter out dud lines
+  # filter out lines with erroneous output
   g <- grep("chr", long.guides$Input) # 5 lines don't pass this criterion, they are mostly junk
   long.guides <- long.guides[g,]
   
