@@ -59,7 +59,7 @@ library(Seurat)
 ################################################################################################################################ #
 ## Load in data, and ready for intersections! ----
   
-## Whilst I am not process this in, I will note some statistics of it: in-house atac-seq from cultured astrocytes
+## In-house atac-seq from cultured astrocytes
   GOK8873A1 <- read.table(inhouse.dir, sep = "\t")
   colnames(GOK8873A1) <- c("chr",	"start", "end",	"length",	"abs_summit",	"pileup",	"-LOG10(pvalue)",	"fold_enrichment",	"-LOG10(qvalue)",	"name")
 
@@ -101,7 +101,7 @@ library(Seurat)
   trev.cpm <- make.cpm(trev.counts)
   
   check.thresh(trev.cpm, 1)
-  check.thresh(trev.cpm, 2) # I'll use this...
+  check.thresh(trev.cpm, 2) # we shall use this...
   check.thresh(trev.cpm, 5)
   
   # apply threshold
@@ -198,7 +198,8 @@ library(Seurat)
 
   ## Next: load in SC data, aiming to collect genes expressed at > 0.3...
   
-    # this section is commented out, due to computational run time. the relevant output is loaded as part of the script, however
+    # this section is commented out, due to computational run time. the relevant output is loaded as part of the script, however.
+    # these data were generated in a pilot screen performed in NHA cells (see SFig2C)
   
     # load("../Pilot/Data/seuratObjects/allBarcodes_Annotated_iSeq.rda")
     # load(file = "../Pilot/Results/GJS getProtospacers.rda")
