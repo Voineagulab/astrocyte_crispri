@@ -7,3 +7,4 @@ These scripts contain code to select our 979 candidate enhancer regions, as well
 2e: comparison of gene expression in NHA cells with and without dCas9-KRAB integration
 2f: comparison of gene expression in NHA cells with data from immunopanned astrocytes
 2g: PCA plot comparing ATAC-seq data from NHAs with pseudo-bulked snATAC-seq from Herring et al. 2022 and bulk ATAC-seq of cells immuno-panned with cell-type specific antibodies from Nott et al. 2019
+2h: Assessment of the small NHA cluster (C1)
