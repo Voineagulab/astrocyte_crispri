@@ -1,92 +1,126 @@
-################
-##
-#This script extracts SNPs located within a 1 kb window of the CRISPRi tested enhancers 
-# Prepares the data for disease-impact scores (DIS) prediction using the Beluga model as implemented at  https://hb.flatironinstitute.org/sei/
-# Processes the output of the online tool
-# Carries out statistical tests comparing the DIS scores between hit and non-hit enhancers.
+####### This script compares Disease impact score (DIS) values between SNPs within 1kb of functional hits and powered non-hit enhancers
+####### and generates the figure displaying variant effect predictions for all variants within Enh427, which regulates CCL2
+## ISM data generated using https://hb.flatironinstitute.org/deepsea/?analysis=insilico
+## DIS scores generated using https://hb.flatironinstitute.org/sei/
+library(pheatmap)
+####### Fisher test
+####### SNP DIS scores: hits vs powered non-hit
+setwd("~/Library/CloudStorage/GoogleDrive-ivlabunsw@gmail.com/My Drive/MANUSCRIPTS_IN PROGRESS/CROPseq_MS/Manuscript/Resubmission_NatNeuro/SuppFigs_tables")
+dis=readxl::read_xlsx("Supplementary Table 8 - Deep learning-derived disease scores for variants in functional enhancers.xlsx",
+                  sheet="8A_SNPs")
+res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
+hits=res[res$HitPermissive, ]
+power=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/Scratchspace/PowerCalculationSuppTable.csv")
+keep=(power$Hit)|(power$WellPowered015)
+power=power[keep, ]
 
-## @author: Sam Bagot
-## @date: 20-10-23
-################
+dis.powered=dis[which(dis$Enh%in%power$Enhancer), ]
 
-#Beluga predicts the effect of individual variants on Disease
-setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/")
-source("Scripts/Header_functions.R")
-enhancers <- read.csv("Data/Enhancer_factors.csv")
-library("ggsignif")
-library("data.table")
+fisher.test(dis$DIS_max_score > -log10(0.05), dis$Enh%in%hits$Enh)
+# Fisher's Exact Test for Count Data
+# 
+# data:  dis$DIS_max_score > -log10(0.05) and dis$Enh %in% hits$Enh
+# p-value = 0.0009354
+# alternative hypothesis: true odds ratio is not equal to 1
+# 95 percent confidence interval:
+#  1.078732 1.353302
+# sample estimates:
+# odds ratio 
+#   1.208186 
 
-########
-##Get known variants and write to vcf for upload to Beluga
-########
-#Read snp2peak subset to SNPS within 1kb window
-snp2peak <- read.csv("../FullScale/Results/3_HitEnrichment/Variants/Final - SNP-to-Peak List.csv")
-snp2peak <- snp2peak[snp2peak$DistanceFromCentre <= 1000 & snp2peak$DistanceFromCentre >=- 1000,]
+# fisher.test(dis.powered$DIS_max_score > -log10(0.05), dis.powered$Enh%in%hits$Enh)
+# data:  dis.powered$DIS_max_score > -log10(0.05) and dis.powered$Enh %in% hits$Enh
+# p-value = 0.009237
+# alternative hypothesis: true odds ratio is not equal to 1
+# 95 percent confidence interval:
+#   1.037987 1.309945
+# sample estimates:
+#   odds ratio 
+# 1.166016 
 
-#This changes to long (based on synonyms) so we can catch all SNPs possible
-snp2peak$Synonym <- paste0(snp2peak$SNP, "|", snp2peak$Synonym )
-snp2peak <- data.table(snp2peak)
-expand_syns <- as.data.frame(unique(snp2peak[ , list( Synonym = unlist( strsplit( Synonym , "\\|" ) ) ) , by = SNP ]))
-snp2peak <- as.data.frame(snp2peak)
-snp2peak <- merge(snp2peak[,colnames(snp2peak) != "Synonym"], expand_syns)
-snp2peak$CHROM <- sub(":.*","",snp2peak$Peak)
+####### Enh427
+setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Resubmission/IV/")
+rm(list=ls())
+library(grid)
 
+########################
+enh="Enh427"
 
-#Gets the Alleles from the vcf
-call <- paste("vcftools --gzvcf /home/rna2/REFERENCE/HUMAN/GRCh38_hg38/GRCh38/dbSNPs/GRCh38_latest_dbSNP_all.vcf.gz", #OverlappingSNPs.txt was replaced by Gavins version
-              "--recode --snps Results/Beluga/KnownVariants/OverlappingSNPs_GJS_20231108.txt --out Results/Beluga/KnownVariants/OverlappingSNPs" )
-#"conda activate mosdepth" (or any environment with vcftools installed)
-system(call) #this doesn't work I just ran it in terminal
+#read in data
+res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
+hits=res[res$HitPermissive, ]
+  
+# AD variants (p<0.05 in ADSP) that overlap Hit enhancers
+# Note: in this bed file the variant position is stored in the "Start" column of the bed file. See : mnt/Data0/PROJECTS/CROPSeq/PublicData/ADSP/DataProcessing.R
+overlap=read.table("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/PublicData/ADSP/Processed/adsp.hits.bed", sep="\t")
+colnames(overlap)=c("Var_chr", "Var_start", "Var_End", "Var_Id", "Var_pval", "Var_strand","Var_source", "Enh_chr", "Enh_start", "Enh_end", "Enh_Id")
+overlap=cbind(overlap, hits[match(overlap$Enh_Id, hits$Enh.Pos), c(1:9)])
+write.csv(overlap, "ADvars_HitEnh.csv") 
+# Beluga disease impact scores for all nucleotide positions in hit enhancers (DIS ISM)
+b=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Results/Beluga/BelugaVariants/BelugaVariants.csv")
+# Note: the SNP position needs to be converted from 0-base to 1-base (+1)
+b$pos=b$pos+1
+b.enh=b[which(b$Enh%in%enh), ]
 
-overlap_vcf <- read.table("Results/Beluga/KnownVariants/OverlappingSNPs.recode.vcf")[3:5]
-colnames(overlap_vcf) <- c("Synonym" ,"REF", "ALT") #Changed SNP to Synonym
-out_vcf <- merge(unique(snp2peak[,c("Synonym", "SNP.pos", "CHROM")]), overlap_vcf)
-out_vcf <- out_vcf[match(unique(out_vcf$SNP), out_vcf$SNP),c("CHROM", "SNP.pos","Synonym", "REF", "ALT")]
-out_vcf$ALT <- sub(",.*","",out_vcf$ALT) #Remove all except first reference
-write.table(out_vcf, file = "Results/Beluga/KnownVariants/OverlappingSNPs.recode.formatted.vcf", quote = F, row.names = F, col.names = F, sep = "\t")
-#It appears that there is a one BP out of position
-#Upload THIS FILE TO BELUGA
-out_vcf$SNP.pos <- out_vcf$SNP.pos + 1
-write.table(out_vcf, file = "Results/Beluga/KnownVariants/OverlappingSNPs.recode.formatted_posplus1.vcf", quote = F, row.names = F, col.names = F, sep = "\t")
+#ISM data (effects on chromatin marks) for the enhancer
+ism=read.table(paste0("/Volumes/share/mnt/Data0/PROJECTS/GWP/crispri/", enh, "_logits.tsv"), header=TRUE)
+ism=ism[, c(1:3,grep("Astro", colnames(ism)))]
 
-#Links to download the Sei/Beluga Results
-#Sei with updated SNPs and pos +1 
-#https://hb.flatironinstitute.org/deepsea/jobs/3de40fcf-ddb9-4ca9-8699-37ac1c69b521/
-#Beluga with updated SNPs and pos +1 
-#https://hb.flatironinstitute.org/deepsea/jobs/746aa96f-3894-4344-b085-b8b1b81b08c2/
+#### Select variants in Enh 
+vars=overlap[which(overlap$Enh%in%enh) , ]
+vars=vars[order(vars$Var_pval), ]
 
-# Use the Beluga model results for downstream analyses
-beluga_results<- read.table("Results/Beluga/KnownVariants/BelugaResults/746aa96f-3894-4344-b085-b8b1b81b08c2_OverlappingSNPs.recode.formatted_posplus1_VARIANT_dis.tsv", sep = "\t", header = T)
-colnames(beluga_results) <- c("CHROM", "SNP.pos", "end", "KnownVariants_DIS_max_score")
-beluga_results <- merge(beluga_results, unique(snp2peak[,c("SNP","CHROM", "SNP.pos","Enh", "Hit")]))
-nrow(beluga_results)
-beluga_results <- beluga_results[order(beluga_results$KnownVariants_DIS_max_score, decreasing = T),]
-beluga_results$KnownVariants_Escore <-  1- rank(beluga_results$KnownVariants_DIS_max_score, ties.method = "average") / nrow(beluga_results)
-beluga_results$KnownVariants_Log10Escore <- -log10(beluga_results$KnownVariants_Escore)
-beluga_results$CHROM <- sub("chr","",beluga_results$CHROM)
-write.csv(beluga_results, "Results/Beluga/KnownVariants/BelugaDiseaseScores.csv", row.names = F)
+#### Convert Variant positions to the relative coordinates in the ISM data 
+e=which(overlap$Enh%in%enh)[1]
 
+end=overlap$Enh_end[e]
+start=overlap$Enh_start[e]
+offset=(1999-(end-start+1))/2
 
-max_Dis <- aggregate(beluga_results$KnownVariants_DIS_max_score, by = list(beluga_results$Enh), max)
-colnames(max_Dis) <- c("Enh", "Beluga.MaxDisScore")
-write.csv(max_Dis,"Results/Beluga/KnownVariants/MaxBelugaDiseaseScores.csv", row.names = F)
+vars$ismRelativePos=ceiling(offset + (vars$Var_start - start))
+b.enh$ismRelativePos=ceiling(offset + (b.enh$pos - start))
 
-# Exproratory Stats on beluga max score
-ft.dis <-fisher.test(beluga_results$Hit,beluga_results$KnownVariants_DIS_max_score > - log10(0.05)) #fisher.test(beluga_results$KnownVariants_DIS_max_score > 2, beluga_results$Hit)
-t.dis <- t.test(beluga_results[beluga_results$Hit,]$KnownVariants_DIS_max_score,beluga_results[! beluga_results$Hit,]$KnownVariants_DIS_max_score)
-ft.dis
-t.dis
-wt.e_score <- wilcox.test(beluga_results[beluga_results$Hit,]$KnownVariants_Escore,beluga_results[! beluga_results$Hit,]$KnownVariants_Escore)
-wt.DIS_score <- wilcox.test(beluga_results[beluga_results$Hit,]$KnownVariants_DIS_max_score,beluga_results[! beluga_results$Hit,]$KnownVariants_DIS_max_score)
+#### Aggregate the ISM data to get the maximum value at each position for consistency with the DIS score
+max.ism=aggregate(ism[, c(4:15)], by=list(ism[,1]), FUN="max")
 
+# Fix colnames(for plotting)
+colnames(max.ism)[1]="relative_pos"
+colnames(max.ism)=gsub("NH_A_Astrocytes.", "", colnames(max.ism))
+colnames(max.ism)=gsub(".None", "", colnames(max.ism))
 
-beluga_results <- beluga_results[order(beluga_results$Hit, decreasing = T),]
-beluga_results_unique <- beluga_results[match(unique(beluga_results$SNP), beluga_results$SNP),]
+# Keep only the enhancer coordinates for plotting (i.e remove the ISM flanks)
+max.ism=max.ism[which(max.ism$relative_pos%in%b.enh$ismRelativePos), ]
 
-tests.list <- list()
-tests.list[["ft.dis.uniq"]] <-fisher.test(beluga_results_unique$Hit,beluga_results_unique$KnownVariants_DIS_max_score > - log10(0.05)) #fisher.test(beluga_results$KnownVariants_DIS_max_score > 2, beluga_results$Hit)
-tests.list[["ft.e.uniq"]] <-fisher.test(beluga_results_unique$Hit,beluga_results_unique$KnownVariants_Escore < 0.05) #fisher.test(beluga_results$KnownVariants_DIS_max_score > 2, beluga_results$Hit)
-tests.list[["t.dis.uniq"]] <- t.test(beluga_results_unique$KnownVariants_DIS_max_score ~ beluga_results_unique$Hit)
-#Fisher TEst  score < 0.05 &  hits
-saveRDS(tests.list, "Results/Beluga/KnownVariants/Unique_SNPs_TestResults.RDS")
+# Add DIS and AD variant pvals to the ISM data
+max.ism$DIS=b.enh$DIS_max_score[match(max.ism$relative_pos, b.enh$ismRelativePos)]
+max.ism$ADpval=vars$Var_pval[match(max.ism$relative_pos,vars$ismRelativePos)]
+max.ism$ADvar=as.numeric(!(is.na(max.ism$ADpval)))
+
+#Plot heatmap
+colheat=colorRampPalette(c("red", "white", "blue"))
+ann=max.ism[, c("DIS",  "ADvar")]
+pdf(paste0(enh, "_ISM.pdf"), height=2.5, width=8)
+pheatmap(t(max.ism[,2:13]), color=rev(colheat(200)), cluster_cols = FALSE,
+         scale="row", annotation_col = ann, show_colnames = FALSE)
+grid.newpage() 
+dev.off()
+
+#Export ism data
+max.ism$genomic_pos=paste0("chr",unique(b.enh$chr),"_", b.enh$pos[match(max.ism$relative_pos, b.enh$ismRelativePos)])
+write.csv(max.ism, paste0(enh, "_maxISM.csv"))
+
+# Data for manuscript text
+# AD variants (p<0.05 in ADSP) that overlap hit enhancers
+advars=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Resubmission/IV/ADvars_HitEnh.csv")
+
+length(unique(advars$Enh))
+#[1] 84
+min(advars$Var_pval)
+#[1] 2.05754e-06
+length(unique(advars$Var_Id))
+#[1] 200
+
+t=advars[grep("TSC22D1", advars$Gene) , ]
+length(unique(t$Var_Id))
+#[1] 12
 
