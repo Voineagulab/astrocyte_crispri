@@ -97,7 +97,7 @@ colnames(EGnet.cyto) <- c("Node1", "Node2")
 TEnet.cyto <- TEnet[, c("TF", "Enh")]
 colnames(TEnet.cyto) <- c("Node1", "Node2")
 
-### Plot heatmaps of TFs, Enhancers, and Genes included in the network
+### Plot heatmaps of TFs, Enhancers, and Genes included in the network (Sfig 7B., Fig 4D)
 # TF expression
 dat.tf <- log2(exp[which(rownames(exp) %in% TEnet.cyto$Node1), ] + 0.1)
 
