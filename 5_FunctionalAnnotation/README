@@ -12,6 +12,7 @@ Two types of data are generated:
 ./EnhGenePairs: 
     EnhGenePairs.R: functional annotations that relate to the pair, rather than either component individually.
     TF_CytoscapeAstronet.R: construction of the TF-enhancer-gene regulatory network.
+    TF_CytoscapeAstronet_Validation: validation of the nodes and edges of the TF-enhancer-gene regulatory network using two external ChIP-seq datasets
 
 ./RegulatedGenes: R scripts that annotates hit genes with ontology enrichments, disease and phenotype data, cell-type and tissue regulation, and astrocyte-specific expression in disorders.
 
