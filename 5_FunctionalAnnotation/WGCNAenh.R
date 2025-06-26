@@ -1,3 +1,7 @@
+###################### This script constructs the co-variation network of candidate regions based on snATAC-seq data from herring et al, and carries out downstream analyses
+
+###################### 1. Network construction, statistical analyses of module eigengenes and related plots
+###################### Set up
 library(gplots)
 library(data.table)
 library(WGCNA)
@@ -7,10 +11,11 @@ library(RColorBrewer)
 library(purrr)
 library(pheatmap)
 library(grid)
-setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/2.EnhancerCharact/Astronet_WGCNA/")
 
+setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/2.EnhancerCharact/Astronet_WGCNA/")
 rm(list=ls())
 
+###################### Read in and format data
 res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
 hits=res[res$HitPermissive, ]
 nonhits=res[!res$HitPermissive,]
@@ -39,7 +44,7 @@ dat=t(data)
 elim=which(apply(dat,2,var)==0) # filtering out one enhancer that has 0 coverage across all samples
 dat=dat[,-elim]
 
-### WGCNA
+###################### Construct the network using WGCNA
 
 powers = c(c(1:10), seq(from = 12, to=20, by=2))
 sft = pickSoftThreshold(dat, powerVector = powers, verbose = 5, blockSize=40000)
@@ -92,7 +97,7 @@ rownames(kme)=rownames(KMEs)
 
 write.csv(kme, "kME.csv")
 
-#---- Calculate stats
+#---- Calculate stats for the association of module eigengenes with cell type and developmental stage
 
 stats=as.data.frame(matrix(NA, nrow=5, ncol=ncol(me)))
 colnames(stats)=colnames(me)
@@ -238,17 +243,23 @@ pheatmap(t(splot), cluster_rows = FALSE,cluster_cols = FALSE, color = palette, a
 grid.newpage() 
 dev.off()
 
+###################### 2. Comparison of Co-variation Modules vs Hit Enhancers, stats and associated plots
+###################### Set up
+library(purrr)
+library(pheatmap)
+library(grid)
+library(ggplot2)
 
-######## Modules vs Hits
 rm(list=ls())
-res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
-power=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/Scratchspace/PowerCalculationSuppTable.csv")
 
-power=power[power$WellPowered015, ]
+###################### Read in and format data
+res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv") # CRISPRi screen results
+power=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/Scratchspace/PowerCalculationSuppTable.csv") # Power cqalculation results
+
+power=power[power$WellPowered015, ] # Select powered EGPs
 keep=c(which(res$HitPermissive==TRUE), which(res$Pair%in%power$Pair))
-
-res=res[keep,]
-hits=res[res$HitPermissive, ]
+res=res[keep,]   # Keep hits and powered non-hits for downstream analysis
+hits=res[res$HitPermissive, ] # Subset hits
 
 kme=read.csv("kME.csv")
 colnames(kme)=gsub("M", "ME", colnames(kme))
@@ -273,11 +284,10 @@ write.csv(t(stats), "moduleStats_Hits.csv")
 
 ######## Subsetting for hits and plotting a heatmap with enhancer-level stats
 
-library(purrr)
-library(pheatmap)
-library(grid)
+
 setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/2.EnhancerCharact/Astronet_WGCNA/")
 rm(list=ls())
+
 res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
 hits=res[res$HitPermissive, ]
 
@@ -366,11 +376,6 @@ barplot(table_data, beside = TRUE,
         main = "2x2 Table: P-Values",
         xlab = "pval_Stage > -log10(0.05)",
         ylab = "Frequency")
-
-##
-
-# Load the necessary library
-library(ggplot2)
 
 # Create the data frame from the table data
 data <- data.frame(
