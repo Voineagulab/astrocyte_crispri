@@ -16,15 +16,16 @@ setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/2.EnhancerCharact/As
 rm(list=ls())
 
 ###################### Read in and format data
+# CRISPRi screen results
 res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
 hits=res[res$HitPermissive, ]
 nonhits=res[!res$HitPermissive,]
 
-#### Load candidate enhancer coverage using data from snATAC-seq from Herring et al.
+# Candidate enhancer coverage using data from snATAC-seq from Herring et al.
 load("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/Chromatin/Coverage/Herring - Intersections and Coverage.rda")
 data<- as.data.frame(log2(herring$CoverageMean_Pooled+0.1)) # data from herring et all only has coverage data for 974 of the 979 enhancers
 
-#### Order data in Herring et al by Cell type and then stage
+# Order data in Herring et al by Cell type and then stage
 names=colnames(data)
 ct=list_transpose(strsplit(names, split="_", fixed=TRUE))[[1]]
 stage=list_transpose(strsplit(names, split="_", fixed=TRUE))[[2]]
@@ -243,58 +244,58 @@ pheatmap(t(splot), cluster_rows = FALSE,cluster_cols = FALSE, color = palette, a
 grid.newpage() 
 dev.off()
 
-###################### 2. Comparison of Co-variation Modules vs Hit Enhancers, stats and associated plots
-###################### Set up
+###################### 2. Comparison of Co-variation Modules vs Hit Enhancers and associated plots
+######## Modules vs Hits - Exploratory analysis
+# rm(list=ls())
+# res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
+# power=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/Scratchspace/PowerCalculationSuppTable.csv")
+# 
+# power=power[power$WellPowered015, ]
+# keep=c(which(res$HitPermissive==TRUE), which(res$Pair%in%power$Pair))
+# 
+# res=res[keep,]
+# hits=res[res$HitPermissive, ]
+# 
+# kme=read.csv("kME.csv")
+# colnames(kme)=gsub("M", "ME", colnames(kme))
+# rownames(kme)=kme[,1]; kme=kme[, -1]
+# kme$Hit=rownames(kme)%in% hits$Enh
+# 
+# kme_powered=kme[which(rownames(kme)%in%res$Enh), ]
+# 
+# stats=read.csv("moduleStats.csv")
+# rownames(stats)=stats[,1]; stats=stats[, -1]
+# stats=t(stats)
+# 
+# names=c(colnames(stats), "p.wilcox.hits", "p.wilcox.hits_vsPowered")
+# stats=data.frame(stats, NA, NA); colnames(stats)=names
+# 
+# for(j in c(1:nrow(stats)))
+# {
+# stats$p.wilcox.hits[j]=wilcox.test(kme[, rownames(stats)[j]] ~ kme$Hit)$p.value
+# stats$p.wilcox.hits_vsPowered[j]=wilcox.test(kme_powered[, rownames(stats)[j]] ~ kme_powered$Hit)$p.value
+# }
+# write.csv(t(stats), "moduleStats_Hits.csv")
+
+###################### Setup
 library(purrr)
 library(pheatmap)
 library(grid)
-library(ggplot2)
-
-rm(list=ls())
-
-###################### Read in and format data
-res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv") # CRISPRi screen results
-power=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/Scratchspace/PowerCalculationSuppTable.csv") # Power cqalculation results
-
-power=power[power$WellPowered015, ] # Select powered EGPs
-keep=c(which(res$HitPermissive==TRUE), which(res$Pair%in%power$Pair))
-res=res[keep,]   # Keep hits and powered non-hits for downstream analysis
-hits=res[res$HitPermissive, ] # Subset hits
-
-kme=read.csv("kME.csv")
-colnames(kme)=gsub("M", "ME", colnames(kme))
-rownames(kme)=kme[,1]; kme=kme[, -1]
-kme$Hit=rownames(kme)%in% hits$Enh
-
-kme_powered=kme[which(rownames(kme)%in%res$Enh), ]
-
-stats=read.csv("moduleStats.csv")
-rownames(stats)=stats[,1]; stats=stats[, -1]
-stats=t(stats)
-
-names=c(colnames(stats), "p.wilcox.hits", "p.wilcox.hits_vsPowered")
-stats=data.frame(stats, NA, NA); colnames(stats)=names
-
-for(j in c(1:nrow(stats)))
-{
-  stats$p.wilcox.hits[j]=wilcox.test(kme[, rownames(stats)[j]] ~ kme$Hit)$p.value
-  stats$p.wilcox.hits_vsPowered[j]=wilcox.test(kme_powered[, rownames(stats)[j]] ~ kme_powered$Hit)$p.value
-}
-write.csv(t(stats), "moduleStats_Hits.csv")
-
-######## Subsetting for hits and plotting a heatmap with enhancer-level stats
-
-
 setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/2.EnhancerCharact/Astronet_WGCNA/")
 rm(list=ls())
 
-res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
-hits=res[res$HitPermissive, ]
+###################### Read in and format data (some steps are repeated from #1 above as the analysis was done subsequently)
 
+# CRISPRi screen results
+res=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv") 
+# Subset for hits
+hits=res[res$HitPermissive, ] 
+
+# Candidate enhancer coverage using data from snATAC-seq from Herring et al.
 load("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/Chromatin/Coverage/Herring - Intersections and Coverage.rda")
 data<- as.data.frame(log2(herring$CoverageMean_Pooled+0.1)) # data from herring et all only has coverage data for 974 of the 979 enhancers
 
-#### Order data in Herring et al by Cell type and then stage
+# Order data in Herring et al by Cell type and then stage
 names=colnames(data)
 ct=list_transpose(strsplit(names, split="_", fixed=TRUE))[[1]]
 stage=list_transpose(strsplit(names, split="_", fixed=TRUE))[[2]]
@@ -311,10 +312,10 @@ sorted.stage=samples[order(samples$orderS, samples$orderCT), ]
 samples$Astro=samples$ct%in%"Astro"
 data=data[, sorted.ct$colnames.data.]
 
-# Subsetting for hits
+# Subsetting coverage data for hit enhancers
 data=data[which(rownames(data)%in%hits$Enh),]
 
-# Read in ANOVA stats 
+# Read in ANOVA stats (enhancer level ANOVA for cell type and stage)
 stats=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/SuppTable_HerringDevCTreg.csv")
 stats=stats[match(rownames(data), stats[,1]) , ]
 stats$padj.anova.ct[which(stats$padj.anova.ct >= 0.05)]=1
@@ -324,7 +325,9 @@ ann$pval_CT=-log10(stats$padj.anova.ct)
 ann$pval_Stage=-log10(stats$padj.anova.stage)
 rownames(ann)=ann[,1] ; ann=ann[,-1]
 
-#-----Plots
+###################### Plots
+
+### Heatmap
 colheat=colorRampPalette(c("#B51A00", "#FFE2D6","white"))
 colct <- c("#6F083D", "#F4EAD4","#F3CCDE","#3A5F9A","#A7D2DA")
 names(colct) <- unique(samples$ct)
@@ -334,6 +337,9 @@ ann_colors <- list(ct = colct, stage = colstage)
 
 rownames(samples)=samples$names
 samples=samples[match(colnames(data), samples$names), ]
+
+# SOURCE DATA:
+write.csv(data, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig3F.csv")
 
 pdf("Fig3.hitsATAC_v2_small.pdf", height=4, width=6) 
 print(pheatmap(t(scale(t(data))),
@@ -361,35 +367,10 @@ print(pheatmap(t(scale(t(data))),
 grid.newpage()
 dev.off()
 
-data <- matrix(c(16, 7, 70, 50), nrow = 2, byrow = FALSE)
-colnames(data) <- c("FALSE", "TRUE")
-rownames(data) <- c("FALSE", "TRUE")
+### Barplot
+barplot_data=as.data.frame(table(stats$padj.anova.ct< 0.05, stats$padj.anova.stage<0.05))
+colnames(barplot_data)=c("CT", "Stage", "Count")
 
-# Convert the matrix to a table
-table_data <- as.table(data)
+# SOURCE DATA:
+write.csv(barplot_data, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig3G.csv")
 
-# Plot the bar plot
-barplot(table_data, beside = TRUE, 
-        col = c("lightblue", "lightgreen"),
-        legend = TRUE, 
-        args.legend = list(x = "topright"),
-        main = "2x2 Table: P-Values",
-        xlab = "pval_Stage > -log10(0.05)",
-        ylab = "Frequency")
-
-# Create the data frame from the table data
-data <- data.frame(
-  pval_CT = rep(c("FALSE", "TRUE"), each = 2),
-  pval_Stage = rep(c("FALSE", "TRUE"), times = 2),
-  Count = c(16, 7, 70, 50)
-)
-
-# Create the bar plot using ggplot2
-ggplot(data, aes(x = pval_Stage, y = Count, fill = pval_CT)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  scale_fill_manual(values = c("lightblue", "lightgreen")) +
-  labs(title = "2x2 Table: P-Values",
-       x = "pval_Stage > -log10(0.05)",
-       y = "Frequency",
-       fill = "pval_CT > -log10(0.05)") +
-  theme_minimal()
