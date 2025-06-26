@@ -1,4 +1,4 @@
-###################### This script constructs the co-variation network of candidate regions based on snATAC-seq data from herring et al, and carries out downstream analyses
+###################### This script constructs the co-variation network of candidate regions based on snATAC-seq data from Herring et al. 2022, and carries out downstream analyses
 
 ###################### 1. Network construction, statistical analyses of module eigengenes and related plots
 ###################### Set up
