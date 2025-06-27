@@ -37,6 +37,7 @@ herring.genes <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/R
 ann.enh <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/Chromatin/Final - Annotation Logical.csv")
 diff.atac=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/Chromatin/Coverage/Herring - Cell-type Specificity Models (Repooled).csv")
 rownames(diff.atac)=diff.atac[,1]; diff.atac=diff.atac[,-1]
+
 # CRISPRi hits
 res <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
 hits <- res[res$HitPermissive, ]
