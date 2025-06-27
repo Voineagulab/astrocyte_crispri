@@ -18,7 +18,7 @@ rm(list=ls())
 
 # Set working directory and sink
 setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/2.EnhancerCharact/")
-sink("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/Res4Fig5.info_v2.txt")
+#sink("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/Res4Fig5.info_v2.txt")
 
 ################# Load data
 # snRNA and snATAC, pseudobulked
@@ -35,7 +35,8 @@ herring.genes <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/R
 
 # Enhancer annotation including astrocyte-specific enhancers based on snATAC-seq data from Herring et al.
 ann.enh <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/Chromatin/Final - Annotation Logical.csv")
-
+diff.atac=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/3_HitEnrichment/Chromatin/Coverage/Herring - Cell-type Specificity Models (Repooled).csv")
+rownames(diff.atac)=diff.atac[,1]; diff.atac=diff.atac[,-1]
 # CRISPRi hits
 res <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/FullScale/Results/2_DE/Enh/Results Final.csv")
 hits <- res[res$HitPermissive, ]
@@ -48,7 +49,7 @@ colnames(bound) <- gsub("Tobias.Bound_", "", colnames(bound))
 
 # TF enrichment based on footprinting
 ft <- read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Results/Tobias/Summaries/FisherTestsExpressedTFMatrix_oldformat.csv")
-ft$TF <- transpose(strsplit(ft$Variable, split="_", fixed=TRUE))[[2]]
+ft$TF <- data.table::transpose(strsplit(ft$Variable, split="_", fixed=TRUE))[[2]]
 ft <- ft[-grep("Exp", ft$Variable), ]
 
 # Core regulatory circuitry
@@ -116,8 +117,8 @@ for (j in c(1:length(hg))) {
 }
 colnames(dat.eg)[1]<- "Id"
 # Heatmap formatting
-coldat <- data.frame(transpose(strsplit(colnames(dat.tf), split = "_", fixed = TRUE))[[1]],
-                     transpose(strsplit(colnames(dat.tf), split = "_", fixed = TRUE))[[2]])
+coldat <- data.frame(data.table::transpose(strsplit(colnames(dat.tf), split = "_", fixed = TRUE))[[1]],
+                     data.table::transpose(strsplit(colnames(dat.tf), split = "_", fixed = TRUE))[[2]])
 colnames(coldat) <- c("CT", "Stage")
 rownames(coldat) <- colnames(dat.tf)
 
@@ -183,6 +184,15 @@ for (j in c(1:nrow(a))) {
 write.csv(TEGnet, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/AstroNet.TEG_v2.csv", row.names = FALSE, quote = FALSE)
 write.csv(TEGnodes, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/AstroNodes.TEG_v2.csv", row.names = FALSE, quote = FALSE)
 sink()
+
+#SOURCE DATA:
+write.csv(dat.eg, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/Fig4D_Heatmap.csv")
+
+herrring.genes.net=herring.genes[which(herring.genes$Gene%in%rownames(dat.eg)) , ]
+write.csv(herrring.genes.net, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/Fig4D_DiffExp.csv")
+          
+diff.atac.net=diff.atac[which(rownames(diff.atac)%in%rownames(dat.eg)), ]
+write.csv(diff.atac.net, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/Fig4D_DiffATAC.csv")
 
 #old=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/AstroNodes.TEG.csv")
 #setdiff(old$Node, TEGnodes$Node)
