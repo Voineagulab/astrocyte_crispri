@@ -187,13 +187,13 @@ write.csv(TEGnodes, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Public
 sink()
 
 #SOURCE DATA:
-write.csv(dat.eg, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/Fig4D_Heatmap.csv")
+write.csv(dat.eg, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig4D_Heatmap.csv")
 
 herrring.genes.net=herring.genes[which(herring.genes$Gene%in%rownames(dat.eg)) , ]
-write.csv(herrring.genes.net, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/Fig4D_DiffExp.csv")
+write.csv(herrring.genes.net, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig4D_DiffExp.csv")
           
 diff.atac.net=diff.atac[which(rownames(diff.atac)%in%rownames(dat.eg)), ]
-write.csv(diff.atac.net, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/Fig4D_DiffATAC.csv")
+write.csv(diff.atac.net, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig4D_DiffATAC.csv")
 
 #old=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/AstroNodes.TEG.csv")
 #setdiff(old$Node, TEGnodes$Node)
