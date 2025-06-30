@@ -14,7 +14,7 @@ Barplot_SingleR.pdf
 UMAP_SingleR.pdf
 
 ####1D
-Script:LibraryDesign.R @gavin: /7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R ? -> Fig numbers need to be updated in this script.
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
 Outputs:
 Encode annotation of candidates.pdf
 Encode annotation of candidates.txt
