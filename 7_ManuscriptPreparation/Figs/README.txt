@@ -8,10 +8,12 @@ Script:2_NHACharacterisation_CandidateEnhancerSelection/2f_RNAseq Clustering.R
 Output:IV_RNAseqClustering.pdf
 
 ####1C
-Script:SingleR Annotation.R
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SingleR_annotation.R
 Output:
-Barplot_SingleR.pdf
-UMAP_SingleR.pdf
+Fig1_Top_Script LibraryDesign_SingleR_Barplot.pdf
+Fig1_Bottom_Left_UMAP_CellType.pdf
+Fig1_Bottom_Middle_UMAP_DevStage.pdf
+Fig1_Bottom_Right_UMAP_CellCycle.pdf
 
 ####1D
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
@@ -34,23 +36,25 @@ moduleStats.csv
 ############################ Figure2
 #####2A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:Volcano.pdf
+Output:2A - Script MainDE - Volcano (Revised2).pdf
 
 #####2B
-Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SanityChecks.R
-Outputs: 
-K562, Superenhancer, TAD.pdf
-K562.txt
-Superenhancer.txt
-TAD.txt
+Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
+Outputs:
+2B - Script MainDE - nEnh Per Gene (Update for Revision 2).pdf
+2B - Script MainDE - nGenes Per Enhancer (Update for Revision 2).pdf
 
 #####2C
-Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:Nanostring vs scRNAseq.pdf
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SanityChecks.R
+Outputs: 
+2C - Script SanityCheck - K562, Superenhancer, TAD.pdf
+2C - Script SanityCheck - K562.txt
+2C - Script SanityCheck - Superenhancer.txt
+2C - Script SanityCheck - TAD.txt
 
 #####2D
-Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:nEnh Per Gene.pdf
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
+Output:2D - Script MainDE - Nanostring vs scRNAseq.pdf
 
 ############################ Figure3
 #####3A
