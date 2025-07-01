@@ -64,7 +64,7 @@
   
   # as density
   # pdf(file = "SFig11A - Expression threshold density.pdf", height = 2.5, width = 5.5)
-  pdf_mainDE(figNo = "SFig11A", title = "Expression threshold density", h = 2.5, w = 5.5)
+  pdf_mainDE(figNo = "SFig2A", title = "Expression threshold density", h = 2.5, w = 5.5)
   ggplot(p, aes(x = log2(SeuratNormalised))) +
     geom_density(colour = pals$One, fill = pals$One, alpha = 0.2) +
     scale_x_continuous(breaks = c(-20, -15, -10, -8, -6, -4, -2, -1, 0, 1, 2, 3),
@@ -80,10 +80,10 @@
   
   # normalised expression versus CPM
   a <- aggregate(Pseudobulk_CPM~Expressed, data = p, FUN = summary)
-  sink_mainDE(figNo = "SFig11C", title = "Expression threshold Seurat vs CPM", a)
+  sink_mainDE(figNo = "SFig2C", title = "Expression threshold Seurat vs CPM", a)
   
   # pdf(file = "SFig11C - Expression threshold Seurat vs CPM.pdf", height = 3.5, width = 5.5)
-  pdf_mainDE(figNo = "SFig11C", title = "Expression threshold Seurat vs CPM", h = 3.5, w = 5.5)
+  pdf_mainDE(figNo = "SFig2C", title = "Expression threshold Seurat vs CPM", h = 3.5, w = 5.5)
   ggplot(p, aes(x = log2(SeuratNormalised), y = (Pseudobulk_CPM))) +
     # geom_density(colour = pals$One, fill = pals$One, alpha = 0.2) +
     geom_point(colour = pals$One) +
@@ -101,10 +101,10 @@
   
   # dropout rate
   a <- aggregate(Dropout~Expressed, data = p, FUN = summary)
-  sink_mainDE(figNo = "SFig11B", title = "Expression threshold dropout rate", a)
+  sink_mainDE(figNo = "SFig2B", title = "Expression threshold dropout rate", a)
   
   # pdf(file = "SFig11B - Expression threshold dropout rate.pdf", height = 3, width = 2)
-  pdf_mainDE(figNo = "SFig11B", title = "Expression threshold dropout rate", h = 3, w = 2)
+  pdf_mainDE(figNo = "SFig2B", title = "Expression threshold dropout rate", h = 3, w = 2)
   ggplot(p, aes(x = Expressed, y = Dropout*100)) +
     theme_bw() +
     scale_y_continuous(limits = c(0,100)) +
@@ -512,7 +512,7 @@ e$log2fc.vst <- exp(e$logfc.vst) %>% log2()
   # levels(p$variable) <- c("FOV Ratio", "Binding Density", "Positive Control R2")
   
   # pdf(file = "SFig12A-C - Nanostring QC.pdf", height = 2.5, width = 7.5/3)
-  pdf_mainDE(figNo = "SFig12A-C", title = "Nanostring QC", h = 2.8, w = 7.5/3)
+  pdf_mainDE(figNo = "SFig3A-C", title = "Nanostring QC", h = 2.8, w = 7.5/3)
   
   # plot FOV ratio
   ggplot(p, aes(x = Batch, y = FOV_Ratio, colour = Batch)) +
@@ -578,7 +578,7 @@ e$log2fc.vst <- exp(e$logfc.vst) %>% log2()
   
   # plot
   # pdf(file = "SFig12D - Nanostring QC (Genes).pdf", height = 3, width = 7)
-  pdf_mainDE(figNo = "SFig12D", title = "Nanostring QC on genes", h = 3, w = 7)
+  pdf_mainDE(figNo = "SFig3D", title = "Nanostring QC on genes", h = 3, w = 7)
   ggplot(p, aes(x = Gene, y = Exp, colour = BelowThreshold)) +
     geom_quasirandom() +
     theme_bw() +
