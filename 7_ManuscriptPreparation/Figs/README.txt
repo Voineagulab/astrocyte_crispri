@@ -156,20 +156,20 @@ Output:PCA_NHA_ATAC validation.pdf
 ############################ Extended Data Figure 2
 ####2A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
-Output:Candidate annotation upset.pdf
+Output:ExtFig2A - Script LibraryDesign - Candidate annotation upset.pdf
 
 ####2B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
-Output:Candidate annotation barplot.pdf
+Output:ExtFig2B - Script LibraryDesign - Candidate annotation barplot.pdf
 
 ############################ Extended Data Figure 3
 ####3A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
-Output:Sfig3A - Script LibraryDesign - Candidate length histogram.pdf
+Output:ExtFig3A - Script LibraryDesign - Candidate length histogram.pdf
 
 ####3B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
-Output:Sfig3B - Script LibraryDesign - Genes tested per candidate.pdf
+Output:ExtFig3B - Script LibraryDesign - Genes tested per candidate.pdf
 
 ####3C
 Script:7_ManuscriptPreparation/Figs/Manuscript_final_enhancer_coverage_module_significance.R
