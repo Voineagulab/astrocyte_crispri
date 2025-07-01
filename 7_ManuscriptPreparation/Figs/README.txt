@@ -16,8 +16,8 @@ UMAP_SingleR.pdf
 ####1D
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
 Outputs:
-Encode annotation of candidates.pdf
-Encode annotation of candidates.txt
+1D - Script LibraryDesign - Encode annotation of candidates.pdf
+1D - Script LibraryDesign - Encode annotation of candidates.txt
 
 #####1E
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_UpsetPlot.R
