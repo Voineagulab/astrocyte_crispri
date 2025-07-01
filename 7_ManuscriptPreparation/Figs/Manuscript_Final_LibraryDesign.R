@@ -711,7 +711,7 @@
   expStats <- expStats[-which(expStats$Mean == 0),]
   
   # pdf(file = "dCas9-KRAB expression rank.pdf", height = 2.2, width = 2.4)
-  pdf_LibDesign(figNo = "SFig4F", title = "dCas9KRAB", h = 2.2, w = 2.4)
+  pdf_LibDesign(figNo = "ExtFig4F", title = "dCas9KRAB", h = 2.2, w = 2.4)
   ggplot(expStats, aes(y = Rank, x = log2(Mean), label = ShowLabel, colour = Expressed, size = Expressed)) +
     # geom_hline(yintercept = 0) +
     # geom_col(colour = "black") +
