@@ -123,7 +123,7 @@ coldat <- data.frame(data.table::transpose(strsplit(colnames(dat.tf), split = "_
 colnames(coldat) <- c("CT", "Stage")
 rownames(coldat) <- colnames(dat.tf)
 
-colheat=colorRampPalette(c("#B51A00","#FFE2D6", "#003F01"))
+colheat=colorRampPalette(c("#E69F00", "#F0F0F0","#4A90E2"))
 colct <- c("#6F083D", "#F4EAD4","#F3CCDE","#3A5F9A","#A7D2DA")
 names(colct) <- unique(coldat$CT)
 colstage <- brewer.pal(n = 6, name = "BuPu")
