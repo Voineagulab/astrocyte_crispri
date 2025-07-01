@@ -144,7 +144,7 @@ Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SanityChecks_EGrf.R
 Output:NHA_EGRF_OverlapBarplot_0.5RPKM.pdf
 
 
-############################ Figure S1
+############################ Extended Data Figure 1
 ####1A
 Script:2_NHACharacterisation_CandidateEnhancerSelection/2e_dCas9-KRAB.R
 Output:dCas9-KRAB.pdf
@@ -153,7 +153,7 @@ Output:dCas9-KRAB.pdf
 Script:2_NHACharacterisation_CandidateEnhancerSelection/Manuscript_final_PCA_NHA_Herring_Nott.R
 Output:PCA_NHA_ATAC validation.pdf
 
-############################ Figure S2
+############################ Extended Data Figure 2
 ####2A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
 Output:Candidate annotation upset.pdf
@@ -162,7 +162,7 @@ Output:Candidate annotation upset.pdf
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
 Output:Candidate annotation barplot.pdf
 
-############################ Figure S3
+############################ Extended Data Figure 3
 ####3A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
 Output:Sfig3A - Script LibraryDesign - Candidate length histogram.pdf
@@ -179,7 +179,7 @@ Output:Nott_StatsCoverage_heatmap.pdf
 Script:7_ManuscriptPreparation/Figs/Manuscript_final_enhancer_coverage_module_significance.R
 Output:Nott_Coverage_heatmap.pdf
 
-############################ Figure S4
+############################ Extended Data Figure 4
 ####4A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
 Output:nCells per candidate.pdf
@@ -214,7 +214,7 @@ Downregulation Percentage.txt
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Output:Downregulation Distribution.pdf
 
-############################ Figure S5
+############################ Extended Data Figure 5
 ####5B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
 Output:5B - Script tt - Scatterplot RNAseq vs TTseq.pdf
@@ -231,19 +231,19 @@ Output:5D - Script tt - FANTOM5.pdf
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
 Output:5E - Script tt - FANTOM5 vs TTseq.pdf
 
-############################ Figure S7
+############################ Extended Data Figure 7
 ####7A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TranscriptionFactors.R
 Output:JASPAR class enrichments.pdf
 ####7B
 5_FunctionalAnnotation/EnhGenePairs/TF_CytoscapeAstronet.R
 Output:AstroNet.HeatmapTF_v2.pdf
-############################ Figure S8
+############################ Extended Data Figure 8
 ####8A
 Script Manuscript_Final_eQTL.R
 Output eqtl vs crispri (per study).pdf
 
-############################ Figure S9
+############################ Extended Data Figure 9
 ####9A
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
 Output:8C.Astrocytes_Variable_Prediction.pdf
@@ -268,52 +268,52 @@ Output:8C.Astrocytes_Variable_Prediction.pdf
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
 Output:8D.Astrocytes_RFimportance.pdf & 8D.K562_RFimportance.pdf
 
-############################ Figure S10
-####10A
+############################ Supplementary Figure 1
+####S1A
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
 Output:cells per batch.pdf
 
-####10B
+####S1B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
 Output:cell-level qc.pdf
 
-####10C
+####S1C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
 Output:scRNAseq qc.txt
 
-############################ Figure S11
-####11A
+############################ Supplementary Figure 2
+####S2A
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Output:Expression threshold density.pdf
 
-####11B
+####S2B
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Outputs
 Expression threshold dropout rate.pdf
 Output Expression threshold dropout rate.txt
 
-####11C
+####S2C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Outputs: 
 Expression threshold Seurat vs CPM.pdf
 Output Expression threshold Seurat vs CPM.txt
 
-############################ Figure S12
-####12A-C
+############################ Supplementary Figure 3
+####S3A-C
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Output:Nanostring QC.pdf
 
-####12D
+####S3D
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Output:Nanostring QC on genes.pdf
 
 
-############################ Figure S13
-####13A
+############################ Supplementary Figure 4
+####S4A
 Script: 3_CRISPRi/3f_PowerSimulations.R
 Output:Power Simulation - All variables V2.pdf
 
-####13B
+####S4B
 Script: 3_CRISPRi/3f_PowerSimulations.R
 Output:Proportion well-powered (wide).pdf
 
