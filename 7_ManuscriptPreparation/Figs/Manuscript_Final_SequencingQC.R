@@ -124,7 +124,7 @@
   m <- mean(p$MOI)
   
   # pdf(file = "QC - MOI.pdf", height = 2.5, width = 3)
-  pdf_qc(figNo = "SFig4C", title = "MOI", h = 2.5, w = 3)
+  pdf_qc(figNo = "ExtFig4C", title = "MOI", h = 2.5, w = 3)
   ggplot(q, aes(x = Var1, y = Freq)) +
     # geom_histogram(binwidth = 1) +
     geom_col(width = 1, fill = pals$One, colour = "white", size = 0.1) +
@@ -160,7 +160,7 @@
     cats <- levels(r$Bin)
     
     # pdf(file = "QC - nCells per candidate.pdf", height = 2.5, width = 2.3)
-    pdf_qc(figNo = "SFig4A", title = "nCells per candidate", h = 2.5, w = 2.3)
+    pdf_qc(figNo = "ExtFig4A", title = "nCells per candidate", h = 2.5, w = 2.3)
     ggplot(r, aes(x = Bin)) +
       geom_bar(fill = pals$One) +
       theme_bw() +
@@ -187,7 +187,7 @@
       sub("-2k", "+", .)  
 
     # pdf(file = "QC - nCells per guide.pdf", height = 2.5, width = 2.2)
-    pdf_qc(figNo = "SFig4B", title = "nCells per guide", h = 2.5, w = 2.2)
+    pdf_qc(figNo = "ExtFig4B", title = "nCells per guide", h = 2.5, w = 2.2)
     ggplot(r, aes(x = Bin)) +
       geom_bar(fill = pals$One) +
       theme_bw() +
@@ -212,7 +212,7 @@
   x$Log2FC <- exp(x$LogFC) %>% log2()
   
   # pdf(file = "Positive Controls - Volcano.pdf", height = 2.1, width = 3)
-  pdf_qc(figNo = "SFig4D", title = "positive control volcano", h = 2.1, w = 3)
+  pdf_qc(figNo = "ExtFig4D", title = "positive control volcano", h = 2.1, w = 3)
   ggplot(x, aes(x = Log2FC, y = -log10(P), colour = Hit)) +
     geom_point(size = 1) +
     theme_bw() +
@@ -307,7 +307,7 @@
   # plot negative binomial
   x_negBinom <- rbind(x1, x2)
   # pdf(file = "Negative Control - qq V2.pdf", height = 2.5, width = 2.5)
-  pdf_qc(figNo = "SFig4E", title = "qqplot", h = 2.5, w = 2.6)
+  pdf_qc(figNo = "ExtFig4E", title = "qqplot", h = 2.5, w = 2.6)
   ggplot(x_negBinom, aes(x = -log10(Expected), y = -log10(Observed), colour = Type)) +
     geom_point() +
     theme_bw() +
