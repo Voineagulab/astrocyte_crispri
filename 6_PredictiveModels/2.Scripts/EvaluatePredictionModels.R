@@ -135,6 +135,10 @@ aes(x = Model, y = AUPRC, fill = Model)) +
 
 dev.off()
 
+##Source Data
+write.csv(AUPRC_astro[AUPRC_astro$Model %in% c(
+  "Distance", "TAPseq.rf", "rE2G.DNAseOnly", "ABC_Score", "EGrf"
+), ], "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig7A_Boxplot.csv")
 
 ######################## 
 ######SupF9C: Boxplots of AUPRC values across 1000 fold bootstraps between the different models in K562
