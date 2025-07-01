@@ -131,6 +131,7 @@ names(colstage) <- unique(coldat$Stage)
 ann_colors <- list(CT = colct, Stage = colstage)
 
 dev.off() 
+#Plot Extended Data Figure 7B  
 pdf("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/AstroNet.HeatmapTF_v2.pdf", height = 7, width = 6)
 pheatmap(dat.tf,
          border_color = NA, show_colnames = FALSE,
@@ -141,6 +142,8 @@ dev.off()
 write.csv(dat.tf, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/EData.TFheatmap_v2.csv")
 
 dev.off()
+
+#Plot Figure 4D
 pdf("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/AstroNet.HeatmapEG_v2.pdf", height = 8, width = 6)
 pheatmap(log2(dat.eg[,-1] + 0.1), fontsize_row = 10, scale = "row",
          border_color = NA, show_colnames = FALSE, cluster_rows = FALSE, gaps_row = b,
