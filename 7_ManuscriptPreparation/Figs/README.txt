@@ -272,41 +272,41 @@ Output:ExtFig9F.Astrocytes_RFimportance.pdf & 8D.K562_RFimportance.pdf
 ############################ Supplementary Figure 1
 ####S1A
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
-Output:cells per batch.pdf
+Output:SFig1A - Script qc - cells per batch.pdf
 
 ####S1B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
-Output:cell-level qc.pdf
+Output:SFig1B - Script qc - cell-level qc.pdf
 
 ####S1C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
-Output:scRNAseq qc.txt
+Output:SFig1C - Script qc - scRNAseq qc.txt
 
 ############################ Supplementary Figure 2
 ####S2A
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:Expression threshold density.pdf
+Output:SFig2A - Script MainDE - Expression threshold density
 
 ####S2B
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Outputs
-Expression threshold dropout rate.pdf
-Output Expression threshold dropout rate.txt
+Outputs:
+SFig2B - Script MainDE - Expression threshold dropout rate.pdf
+SFig2B - Script MainDE - Expression threshold dropout rate.txt
 
 ####S2C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Outputs: 
-Expression threshold Seurat vs CPM.pdf
-Output Expression threshold Seurat vs CPM.txt
+SFig2C - Script MainDE - Expression threshold Seurat vs CPM.pdf
+SFig2C - Script MainDE - Expression threshold Seurat vs CPM.txt
 
 ############################ Supplementary Figure 3
 ####S3A-C
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:Nanostring QC.pdf
+Output:SFig3A-C - Script MainDE - Nanostring QC.pdf
 
 ####S3D
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:Nanostring QC on genes.pdf
+Output:SFig3D - Script MainDE - Nanostring QC on genes.pdf
 
 
 ############################ Supplementary Figure 4
