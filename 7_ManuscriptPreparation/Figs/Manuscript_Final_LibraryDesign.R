@@ -64,7 +64,7 @@
   pal <- pals$Primary[c(3,4,7,8)]
  
   # pdf(file = "Enhancer Width Distribution, With nGuides (Wider Bins).pdf", height = 2.2, width = 3.1)
-  pdf_LibDesign(figNo = "1E", title = "Candidate length histogram", h = 2.2, w = 3.1)
+  pdf_LibDesign(figNo = "ExtFig3A", title = "Candidate length histogram", h = 2.2, w = 3.1)
   ggplot(q, aes(x = Bin, fill = N, colour = N)) +
     geom_bar(position = "stack") +
     theme_bw() +
@@ -92,7 +92,7 @@
   levels(p$Cut) <- c(0:9, "10-11", "12-13", "14-15", "16-17", "18-19", "20-24", "25-29", "30-39", "40-49")
   
   # pdf(file = "Genes (Tested) Per Enhancer.pdf", height = 2.1, width = 3.8)
-  pdf_LibDesign(figNo = "1F", title = "Genes tested per candidate", h = 2.1, w = 3.8)
+  pdf_LibDesign(figNo = "ExtFig3B", title = "Genes tested per candidate", h = 2.1, w = 3.8)
   ggplot(p, aes(x = Cut)) +
     geom_bar(fill = pals$One, width = 0.8) +
     theme_bw() +
@@ -130,7 +130,7 @@
   # plot
   library(ggupset)
   # pdf(file = "Candidate upset.pdf", height = 3.5, width = 7)
-  pdf_LibDesign(figNo = "SFig2A", title = "Candidate annotation upset", h = 3.5, w = 7)
+  pdf_LibDesign(figNo = "ExtFig2A", title = "Candidate annotation upset", h = 3.5, w = 7)
   ggplot(p, aes(x = List)) +
     geom_bar(fill = pals$One, colour = pals$One) +
     geom_text(stat = "Count", aes(label = after_stat(count)), vjust = 0.5, hjust = -0.2, size = 2.5,
@@ -151,7 +151,7 @@
   p <- p[which(p$value),]
 
   # pdf(file = "Candidate total.pdf", height = 2.5, width = 4)
-  pdf_LibDesign(figNo = "SFig2B", title = "Candidate annotation barplot", h = 2.5, w = 4)
+  pdf_LibDesign(figNo = "ExtFig2B", title = "Candidate annotation barplot", h = 2.5, w = 4)
   ggplot(p, aes(x = variable)) +
     geom_bar(fill = pals$One, colour = pals$One, width = 0.7) +
     theme_bw() +
