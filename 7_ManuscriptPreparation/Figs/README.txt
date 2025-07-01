@@ -137,7 +137,7 @@ Output:7A_BoxplotAstro_AUPRC_1000bootstraps.pdf
 
 ####7B
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R.R
-Output:8B.Performance_Astrocytes_K562_PR.pdf
+Output:7B.Performance_Astrocytes_K562_PR.pdf
 
 ####7C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SanityChecks_EGrf.R
@@ -182,71 +182,72 @@ Output:Nott_Coverage_heatmap.pdf
 ############################ Extended Data Figure 4
 ####4A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
-Output:nCells per candidate.pdf
+Output:ExtFig4A - Script qc - nCells per candidate.pdf
 
 ####4B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
-Output:nCells per guide.pdf
+Output:ExtFig4b - Script qc - nCells per guide.pdf
 
 ####4C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
-Output:MOI.pdf
+Output:ExtFig4c - Script qc - MOI.pdf
 
 ####4D 
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
-Output:positive control volcano.pdf
+Output:ExtFig4d - Script qc - Positive controls volcano.pdf
 
 ####4E
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_SequencingQC.R
-Output:qqplot.pdf
+Output:ExtFig4e - Script qc - qqplot.pdf
 
 ####4F
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_LibraryDesign.R
-Output:dCas9KRAB.pdf
+Output:ExtFig4F - Script LibraryDesign - dCas9KRAB.pdf
 
 ####4G
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Outputs:
-Downregulation Percentage.pdf
-Downregulation Percentage.txt
+ExtFig4G - Script MainDE - Downregulation Percentage.pdf
+ExtFig4G - Script MainDE - Downregulation Percentage.txt
 
 ####4H
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:Downregulation Distribution.pdf
+Output:ExtFig4H - Script MainDE - Downregulation Distribution.pdf
 
 ############################ Extended Data Figure 5
 ####5B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
-Output:5B - Script tt - Scatterplot RNAseq vs TTseq.pdf
+Output:ExtFig5B - Script tt - Scatterplot RNAseq vs TTseq.pdf
 
 ####5C
 Script:Script 7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
-Output:5C - Script tt - eRNA across thresholds.pdf
+Output:ExtFig5C - Script tt - eRNA across thresholds.pdf
 
 ####5D
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
-Output:5D - Script tt - FANTOM5.pdf
+Output:ExtFig5D - Script tt - FANTOM5.pdf
 
 ####5E
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
-Output:5E - Script tt - FANTOM5 vs TTseq.pdf
+Output:ExtFig5E - Script tt - FANTOM5 vs TTseq.pdf
 
 ############################ Extended Data Figure 7
 ####7A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TranscriptionFactors.R
-Output:JASPAR class enrichments.pdf
+Output:ExtFig7A - Script TF - JASPAR class enrichments.pdf
 ####7B
 5_FunctionalAnnotation/EnhGenePairs/TF_CytoscapeAstronet.R
 Output:AstroNet.HeatmapTF_v2.pdf
+
 ############################ Extended Data Figure 8
 ####8A
-Script Manuscript_Final_eQTL.R
-Output eqtl vs crispri (per study).pdf
+7_ManuscriptPreparation/Figs/Script Manuscript_Final_eQTL.R
+Output:ExtFig8A - Script eqtl - eqtl vs crispri (per study).pdf
 
-############################ Extended Data Figure 9
+############################Extended Data Figure 9
 ####9A
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
-Output:8C.Astrocytes_Variable_Prediction.pdf
+Output:ExtFig9A.Astrocytes_Variable_Prediction.pdf
 
 ####9B
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
@@ -254,19 +255,19 @@ Output:Bootstrapping_AstrocytesPlusonly.pdf
 
 ####9C
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
-Output:SFig9C_BoxplotK562_AUPRC_1000bootstraps.pdf
+Output:ExtFig9C_BoxplotK562_AUPRC_1000bootstraps.pdf
 
 ####9D
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
-Output:8B.Performance_Astrocytes_K562_PR.pdf
+Output:7B.Performance_Astrocytes_K562_PR.pdf
 
 ####9E
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
-Output:8C.Astrocytes_Variable_Prediction.pdf
+Output:ExtFig9E.K562_Variable_Prediction.pdf
 
 ####9F
 Script:6_PredictiveModels/2.Scripts/EvaluatePredictionModels.R
-Output:8D.Astrocytes_RFimportance.pdf & 8D.K562_RFimportance.pdf
+Output:ExtFig9F.Astrocytes_RFimportance.pdf & 8D.K562_RFimportance.pdf
 
 ############################ Supplementary Figure 1
 ####S1A
