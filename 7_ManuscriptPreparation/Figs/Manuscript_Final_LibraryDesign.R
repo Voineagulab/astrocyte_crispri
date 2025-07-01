@@ -203,7 +203,7 @@
     levels(p$variable) <- c("All peaks\n(260,193)", "Candidate\nenhancers\n(979)")
     
     # pdf(file = "ENCODE - Barplot V4.1.pdf", height = 2.5, width = 4)
-    pdf_LibDesign(figNo = "1B", title = "Encode annotation of candidates", h = 2.5, w = 4)
+    pdf_LibDesign(figNo = "1D", title = "Encode annotation of candidates", h = 2.5, w = 4)
     pal <- rev(pals$Primary[1:3])
     ggplot(p, aes(x = variable, y = value*100, fill = Dataset, colour = Dataset)) +
       geom_col(position = "dodge", width = 0.65) +
