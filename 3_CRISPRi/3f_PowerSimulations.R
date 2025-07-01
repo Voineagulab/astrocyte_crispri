@@ -423,7 +423,7 @@
     
     
     levels(p$ExpressionQuintile) <- gsub("th", "", levels(p$ExpressionQuintile))
-    
+    #Supplementary Figure 4A
     pdf(file = "Power Simulation - All variables V2.pdf", height = 7.5, width = 7)
     ggplot(p, aes(x = ExpressionQuintile, y = Power*100, colour = ExpressionQuintile)) +
       # geom_boxplot() +
@@ -463,7 +463,7 @@
     prop$FC <- factor(prop$FC)
     levels(prop$FC) <- paste0("Fold-change -", levels(prop$FC))
     
-    
+    #Supplementary Figure 4B
     pdf(file = "Proportion well-powered (wide).pdf", width = 7, height = 3)
     
     # ggplot(prop, aes(x = nCells, y = Quintile, fill = Powered80*100, label = round(Powered80*100, 0))) +
