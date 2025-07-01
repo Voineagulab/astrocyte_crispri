@@ -147,3 +147,6 @@ ggplot(po, aes(x = Resource, y = Freq, colour = Var1, fill = Var1)) +
 
 
 dev.off()
+
+#Source data
+write.csv(po[c(1,3,4)], "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig7C_Barplot.csv")
