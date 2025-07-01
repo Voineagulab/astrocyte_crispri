@@ -47,7 +47,7 @@
                    MedianDepth = median(p$UMI_Total))
   qc <- t(qc) %>% as.data.frame()
   
-  sink_qc(figNo = "SFig10", title = "scRNAseq qc", qc)
+  sink_qc(figNo = "SFig1C", title = "scRNAseq qc", qc)
   
 
 ## Cells per library
@@ -72,7 +72,7 @@
     levels(q$Call) <- c("Pre-filtering", "Post-filtering")
     
     # pdf(file = "QC - Cells per batch.pdf", height = 3, width = 2)
-    pdf_qc(figNo = "SFig10A", title = "cells per batch", h = 3, w = 2)
+    pdf_qc(figNo = "SFig1A", title = "cells per batch", h = 3, w = 2)
     ggplot(q, aes(y = Batch, x = value, colour = Batch, shape = Call)) +
       geom_segment(aes(x = 0, xend = value, y = Batch, yend = Batch), linetype = 2) +
       geom_point(size = 3.5) +
@@ -97,7 +97,7 @@
   levels(q$variable) <- c("Ribosomal %", "Mitochondrial %", "Total UMIs (1000's)")
   
   # pdf(file = "QC - Cell-level expression metrics.pdf", height = 3, width = 5.5)
-  pdf_qc(figNo = "SFig10B", title = "cell-level qc", h = 3, w = 5.5)
+  pdf_qc(figNo = "SFig1B", title = "cell-level qc", h = 3, w = 5.5)
   ggplot(q, aes(x = Library, y = value, colour = Library, fill = Library)) +
     geom_violin(draw_quantiles = 0.5, alpha = 0.8, scale = "width") +
     theme_bw() +
