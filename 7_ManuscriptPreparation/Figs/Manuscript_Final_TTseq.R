@@ -87,7 +87,7 @@
   p$Density <- get_density(p$TTseq, p$RNAseq)
   
   # pdf(file = "RNAseq vs TTseq scatterplot.pdf", height = 3, width = 3)
-  pdf_tt(figNo = "SFig6B", title = "Scatterplot RNAseq vs TTseq", h = 3, w = 3)
+  pdf_tt(figNo = "ExtFig5B", title = "Scatterplot RNAseq vs TTseq", h = 3, w = 3)
   ggplot(p, aes(x = RNAseq+offset, y = TTseq+offset )) +
     geom_point(colour = pals$One ) +
     geom_rug(col = rgb(0.5, 0, 0, alpha = 0.2)) +
@@ -280,7 +280,7 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
   p$Annot <- round(p$value * 100) %>% paste0("%") 
   
   # pdf(file = "Transcriptional categories across thresholds (TTseq).pdf", height = 2.5, width = 3.5)
-  pdf_tt(figNo = "SFig5C", title = "eRNA across thresholds", h = 2.5, w = 3.5)
+  pdf_tt(figNo = "ExtFig5C", title = "eRNA across thresholds", h = 2.5, w = 3.5)
   ggplot(p, aes(x = Hit, fill = interaction(variable, Hit), y = value*100, label = Annot)) +
     geom_col(alpha = 0.8, width = 0.9, position = "stack") +
     theme_bw() +
@@ -383,7 +383,7 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
 
   
   # pdf(file = "FANTOM5 - Overlap Barplot.pdf", height = 2, width = 3)
-  pdf_tt(figNo = "SFig5D", title = "FANTOM5", h = 2, w = 3)
+  pdf_tt(figNo = "ExtFig5D", title = "FANTOM5", h = 2, w = 3)
   ggplot(p[which(p$Sample == "Astrocytes"),], aes(x = Sample, y = Freq*100, fill = Hit, colour = Hit)) +
     geom_col(position = "dodge", width = 0.75) +
     theme_bw() +
@@ -473,7 +473,7 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
   pal <- c("grey95", pals$Primary[c(4,5,7)])
   
   # pdf("FANTOM5 - Combined category.pdf", height = 3, width = 3.8)
-  pdf_tt(figNo = "SFig5E", title = "FANTOM5 vs TTseq", h = 3, w = 3.8)
+  pdf_tt(figNo = "ExtFig5E", title = "FANTOM5 vs TTseq", h = 3, w = 3.8)
   ggplot(tab, aes(x = Var2, fill = Var1, y = Freq*100)) +
     geom_col(colour = "black", width = 0.7) +
     theme_bw() +
