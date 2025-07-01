@@ -1,4 +1,4 @@
-#This script generates figures 2B
+#This script generates figures 2C
 ## Setup
   setwd("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Figs/Fig_SanityChecks/")
   library(tidyverse)
@@ -144,7 +144,7 @@
   # z_ttl <- candidate.enrich["ValidatedEnh_K562_Yao2022",]
   # z_ttl <- paste0("p=", signif(z_ttl$p, 2), ", ", 
   #               "OR=", signif(z_ttl$OR, 2))
-  sink_sanity(figNo = "2B", title = "K562", z_ttl)
+  sink_sanity(figNo = "2C", title = "K562", z_ttl)
   
 ## Plot
   p <- rbind(x,y,z)
@@ -153,7 +153,7 @@
   p$Resource <- gsub(" ", "\n", p$Resource)
   
   # pdf(file = "Combined sanity check barplot.pdf", height = 2, width = 3)
-  pdf_sanity(figNo = "2B", title = "K562, Superenhancer, TAD", h = 2, w = 3)
+  pdf_sanity(figNo = "2C", title = "K562, Superenhancer, TAD", h = 2, w = 3)
   ggplot(p, aes(x = Resource, y = Freq, colour = Var1, fill = Var1)) +
       geom_col(position = "dodge", width = 0.7) +
       scale_colour_manual(values = pals$Hits_Darker) +
