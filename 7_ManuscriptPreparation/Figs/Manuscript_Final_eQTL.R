@@ -169,7 +169,7 @@
   levels(p$Group) <- c("Brain\nFine-mapped", "Brain\nSignificant", "Astrocyte\nSignificant")
   
   # pdf(file = "Consistency rate (across).pdf", height = 3, width = 4)
-  pdf_eqtl(figNo = "SFig8", title = "eqtl vs crispri (per study)", h = 3, w = 4)
+  pdf_eqtl(figNo = "ExtFig8A", title = "eqtl vs crispri (per study)", h = 3, w = 4)
   ggplot(p, aes(x = Study, fill = Cat)) +
     geom_bar(position = "stack", width = 0.7, linewidth = 0.5) +
     theme_bw() +
