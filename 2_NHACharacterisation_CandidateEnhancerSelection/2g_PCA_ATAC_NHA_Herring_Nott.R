@@ -91,7 +91,7 @@ variance_explained <- (pca_result$sdev^2) / sum(pca_result$sdev^2)
 var_PC1 <- round(variance_explained[1] * 100, 0)
 var_PC2 <- round(variance_explained[2] * 100, 0)
 
-# Generate PCA plot corresponding to SFig 1b
+# Generate PCA plot corresponding to Extended Data Figure 1b
 pdf("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Resubmission/IV/SCRIPTS/PCA_NHA_ATAC validation.pdf", width = 7, height = 5)
 ggplot(pca_data, aes(x = Comp.1, y = Comp.2, color = CT, shape = Stage)) +
   geom_point(size = 2.5) +
