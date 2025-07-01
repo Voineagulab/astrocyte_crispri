@@ -222,7 +222,7 @@ e$log2fc.vst <- exp(e$logfc.vst) %>% log2()
   p <- p[which(p$Sign == "Downregulated"),]
   
   # pdf(file = "EGPs - Downregulation Percentage.pdf", height = 2, width = 2.2)
-  pdf_mainDE(figNo = "SFig4H", title = "Downregulation Percentage", h = 2, w = 2.2)
+  pdf_mainDE(figNo = "ExtFig4G", title = "Downregulation Percentage", h = 2, w = 2.2)
   ggplot(p, aes(x = Hit, y = Freq*100, fill = Hit)) +
     geom_col(colour = "black", width = 0.6) +
     theme_bw() +
@@ -242,7 +242,7 @@ e$log2fc.vst <- exp(e$logfc.vst) %>% log2()
   levels(p$Sign) <- c("Negative\nfold-change", "Positive\nfold-change")
   
   # pdf(file = "EGPs - Downregulation Distribution.pdf", height = 2.5, width = 3)
-  pdf_mainDE(figNo = "SFig4I", title = "Downregulation Distribution", h = 2.5, w = 3)
+  pdf_mainDE(figNo = "ExtFig4H", title = "Downregulation Distribution", h = 2.5, w = 3)
   ggplot(p, aes(x = HitPermissive, y = log2fc.vst, colour = HitPermissive)) +
     # geom_violin(draw_quantiles = 0.5, position = position_dodge(width = 0.7), scale = "width", width = 0.7) +
     facet_wrap(~Sign, ncol = 2, strip.position = "bottom", scales = "free_x") +
