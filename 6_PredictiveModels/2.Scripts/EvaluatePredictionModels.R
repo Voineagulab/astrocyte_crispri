@@ -25,7 +25,7 @@ importance_K562 <- read.csv("RF_Results/K562/EG_Variable_Importance_EGrf.Extende
 
 
 ####################
-#Code for Fig 8B
+#Code for Figure 7B and Extended Data Figure 9D
 ###################
 setwd("../4.Figures_Tables/")
 
@@ -52,14 +52,14 @@ le <- get_legend(K562_pr)
 Astrocytes_pr <- Astrocytes_pr + theme(legend.position = "none") 
 K562_pr <- K562_pr + theme(legend.position = "none")
 plots <- plot_grid(Astrocytes_pr, K562_pr, label_size = 20)
-pdf("8B.Performance_Astrocytes_K562_PR.pdf", height = h_margin * 3 / 10, width = w_margin *2 /3)
+pdf("7B.Performance_Astrocytes_K562_PR.pdf", height = h_margin * 3 / 10, width = w_margin *2 /3)
 plot_grid(plots, le, rel_heights = c(1,0.2), ncol = 1)
 dev.off()
 
 
 
 ###########################
-##Code for Fig 8A and SFig.9
+##Code for Extended Data Figure 9B
 ##########################
 aucvars <- c("rE2G.DNAseOnly","ABC_Score","Distance",
              colnames(all_rf_factors_powered_encode)[str_detect(colnames(all_rf_factors_powered_encode), ".removed|rf")])
@@ -141,7 +141,7 @@ write.csv(AUPRC_astro[AUPRC_astro$Model %in% c(
 ), ], "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig7A_Boxplot.csv")
 
 ######################## 
-######SupF9C: Boxplots of AUPRC values across 1000 fold bootstraps between the different models in K562
+######ExtFig9C: Boxplots of AUPRC values across 1000 fold bootstraps between the different models in K562
 AUPRC_K562=data.frame(do.call("rbind",bootstrap_K562$PR_FULL))
 AUPRC_K562=melt(AUPRC_K562, variable.name = "Model", value.name = "AUPRC")
 
@@ -155,7 +155,7 @@ stars_df_K562 <- data.frame(
 
 AUPRC_K562$Model <- factor(AUPRC_K562$Model, levels = c("EGrf.Extended", "rE2G.Extended", "rE2G.Extended.rf",
                                                               "EGrf", "rE2G.DNAseOnly","ABC_Score","TAPseq.rf","Distance"))
-pdf("SFig9C_BoxplotK562_AUPRC_1000bootstraps.pdf",w_margin / 1.4, height = w_margin /2.5)
+pdf("ExtFig9C_BoxplotK562_AUPRC_1000bootstraps.pdf",w_margin / 1.4, height = w_margin /2.5)
 ggplot(data = AUPRC_K562[AUPRC_K562$Model %in% c("EGrf.Extended", "rE2G.Extended", "rE2G.Extended.rf",
                                                  "EGrf", "rE2G.DNAseOnly","ABC_Score","TAPseq.rf","Distance"),],
 aes(x = Model, y = AUPRC, fill = Model)) +
@@ -177,7 +177,7 @@ dev.off()
 
 
 ################
-#Code for fig 8D
+#Code for ExtFig9F
 #################
 
 #Making names match
@@ -190,7 +190,7 @@ var_colours <- c(#Distance related
   #Enhancer Chip
   H3K27ac = pals$Primary[6], ATACseq.Pileup = pals$Primary[5],  #Chip.H3K4me3 #DNAse.Pileup #Chip.H3K27ac 
   DNAse = pals$Primary[5], H3K4me3 = "royalblue2", EP300 = "steelblue1") #normalizedEP300_enhActivity
-pdf("8D.Astrocytes_RFimportance.pdf", width = w_margin /1.5, height = h_margin* 3/11)
+pdf("ExtFig9F.Astrocytes_RFimportance.pdf", width = w_margin /1.5, height = h_margin* 3/11)
 #Generate plot showing changes in median AUPRC values after individual variables are removed from a astrocyte model
 combined_astro <- combineImportance(bootstrap_Astro$PR, importance_astro,var_colours, line.var = "EGrf", CellType = "Astrocytes")
 dev.off()
@@ -203,7 +203,7 @@ combined_K562 <- combineImportance(bootstrap_K562$PR,importance_K562, var_colour
 dev.off()
 
 ####################
-#Code for fig 8C
+#Code for  ExtFig9
 ####################
 #Define variables included in the plot
 vars_of_interest <- c("Chip.H3K4me3", "TTseq.TTseq_Total", "TTseq.Ratio_TTversusRNA",
@@ -220,14 +220,14 @@ colnames(all_rf_factors_powered_encode)[names(all_rf_factors_powered_encode) == 
 #plot AUPRC values for individual variables considered as predictors
 predictionpower_cols <- rep("grey",length(vars_of_interest[! vars_of_interest %in% importance_astro$X]))
 names(predictionpower_cols) <-  updateVarNames(vars_of_interest[! vars_of_interest %in% importance_astro$X])
-pdf("8C.Astrocytes_Variable_Prediction.pdf", width = 3.75/1.5, height = 2.5/1.5)
+pdf("ExtFig9A.Astrocytes_Variable_Prediction.pdf", width = 3.75/1.5, height = 2.5/1.5)
 aucIndividualVariables(all_rf_factors_powered_encode, vars_of_interest, 
                        cols = c(plot_cols,predictionpower_cols),"HitPermissive_NegZ")
 dev.off()
 
 predictionpower_cols <- rep("grey",length(vars_of_interest[! vars_of_interest %in% importance_K562$X]))
 names(predictionpower_cols) <-  updateVarNames(vars_of_interest[! vars_of_interest %in% importance_K562$X])
-pdf("8C.K562_Variable_Prediction.pdf", width = 3.75/1.5, height = 2.5/1.5)
+pdf("ExtFig9E.K562_Variable_Prediction.pdf", width = 3.75/1.5, height = 2.5/1.5)
 aucIndividualVariables(K562_EGPs, vars_of_interest, 
                        cols = c(plot_cols,predictionpower_cols),"Significant_NegEffectSize")
 dev.off()
