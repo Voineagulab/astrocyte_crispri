@@ -171,7 +171,7 @@ ann_colors<- list(Module = module_colors, `Chromatin mark` = Mark_colors)
 color_ramp <- colorRamp(c("lightblue", "midnightblue"))
 palette_stats <- rgb(color_ramp(seq(0, 1, length.out = 1000)), maxColorValue = 255)
 
-###########Heatmap ploting stats: It generates Sup Fig 3D
+###########Heatmap ploting stats: It generates Extended Data Figure 3c
 fontsize=18
 pdf("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Resubmission/IV/Astronet_WGCNA/Nott_StatsCoverage_heatmap.pdf", width = 11, height = 9)
 pheatmap(t(-log10(pvalue_combined)), 
@@ -222,7 +222,7 @@ cell_colors <- setNames(
 ann_colors<- list(moduleLabel = module_colors, CellType = cell_colors)
 
 
-###########Generates Sup Fig 3C
+###########Generates Extended Data Figure 3d
 pdf("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/Resubmission/IV/Astronet_WGCNA/Nott_Coverage_heatmap.pdf", height = 7, width = 11)
 pheatmap(as.matrix(coverage_nott_sorted[, c(paste0(sample_order, "_atac"), 
                                             paste0(sample_order, "_H3K27ac"),
