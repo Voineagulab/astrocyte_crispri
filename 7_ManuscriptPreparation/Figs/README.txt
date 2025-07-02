@@ -60,30 +60,30 @@ Output:2D - Script MainDE - Nanostring vs scRNAseq.pdf
 #####3A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Outputs: 
-Distance Density.pdf
-Distance Density.txt
+3A - Script MainDE - Distance Density.pdf
+3A - Script MainDE - Distance Density.txt
 
 #####3B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:Nearest gene stacked barplot.pdf
+Output:3B - Script MainDE - Nearest gene stacked barplot.pdf
 
 #####3D
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
 Outputs: 
-Reads in hits versus non-hits.pdf
-Reads Reads in hits versus non-hits.txt
+3D - Script tt - eRNA.pdf
+3D - Script tt - eRNA bidirectional if transcribed.txt
 
 #####3E
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
-Output: Reads in hits versus non-hits.pdf
+Output: 3E - Script tt - Reads in hits versus non-hits.pdf
 
 #####3F
-Script:Script:5_FunctionalAnnotation/WGCNAenh.R
+Script:5_FunctionalAnnotation/WGCNAenh.R
 Output:
 Fig3.hitsATAC_v2_large.pdf
 
 #####3G
-Script:Script:5_FunctionalAnnotation/WGCNAenh.R
+Script:5_FunctionalAnnotation/WGCNAenh.R
 Output:
 CT_Stage_BarplotData.csv
 
