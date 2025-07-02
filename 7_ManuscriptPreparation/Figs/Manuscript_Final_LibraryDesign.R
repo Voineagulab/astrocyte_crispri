@@ -183,7 +183,7 @@
     x$FisherCanditates <- apply(encode[,g], 2, function(y) fisher.test(table(y, encode$Candidate))$estimate)
     x$FisherCanditatesP <- apply(encode[,g], 2, function(y) fisher.test(table(y, encode$Candidate))$p.value)
 
-    sink_LibDesign(figNo = "1B", title = "Encode annotation of candidates", x)
+    sink_LibDesign(figNo = "1D", title = "Encode annotation of candidates", x) # this is also used as source data
     
     # write.csv(x, file = "ENCODE - Stats.csv")
     
@@ -220,7 +220,9 @@
       scale_y_continuous(expand = c(0,0), limits = c(0,100)) +
       labs(y = "Percent intersecting ENCODE annotation")
     dev.off()
-    
+
+    # save as source data
+    write.csv(p, "../../SourceData/SourceData_Fig1D.csv")
   
   
 ## Plot 3: Nott. 
