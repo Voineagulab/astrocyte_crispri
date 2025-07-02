@@ -367,9 +367,32 @@ print(pheatmap(t(scale(t(data))),
 grid.newpage()
 dev.off()
 
-### Barplot
+### Barplot corresponding to Figure 3G
 barplot_data=as.data.frame(table(stats$padj.anova.ct< 0.05, stats$padj.anova.stage<0.05))
 colnames(barplot_data)=c("CT", "Stage", "Count")
+barplot_data$Category=c("None", "CT", "Stage", "CT & Stage")
+
+cols_barplot = c(
+  "CT" = "#5A9C88",       
+  "CT & Stage" = "#B14040", 
+  "None" = "#A7C7E7",     
+  "Stage" = "#7D4E95"     
+)
+
+pdf("CT_Stage_Barplot.pdf", height = 5, width = 3)
+ggplot(data=barplot_data, aes(x=Category, y=Count, fill=Category))+
+  geom_bar(stat="identity") +
+  scale_fill_manual(values = cols_barplot) +
+  labs(x="", title="Significant chromatin\n    state variation")+
+  theme(
+    title = element_text(size=12, face="bold"),
+    axis.title.y = element_text(size = 12),  
+    axis.text.x = element_text(size = 12, angle=270),   
+    axis.text.y = element_text(size = 12),
+    legend.position = "none"
+  ) 
+dev.off()  
+
 
 # SOURCE DATA:
 write.csv(barplot_data, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig3G.csv")
