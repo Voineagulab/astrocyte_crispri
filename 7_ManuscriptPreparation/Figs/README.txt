@@ -106,7 +106,7 @@ Output:AstroNet.HeatmapEG_v2.pdf
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_RelevanceToHumanBiology.R 
 Output:5A - Script HumBiol - Disease annotation (wellpowered).pdf
 
-#####5C
+#####5C**
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
 Output:_no_pool.pdf
 
@@ -114,18 +114,18 @@ Output:_no_pool.pdf
 ####6A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_eQTL.R
 OutputS: 
-SNPs per enhancer.pdf
-SNPs per enhancer.txt
+6A - Script eqtl - SNPs per enhancer.pdf
+6A - Script eqtl - SNPs per enhancer.txt
 
 ####6B
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_eQTL.R
-Output:eqtl vs crispri (pooled).pdf
+Output:6B - Script eqtl - eqtl vs crispri (pooled).pdf
 
 ####6C 
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_eQTL.R
 Outputs: 
-eqtl reproducibility.pdf
-reproducibility.txt
+6C - Script eqtl - eqtl reproducibility.pdf
+6C - Script eqtl - eqtl reproducibility.txt
 
 ####6D
 Script:5_FunctionalAnnotation/Beluga/5.ISM_Beluga_CCL2.R
