@@ -79,26 +79,23 @@ Output: 3E - Script tt - Reads in hits versus non-hits.pdf
 
 #####3F
 Script:5_FunctionalAnnotation/WGCNAenh.R
-Output:
-Fig3.hitsATAC_v2_large.pdf
+Output: Fig3.hitsATAC_v2_large.pdf
 
 #####3G
 Script:5_FunctionalAnnotation/WGCNAenh.R
-Output:
-CT_Stage_BarplotData.csv
-
+Output: CT_Stage_Barplot.pdf
 
 ############################ Figure4
 #####4A 
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_RelevanceToHumanBiology.R
-Output:Functional annotation.pdf
+Output:4A - Script HumBiol - Functional annotation.pdf
 
 #####4C
-Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TTseq.R
+Script:7_ManuscriptPreparation/Figs/Manuscript_Final_TranscriptionFactors.R
 Outputs:
-binding counts and fractions.pdf
-Combined.pdf
-footprinting signal.pdf
+4C - Script TF - binding counts and fractions.pdf
+4C - Script TF - Combined.pdf
+4C - Script TF - footprinting signal.pdf
 
 #####4D
 Script:5_FunctionalAnnotation/EnhGenePairs/TF_CytoscapeAstronet.R
@@ -107,7 +104,7 @@ Output:AstroNet.HeatmapEG_v2.pdf
 ############################ Figure5
 #####5A
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_RelevanceToHumanBiology.R 
-Output:Disease annotation.pdf
+Output:5A - Script HumBiol - Disease annotation (wellpowered).pdf
 
 #####5C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
