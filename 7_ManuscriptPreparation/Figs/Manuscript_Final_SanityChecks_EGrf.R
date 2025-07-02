@@ -107,7 +107,7 @@ po$Var1 <- factor(po$Var1)
 levels(po$Var1) <- c("NHA intergenic peaks", "EGrf predictions")
 po$Resource <- gsub(" ", "\n", po$Resource)
 
-#This plot Fig 6C)
+#This generates Fig 7C)
 pdf("Scripts/6.Predictive_models/Sanity_checks/NHA_EGRF_OverlapBarplot_0.5RPKM.pdf",width = 3.5, height = 4)
 ggplot(po, aes(x = Resource, y = Freq, colour = Var1, fill = Var1)) +
   geom_col(position = "dodge", width = 0.7) +
