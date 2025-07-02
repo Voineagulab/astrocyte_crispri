@@ -162,7 +162,7 @@ TF_counts$name <- factor(TF_counts$name, levels = c("Bound", "Unbound","Fraction
 
 #TOBIAS plot aggregate is slightly bugged they only collect a 120 width region when they should grab 121
 # pdf("Tobias_Fooprinting_Bound_and_Unbound.pdf", height = 4, width = w_margin *(1/4))
-pdf_tf(figNo = "5A", title = "footprinting signal", h = 4, w = w_margin *(1/4))
+pdf_tf(figNo = "4C", title = "footprinting signal", h = 4, w = w_margin *(1/4))
 p1 <- footprintingSignalPlot(bound_unbound) + facet_wrap(vars(TFBS), ncol = 1)
 p2 <- p1 + theme(legend.position = "none")
 le1 <- get_legend(p1)
@@ -170,7 +170,7 @@ plot_grid(p2, le1, nrow = 2, rel_heights = c(1, 0.2))
 dev.off()
 
 # pdf("Tobias_Exp_BoundTFs_log2.pdf", width = w_margin *(1/4) , height = 6)
-pdf_tf(figNo = "5A", title = "binding counts and fractions", h = 6, w = w_margin *(1/4))
+pdf_tf(figNo = "4C", title = "binding counts and fractions", h = 6, w = w_margin *(1/4))
 p1 <- plotTFcounts(TF_counts[TF_counts$name != "Fraction Bound",], y.title =  "Number of TF binding sites",log2 = T)  + facet_wrap(vars(name), scales = "free_y",ncol =1)
 p2 <- plotTFcounts(TF_counts[TF_counts$name == "Fraction Bound",], y.title = "Fraction Bound") + facet_wrap(vars(name), scales = "free_y",ncol =1)
 p2 <- p2 + theme(legend.position = "none")
@@ -191,7 +191,7 @@ bound_frac_plot <- bound_frac_plot + theme(legend.position = "none", axis.title.
 bound_counts_plot <- bound_counts_plot + theme(legend.position = "none", axis.ticks.x = element_blank())
 
 # pdf("Tobias_combined_bound_plot.pdf", width = w_margin *(3.5/8) , height = 3)
-pdf_tf(figNo = "5A", title = "Combined", h = 3, w = w_margin *(3.5/8))
+pdf_tf(figNo = "4C", title = "Combined", h = 3, w = w_margin *(3.5/8))
 plot_grid(footprintPlot, le1,bound_counts_plot,bound_frac_plot, nrow = 2, ncol =2, rel_widths = c(1, 0.6), rel_heights = c(1, 0.8))
 dev.off()
 
