@@ -106,9 +106,9 @@ Output:AstroNet.HeatmapEG_v2.pdf
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_RelevanceToHumanBiology.R 
 Output:5A - Script HumBiol - Disease annotation (wellpowered).pdf
 
-#####5C**
+#####5C
 Script:7_ManuscriptPreparation/Figs/Manuscript_Final_MainDE.R
-Output:_no_pool.pdf
+Output:*_no_pool.pdf
 
 ############################ Figure6
 ####6A
