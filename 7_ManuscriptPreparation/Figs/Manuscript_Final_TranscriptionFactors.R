@@ -195,6 +195,10 @@ pdf_tf(figNo = "4C", title = "Combined", h = 3, w = w_margin *(3.5/8))
 plot_grid(footprintPlot, le1,bound_counts_plot,bound_frac_plot, nrow = 2, ncol =2, rel_widths = c(1, 0.6), rel_heights = c(1, 0.8))
 dev.off()
 
+# save source data
+write.csv(TF_counts, file = "../../SourceData/SourceData_Fig4C_Part1.csv", row.names = FALSE)
+write.csv(bound_unbound, file = "../../SourceData/SourceData_Fig4C_Part2_.csv", row.names = FALSE)
+
 ########
 #Tobias Class plots
 test_boundMatrix <- read.csv("/mnt/Data0/PROJECTS/CROPSeq/EnhancerPredictionModels/Results/Tobias/Summaries/JASPAR_group_AnnotatedTFs.csv")
