@@ -504,6 +504,12 @@ e$log2fc.vst <- exp(e$logfc.vst) %>% log2()
       scale_x_continuous(limits = c(0,1.3), expand = c(0,0), breaks = c(0, 0.5, 1))
 
     dev.off()
+
+## Source data
+  p["blank",] <- ""
+  p["blank2",] <- ""
+  p["blank2", 1] <- gsub("r =", "Pearson correlation of screenFC vs NanoFC =", txt)
+  write.csv(p, "../../../SourceData/SourceData_Fig2D.csv", na = "", row.names = FALSE)
     
 ## QC samples
   p <- meta_nano[,c("Batch", "FOV_Ratio", "Binding_Dens", "Pos_R2")]
