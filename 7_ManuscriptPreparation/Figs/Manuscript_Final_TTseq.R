@@ -143,7 +143,7 @@ ggplot(p[which(p$variable == "TTseq"),], aes(x = Hit, colour = Hit, fill = Hit, 
   labs(y = "TTseq read count at\ntranscribed enhancers")
 
 dev.off()
-  
+
 
 ## Statistics
 q <- p[which(p$variable == "TTseq"),]
@@ -151,6 +151,11 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
 
  # p = 0.0446
 
+## Source data
+p <- p[which(p$variable == "TTseq"),]
+p[,"blank"] <- NA
+p[1,"blank1"] <- paste0("Wilcoxon for value ~ Hit: p=", signif(q$p.value, 2))
+write.csv(p, "../../SourceData/SourceData_Fig3E.csv", na = "", row.names = FALSE)
 
 ################################################################################################################################ #
 ## New definition of expressed ----  
@@ -163,7 +168,8 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
   final.thresh <- 3
   
   ## Functions
-    plot.cats <- function(thresh, complex = FALSE) {
+    ## Functions
+    plot.cats <- function(thresh, complex = FALSE, saveDf = TRUE) {
       
       transcribed_filt <- transcribed[which(transcribed$Enh %in% wellpowered_enh),]
       
@@ -202,6 +208,20 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
       levels(p$Hit) <- (c("Inactive\ncandidates", "Functional\nenhancers")  )
       p$Transcribed <- factor(p$Transcribed, levels = c("Not transcribed", "Unidirectional", "Bidirectional"))
   
+      if (saveDf) {
+        
+        p[,1] <- as.character(p[,1])
+        
+        p["blank",] <- NA
+        
+        p["blank1",1] <- lab_trns
+        p["blank2",1] <- lab_uni
+        p["blank3",1] <- lab_bi
+        
+        return(p)
+        
+        }
+      
       if (complex) {
         pal <- c("grey90", pals$Hits[1], pals$Hits_Darker[1], # non-hit colours
                "grey91", pals$Hits[2], pals$Hits_Darker[2]) # hit colours
@@ -244,6 +264,10 @@ sink_tt(figNo = "4E", title = "Reads in hits versus non-hits", wilcox.test(q$val
     pdf_tt(figNo = "3D", title = "eRNA", h = 2.2, w = 4)
     plot.cats(final.thresh) 
     dev.off()
+
+  # save source data
+    p <- plot.cats(final.thresh, saveDf = TRUE) 
+    write.csv(p, file = "../../SourceData/SourceData_Fig3D.csv", na = "", row.names = FALSE)
  
 ## Test whether functional EGPs are more likely to be bidirectional (given transcription is assumed)
     p <- transcribed[which(transcribed$Enh %in% wellpowered_enh),]
