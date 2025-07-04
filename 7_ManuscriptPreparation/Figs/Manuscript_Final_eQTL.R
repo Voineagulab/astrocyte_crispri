@@ -85,7 +85,9 @@
                        trans = "log2", labels = function(x) { comma(x - offset) },
                        breaks = c(0, 1, 2, 8, 32, 128, 512) + offset)
     dev.off()
- 
+
+## Source data
+  write.csv(tab, file = "../../SourceData/SourceData_Fig6A.csv", row.names = FALSE)
 
 ################################################################################################################################ #
 ## Are eQTLs supported by experimental data  ---- 
@@ -145,6 +147,9 @@
           # axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
           panel.grid = invis, axis.ticks.x = invis)
     dev.off()
+
+  # source data
+  write.csv(p[1:6, 1:4], file = "../../SourceData/SourceData_Fig6B.csv", row.names = FALSE) # this indexes to the area shown in the final manuscript
     
     
 ## Looking within each dataset
@@ -262,5 +267,14 @@
           panel.grid = invis, axis.ticks.y = invis)
   
   dev.off()
+
+## Source data
+  tab$Same <- as.character(tab$Same)
+  colnames(tab)[2] <- paste0(colnames(tab)[2], "_reproduced")
+ 
+  tab["blank1",] <- NA
+  tab["blank2", 1] <- paste0("Fisher test: p=", signif(f$p.value, 2), ", OR=", signif(f$estimate, 2))
+ 
+  write.csv(tab, file = "../../SourceData/SourceData_Fig6C.csv", row.names = FALSE)
   
   
