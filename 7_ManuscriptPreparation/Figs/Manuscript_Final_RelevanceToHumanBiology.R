@@ -170,7 +170,12 @@
           legend.box = "vertical", axis.title.y = invis) +
     geom_vline(xintercept = 1, linetype = 2, alpha = 0.5, colour = "grey80")
   dev.off()
-  
+
+## Source data
+  p$OR <- signif(p$OR, 2)
+  p$mlog10p <- round(p$mlog10p, 2)
+  write.csv(p, "../../SourceData/SourceData_Fig4A.csv", row.names = FALSE)
+
 
 ################################################################################################################################ #
 ## A combined plot for disease ----
@@ -309,7 +314,11 @@
 
     
   dev.off()
-       
+
+## Source data
+  p$OR <- signif(p$OR, 2)
+  write.csv(p, "../../SourceData/SourceData_Fig5A.csv", row.names = FALSE)
+
 # 
 # ################################################################################################################################ #
 # ## Gene regulation within the astrocytes ----
