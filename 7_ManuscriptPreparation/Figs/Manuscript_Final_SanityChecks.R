@@ -107,33 +107,33 @@
   # levels(x$Var1) <- c("Inactive\nEGP links", "Functional\nEGP links")
   x$Resource <- "TAD Boundary"
   
-  x_ttl <- paste0("p=", signif(fish$p.value, 1), ", ", 
+  x_ttl <- paste0("TAD Boundary: ",
+                  "p=", signif(fish$p.value, 1), ", ", 
                 "OR=", signif(fish$estimate, 2))
   sink_sanity(figNo = "2C", title = "TAD", x_ttl)
   
   # superenhancers
   y <- candidate.annot[which(candidate.annot$Tested),]
-  y <- y[which(rownames(y) %in% wellpowered_enh),]
+  y <- y[wellpowered_enh,]
   y <- table(y$Hit, y$Superenhancer)
-  
-  y_ttl <- fisher.test(y)
-  
   y <- y / rowSums(y) * 100
   y <- as.data.frame(y)
   y <- y[which(as.logical(y$Var2)),]
   # levels(y$Var1) <- c("Inactive\ncandidates", "Functional\nenhancers")
   y$Resource <- "Superenhancer"
   
-  # y_ttl <- candidate.enrich["Superenhancer",]
-  # y_ttl <- paste0("p=", signif(y_ttl$p, 2), ", ", 
-  #               "OR=", signif(y_ttl$OR, 2))
+  y_ttl <- candidate.annot[which(candidate.annot$Tested),]
+  y_ttl <- y_ttl[wellpowered_enh,]
+  y_ttl <- fisher.test(y_ttl$Superenhancer, y_ttl$Hit)
+  y_ttl <- paste0("Superenhancers: ",
+                  "p=", signif(y_ttl$p.value, 2), ", ", 
+                "OR=", signif(y_ttl$estimate, 2))
   sink_sanity(figNo = "2C", title = "Superenhancer", y_ttl)
   
   # k562 enhancers
   z <- candidate.annot[which(candidate.annot$Tested),]
-  z <- z[which(rownames(z) %in% wellpowered_enh),]
+  z <- z[wellpowered_enh,]
   z <- table(z$Hit, z$ValidatedEnh_K562_Yao2022)
-  z_ttl <- fisher.test(z)
   z <- z / rowSums(z) * 100
   z <- as.data.frame(z)
   z <- z[which(as.logical(z$Var2)),]
@@ -141,10 +141,14 @@
     
   z$Resource <- "K562 enhancer"
   
-  # z_ttl <- candidate.enrich["ValidatedEnh_K562_Yao2022",]
-  # z_ttl <- paste0("p=", signif(z_ttl$p, 2), ", ", 
-  #               "OR=", signif(z_ttl$OR, 2))
+  z_ttl <- candidate.annot[which(candidate.annot$Tested),]
+  z_ttl <- z_ttl[wellpowered_enh,]
+  z_ttl <- fisher.test(z_ttl$ValidatedEnh_K562_Yao2022, z_ttl$Hit)
+  z_ttl <- paste0("K562 Enh: ",
+                  "p=", signif(z_ttl$p.value, 2), ", ", 
+                "OR=", signif(z_ttl$estimate, 2))
   sink_sanity(figNo = "2C", title = "K562", z_ttl)
+  
   
 ## Plot
   p <- rbind(x,y,z)
@@ -153,7 +157,7 @@
   p$Resource <- gsub(" ", "\n", p$Resource)
   
   # pdf(file = "Combined sanity check barplot.pdf", height = 2, width = 3)
-  pdf_sanity(figNo = "2C", title = "K562, Superenhancer, TAD", h = 2, w = 3)
+  pdf_sanity(figNo = "2C", title = "K562, Superenhancer, TAD (Updated)", h = 2, w = 3)
   ggplot(p, aes(x = Resource, y = Freq, colour = Var1, fill = Var1)) +
       geom_col(position = "dodge", width = 0.7) +
       scale_colour_manual(values = pals$Hits_Darker) +
@@ -166,4 +170,13 @@
             panel.grid = invis, plot.title = element_text(size = 6)) +
       labs(y = "Percentage")
   dev.off()
+  
+## Save as source data
+  p[,"blank" ] <- NA
+  p[,"blank1" ] <- NA
+  p[1,"blank1"] <- x_ttl
+  p[2,"blank1"] <- y_ttl
+  p[3,"blank1"] <- z_ttl
+  
+  write.csv(p, file = "../../SourceData/SourceData_Fig2C.csv", row.names = FALSE, na = "")
   
