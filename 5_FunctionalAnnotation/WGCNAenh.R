@@ -318,6 +318,10 @@ data=data[which(rownames(data)%in%hits$Enh),]
 # Read in ANOVA stats (enhancer level ANOVA for cell type and stage)
 stats=read.csv("/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/IV/RESULTS/Publication/SuppTable_HerringDevCTreg.csv")
 stats=stats[match(rownames(data), stats[,1]) , ]
+
+# SOURCE DATA:
+write.csv(stats, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig3F_stats.csv")
+
 stats$padj.anova.ct[which(stats$padj.anova.ct >= 0.05)]=1
 stats$padj.anova.stage[which(stats$padj.anova.stage >= 0.05)]=1
 ann=stats
@@ -339,7 +343,7 @@ rownames(samples)=samples$names
 samples=samples[match(colnames(data), samples$names), ]
 
 # SOURCE DATA:
-write.csv(data, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig3F.csv")
+write.csv(data, "/Volumes/share/mnt/Data0/PROJECTS/CROPSeq/Manuscript/SourceData/SourceData_Fig3F_heatmap.csv")
 
 pdf("Fig3.hitsATAC_v2_small.pdf", height=4, width=6) 
 print(pheatmap(t(scale(t(data))),
