@@ -665,7 +665,9 @@
   table(powerAtEnh$Hit, powerAtEnh$Powered25) %>% proportions(1)
   table(powerAtEnh$Hit, powerAtEnh$Powered25) %>% fisher.test()
    
-    
+
+## Below is some exploratory analysis 
+
 # ## Compare power to the technical score from an enhancer prediction model
 #   # read in
 #   tech <- read.csv("../../../../EnhancerPredictionModels/Data/Enhancer_factors_pluspredictions.csv")
