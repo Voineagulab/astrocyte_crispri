@@ -101,7 +101,7 @@ library(Seurat)
   trev.cpm <- make.cpm(trev.counts)
   
   check.thresh(trev.cpm, 1)
-  check.thresh(trev.cpm, 2) # we shall use this...
+  check.thresh(trev.cpm, 2) # using this
   check.thresh(trev.cpm, 5)
   
   # apply threshold
@@ -133,7 +133,7 @@ library(Seurat)
   rizz.cpm <- make.cpm(rizz.counts)
   
   check.thresh(rizz.cpm, 1)
-  check.thresh(rizz.cpm, 2) # I'll use this... mostly for consistency!
+  check.thresh(rizz.cpm, 2) # using this!
   check.thresh(rizz.cpm, 5)
   
   # apply threshold!
@@ -299,7 +299,7 @@ library(Seurat)
                                   "-i", inhouse.dir,
                                   "-files", # after this comes a list of beds with which you will intersect
                                   extended.gencode.dir,
-                                  "/mnt/Data0/PROJECTS/CROPSeq/FullLibrary_Selection/PublicData_forLibrarySelectionOnly/AdultBrain/Fullard2018/NeuN-_hg38.bed", # oversight: not actually using the 2cpm 
+                                  "/mnt/Data0/PROJECTS/CROPSeq/FullLibrary_Selection/PublicData_forLibrarySelectionOnly/AdultBrain/Fullard2018/NeuN-_hg38.bed", 
                                   "/mnt/Data0/PROJECTS/CROPSeq/FullLibrary_Selection/PublicData_forLibrarySelectionOnly/AdultBrain/Rizzardi2019/NeuN-_cpm2_BA_hg38.bed",
                                   "/mnt/Data0/PROJECTS/CROPSeq/FullLibrary_Selection/PublicData_forLibrarySelectionOnly/CulturedCells/Song2019/astrocyte_hg38.bed", 
                                   "/mnt/Data0/PROJECTS/CROPSeq/FullLibrary_Selection/PublicData_forLibrarySelectionOnly/CulturedCells/Trevino2020/Glia_hCS_cpm2_hg38.bed",  
