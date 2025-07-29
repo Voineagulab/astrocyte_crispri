@@ -233,7 +233,9 @@
 ################################################################################################################################ #
 ## Enhancer classification using data from ENCODE V3 (Meuleman 2020), which we've called the Altius dataset ----
   
-  
+# This Altius work was exploratory in nature and does not feature heavily in the final manuscript
+
+
 ## Overlap peak coordinates to our screen
   # at FDR = 0.1%
   # typically, 100k per sample in 733 samples, and 76M total
