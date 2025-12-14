@@ -13,6 +13,7 @@ This directory contains the following files and subdirectories:
 - **AstroVars.csv**: List of variables included in the astrocyte Random Forest models.
 - **CRISPRi_Results Final.csv** and **CRISPRi_Power Simulation - Power per EGP.csv**: Results of the CRISPRi screening data generated in the present study.
   - *Scripts*: `CRISPRi_screen/2C_DE_EnhancerHits.csv` and `Power_Simulations.R` respectively.
+  - Note: Positive EG pairs were defined as those significant (HitPermisive=TRUE) and downregulated (logFC.vst<0) from CRISPRi_Results Final.csv. Negative EG pairs were defined as those Well powered at a fold-change of 0.15 (WellPowered015=TRUE from CRISPRi_Power Simulation - Power per EGP.csv ) and not in the positive set. Supplementary Table 3F of the published article lists the Positive and Negative sets under the column "RandomForest".
 - **TTseq_Results Table.csv**: TT-seq data generated in the present study.
   - *Script producing this file*: `Functional_annotation/EnhancerTranscription.R`
 - **NHA_Peaks_Annotated.csv** and **NHA_All_ATACseq_Peaks_Annotated.csv**: ATAC-seq data generated in the present study for candidate enhancer peaks and all ATAC-seq peaks respectively.
